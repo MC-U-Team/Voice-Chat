@@ -1,0 +1,35 @@
+modLoader="javafml"
+loaderVersion="[28,)"
+issueTrackerURL="https://github.com/MC-U-Team/Voice-Chat/issues"
+displayURL="https://u-team.info/mods/voicechat"
+logoFile="logo.png"
+credits="Team U-Team"
+authors="HyCraftHD"
+
+[[mods]]
+	modId="voicechat"
+	version="${file.jarVersion}"
+	displayName="Voice Chat"
+	updateJSONURL="https://api.u-team.info/update/voicechat.json"
+	description="This mod adds a simple voice chat to minecraft."
+	
+	[[dependencies.voicechat]]
+	    modId="forge"
+	    mandatory=true
+	    versionRange="[28.1.96,)"
+	    ordering="NONE"
+	    side="BOTH"
+	
+	[[dependencies.voicechat]]
+	    modId="minecraft"
+	    mandatory=true
+	    versionRange="[1.14.4]"
+	    ordering="NONE"
+	    side="BOTH"
+	    
+	[[dependencies.voicechat]]
+	    modId="uteamcore"
+	    mandatory=true
+	    versionRange="[2.7.8.138,)"
+	    ordering="NONE"
+	    side="BOTH"
