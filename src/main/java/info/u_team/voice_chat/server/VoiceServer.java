@@ -11,21 +11,30 @@ import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.PacketDistributor;
 
-public class VoiceServer implements Runnable {
+public class VoiceServer {
 	
-	public final DatagramSocket socket;
+	private final DatagramSocket socket;
+	
+	private final Thread thread;
 	
 	public VoiceServer() throws SocketException {
-		SocketAddress address = NetworkUtil.findServerBindAddress();
-		socket = new DatagramSocket(address);
+		socket = new DatagramSocket(NetworkUtil.findServerBindAddress());
+		thread = new Thread(() -> serverTask(), "Voice Server");
+		thread.start();
 	}
 	
 	public void close() {
+		thread.interrupt();
+		try {
+			// Wait for the thread to be closed
+			thread.join();
+		} catch (InterruptedException ex) {
+			// Should not happen. Who interrupts the main thread??
+		}
 		socket.close();
 	}
 	
-	@Override
-	public void run() {
+	public void serverTask() {
 		while (!socket.isClosed()) {
 			try {
 				receivePacket();

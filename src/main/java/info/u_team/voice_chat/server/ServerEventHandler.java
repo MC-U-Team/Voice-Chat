@@ -9,10 +9,11 @@ import net.minecraftforge.event.entity.player.PlayerEvent.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.event.server.*;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 @EventBusSubscriber(modid = VoiceChatMod.MODID, bus = Bus.FORGE)
-public class PlayerServerEventHandler {
+public class ServerEventHandler {
 	
 	@SubscribeEvent
 	public static void login(PlayerLoggedInEvent event) {
@@ -38,6 +39,16 @@ public class PlayerServerEventHandler {
 		VerifiedPlayerDataList.removePlayer(player);
 		// Remove player secret
 		PlayerSecretList.removePlayer(player);
+	}
+	
+	@SubscribeEvent
+	public static void start(FMLServerStartingEvent event) {
+		VoiceServerManager.start();
+	}
+	
+	@SubscribeEvent
+	public static void stop(FMLServerStoppingEvent event) {
+		VoiceServerManager.stop();
 	}
 	
 }
