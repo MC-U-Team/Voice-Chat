@@ -6,7 +6,7 @@ public class VoiceServerManager {
 	
 	private static VoiceServer SERVER;
 	
-	public static void start() {
+	public synchronized static void start() {
 		try {
 			SERVER = new VoiceServer();
 		} catch (SocketException ex) {
@@ -14,14 +14,14 @@ public class VoiceServerManager {
 		}
 	}
 	
-	public static void stop() {
+	public synchronized static void stop() {
 		if (SERVER != null) {
 			SERVER.close();
 			SERVER = null;
 		}
 	}
 	
-	public static boolean isRunning() {
+	public synchronized static boolean isRunning() {
 		return SERVER != null;
 	}
 	
