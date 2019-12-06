@@ -22,7 +22,10 @@ public class NetworkUtil {
 	public static InetSocketAddress findServerInetAddress(int port) {
 		final Minecraft client = LogicalSidedProvider.INSTANCE.get(LogicalSide.CLIENT);
 		if (client.getCurrentServerData() != null) {
-			return new InetSocketAddress(ServerAddress.fromString(client.getCurrentServerData().serverIP).getIP(), port);
+			final InetSocketAddress address = new InetSocketAddress(ServerAddress.fromString(client.getCurrentServerData().serverIP).getIP(), port);
+			if (!address.getAddress().isAnyLocalAddress()) { // If the address is something like ::0 or 0.0.0.0 we cannot send udp packets there, so use the local host then
+				return address;
+			}
 		}
 		return new InetSocketAddress("localhost", port);
 	}
