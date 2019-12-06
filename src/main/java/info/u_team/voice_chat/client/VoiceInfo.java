@@ -8,17 +8,19 @@ public class VoiceInfo {
 	
 	protected static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
 	
+	protected static final OpusEncoder ENCODER;
+	protected static final OpusDecoder DECODER;
+	
 	static {
-		OpusEncoder encoder;
 		try {
-			encoder = new OpusEncoder(48000, 2, OpusApplication.OPUS_APPLICATION_AUDIO);
-			encoder.setBitrate(96000);
-			encoder.setSignalType(OpusSignal.OPUS_SIGNAL_MUSIC);
-			encoder.setComplexity(10);
-		} catch (OpusException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ENCODER = new OpusEncoder(48000, 2, OpusApplication.OPUS_APPLICATION_AUDIO);
+			ENCODER.setBitrate(96000); // TODO Very high bitrate, we should decrease that eventually
+			ENCODER.setSignalType(OpusSignal.OPUS_SIGNAL_AUTO);
+			ENCODER.setComplexity(10);
+			
+			DECODER = new OpusDecoder(48000, 2);
+		} catch (OpusException ex) {
+			throw new RuntimeException(ex); // This should never happen
 		}
 	}
-	
 }
