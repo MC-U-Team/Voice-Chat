@@ -16,7 +16,8 @@ public class VoiceClient {
 	private final Thread receiveThread;
 	private final Thread sendThread;
 	
-	private final VoiceSender sender;
+	private final VoiceRecorder sender;
+	private final VoicePlayer player;
 	
 	private boolean handshakeDone;
 	
@@ -28,7 +29,8 @@ public class VoiceClient {
 		sendThread = new Thread(() -> sendTask(), "Voice Client Send");
 		receiveThread.start();
 		sendThread.start();
-		sender = new VoiceSender();
+		sender = new VoiceRecorder();
+		player = new VoicePlayer();
 	}
 	
 	public void close() {
@@ -45,31 +47,28 @@ public class VoiceClient {
 	}
 	
 	private void receiveTask() {
-		while (!receiveThread.isInterrupted()) {
-			
+		try {
+			while (!receiveThread.isInterrupted() && !socket.isClosed()) {
+				receivePacket();
+			}
+		} catch (IOException ex) {
+			if (!socket.isClosed()) {
+				ex.printStackTrace();
+			}
 		}
 	}
 	
 	private void sendTask() {
 		try {
 			// If handshake has not been done yet, send the packet every 500 ms
-			while (!handshakeDone) {
+			while (!handshakeDone && !socket.isClosed()) {
 				sendHandshakePacket();
 				synchronized (this) {
 					Thread.sleep(500);
 				}
 			}
-			while (!sendThread.isInterrupted()) {
-				if (sender.canSend()) {
-					final byte[] opusPacket = sender.getBytes();
-					if (opusPacket.length > 1) {
-						sendVoicePacket(opusPacket);
-					}
-				} else {
-					synchronized (this) {
-						Thread.sleep(200);
-					}
-				}
+			while (!sendThread.isInterrupted() && !socket.isClosed()) {
+				sendPacket();
 			}
 		} catch (IOException ex) {
 			if (!socket.isClosed()) {
@@ -81,6 +80,19 @@ public class VoiceClient {
 	
 	public void setHandshakeDone() {
 		handshakeDone = true;
+	}
+	
+	private void sendPacket() throws IOException, InterruptedException {
+		if (sender.canSend()) {
+			final byte[] opusPacket = sender.getBytes();
+			if (opusPacket.length > 1) {
+				sendVoicePacket(opusPacket);
+			}
+		} else {
+			synchronized (this) {
+				Thread.sleep(200);
+			}
+		}
 	}
 	
 	private void sendHandshakePacket() throws IOException {
@@ -102,6 +114,17 @@ public class VoiceClient {
 		
 		final DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress);
 		socket.send(packet);
+	}
+	
+	private void receivePacket() throws IOException {
+		final DatagramPacket packet = new DatagramPacket(new byte[1500], 1500);
+		socket.receive(packet);
+		// TODO logic with from what player etc
+		handleVoicePacket(Arrays.copyOf(packet.getData(), packet.getLength()));
+	}
+	
+	private void handleVoicePacket(byte[] packet) {
+		player.play(packet);
 	}
 	
 }

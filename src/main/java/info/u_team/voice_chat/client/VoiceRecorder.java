@@ -9,13 +9,13 @@ import org.concentus.OpusException;
 import info.u_team.voice_chat.config.ClientConfig;
 import info.u_team.voice_chat.init.VoiceChatKeybindings;
 
-public class VoiceSender extends VoiceInfo {
+public class VoiceRecorder extends VoiceInfo {
 	
 	private static final DataLine.Info MIC_INFO = new DataLine.Info(TargetDataLine.class, FORMAT);
 	
 	private TargetDataLine targetLine;
 	
-	public VoiceSender() {
+	public VoiceRecorder() {
 		setTargetLine(findMicrophoneOrUseDefault(ClientConfig.getInstance().microphoneValue.get()));
 	}
 	
@@ -24,10 +24,10 @@ public class VoiceSender extends VoiceInfo {
 	}
 	
 	public byte[] getBytes() {
-		byte[] data = new byte[960 * 2 * 2]; // Used for 20 ms audio frames with 2 channels at 48khz
+		final byte[] data = new byte[960 * 2 * 2]; // Used for 20 ms audio frames with 2 channels at 48khz
 		targetLine.read(data, 0, data.length);
 		try {
-			int encodedLength = ENCODER.encode(data, 0, 960, data, 0, data.length);
+			final int encodedLength = ENCODER.encode(data, 0, 960, data, 0, data.length);
 			return Arrays.copyOf(data, encodedLength);
 		} catch (OpusException ex) {
 			return new byte[0];
