@@ -1,10 +1,9 @@
-package info.u_team.voice_chat.handler;
+package info.u_team.voice_chat.server;
 
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.config.CommonConfig;
 import info.u_team.voice_chat.init.VoiceChatNetworks;
 import info.u_team.voice_chat.message.ServerPortMessage;
-import info.u_team.voice_chat.server.PlayerSecretList;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerEvent.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -13,7 +12,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 @EventBusSubscriber(modid = VoiceChatMod.MODID, bus = Bus.FORGE)
-public class HandshakeHandler {
+public class PlayerServerEventHandler {
 	
 	@SubscribeEvent
 	public static void login(PlayerLoggedInEvent event) {
@@ -29,11 +28,14 @@ public class HandshakeHandler {
 	}
 	
 	@SubscribeEvent
-	public static void login(PlayerLoggedOutEvent event) {
+	public static void logout(PlayerLoggedOutEvent event) {
 		if (!(event.getPlayer() instanceof ServerPlayerEntity)) {
 			return;
 		}
 		final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
+		
+		// Remove verified player
+		VerifiedPlayerDataList.removePlayer(player);
 		// Remove player secret
 		PlayerSecretList.removePlayer(player);
 	}
