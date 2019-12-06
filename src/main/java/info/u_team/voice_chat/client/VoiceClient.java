@@ -16,6 +16,8 @@ public class VoiceClient {
 	private final Thread receiveThread;
 	private final Thread sendThread;
 	
+	private final VoiceSender sender;
+	
 	private boolean handshakeDone;
 	
 	public VoiceClient(int port, byte[] secret) throws SocketException {
@@ -26,6 +28,7 @@ public class VoiceClient {
 		sendThread = new Thread(() -> sendTask(), "Voice Client Send");
 		receiveThread.start();
 		sendThread.start();
+		sender = new VoiceSender();
 	}
 	
 	public void close() {
@@ -53,11 +56,20 @@ public class VoiceClient {
 			while (!handshakeDone) {
 				sendHandshakePacket();
 				synchronized (this) {
-					wait(500);
+					Thread.sleep(500);
 				}
 			}
 			while (!sendThread.isInterrupted()) {
-				
+				if (sender.canSend()) {
+					final byte[] opusPacket = sender.getBytes();
+					if (opusPacket.length > 1) {
+						sendVoicePacket(opusPacket);
+					}
+				} else {
+					synchronized (this) {
+						Thread.sleep(200);
+					}
+				}
 			}
 		} catch (IOException ex) {
 			if (!socket.isClosed()) {
@@ -74,8 +86,19 @@ public class VoiceClient {
 	private void sendHandshakePacket() throws IOException {
 		// Build packet
 		byte[] data = new byte[9];
-		data[0] = 0;
+		data[0] = 0; // Handshake byte
 		System.arraycopy(secret, 0, data, 1, secret.length);
+		
+		final DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress);
+		socket.send(packet);
+	}
+	
+	private void sendVoicePacket(byte[] opusPacket) throws IOException {
+		// Build packet
+		byte[] data = new byte[opusPacket.length + 9];
+		data[0] = 1; // Voice packet byte
+		System.arraycopy(secret, 0, data, 1, secret.length);
+		System.arraycopy(opusPacket, 0, data, 9, opusPacket.length);
 		
 		final DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress);
 		socket.send(packet);

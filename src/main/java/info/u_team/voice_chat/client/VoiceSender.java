@@ -1,8 +1,13 @@
 package info.u_team.voice_chat.client;
 
+import java.util.Arrays;
+
 import javax.sound.sampled.*;
 
-import info.u_team.voice_chat.config.CommonConfig;
+import org.concentus.OpusException;
+
+import info.u_team.voice_chat.config.ClientConfig;
+import info.u_team.voice_chat.init.VoiceChatKeybindings;
 
 public class VoiceSender extends VoiceInfo {
 	
@@ -11,20 +16,38 @@ public class VoiceSender extends VoiceInfo {
 	private TargetDataLine targetLine;
 	
 	public VoiceSender() {
+		setTargetLine(findMicrophoneOrUseDefault(ClientConfig.getInstance().microphoneValue.get()));
 	}
 	
-	public void setTargetLine(TargetDataLine newLine) throws LineUnavailableException {
+	public boolean canSend() {
+		return targetLine != null && targetLine.isOpen() && VoiceChatKeybindings.PUSH_TALK.isKeyDown();
+	}
+	
+	public byte[] getBytes() {
+		byte[] data = new byte[960 * 2 * 2]; // Used for 20 ms audio frames with 2 channels at 48khz
+		targetLine.read(data, 0, data.length);
+		try {
+			int encodedLength = ENCODER.encode(data, 0, 960, data, 0, data.length);
+			return Arrays.copyOf(data, encodedLength);
+		} catch (OpusException ex) {
+			return new byte[0];
+		}
+	}
+	
+	public void setTargetLine(TargetDataLine newLine) {
 		if (targetLine != null) {
 			targetLine.close();
 		}
 		targetLine = newLine;
-		targetLine.open(FORMAT);
-		targetLine.start();
-		
-		CommonConfig.getInstance().portValue.set(1);
+		try {
+			targetLine.open(FORMAT);
+			targetLine.start();
+		} catch (LineUnavailableException ex) {
+			targetLine = null;
+		}
 	}
 	
-	public TargetDataLine findMicrophoneOrUseDefault(String name) {
+	private TargetDataLine findMicrophoneOrUseDefault(String name) {
 		try {
 			for (Mixer.Info info : AudioSystem.getMixerInfo()) {
 				final Mixer mixer = AudioSystem.getMixer(info);
@@ -36,7 +59,5 @@ public class VoiceSender extends VoiceInfo {
 		} catch (LineUnavailableException ex) {
 			return null;
 		}
-		
 	}
-	
 }
