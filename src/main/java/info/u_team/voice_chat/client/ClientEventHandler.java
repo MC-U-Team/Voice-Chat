@@ -12,7 +12,6 @@ public class ClientEventHandler {
 	
 	@SubscribeEvent
 	public static void logout(LoggedOutEvent event) {
-		System.out.println("FIRED LOGOUT EVENT LOL");
 		if (VoiceClientManager.isRunning()) {
 			VoiceClientManager.stop();
 		}

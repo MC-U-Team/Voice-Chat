@@ -68,7 +68,6 @@ public class VoiceClient {
 	}
 	
 	public void setHandshakeDone() {
-		System.out.println("HANDSHAKE DONE");
 		handshakeDone = true;
 	}
 	
