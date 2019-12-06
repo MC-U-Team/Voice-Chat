@@ -18,7 +18,6 @@ public class VoiceServer implements Runnable {
 	public VoiceServer() throws SocketException {
 		SocketAddress address = NetworkUtil.findServerBindAddress();
 		socket = new DatagramSocket(address);
-		System.out.println("----------------------------------------------<yyyyyyyYY " + address);
 	}
 	
 	public void close() {
@@ -29,14 +28,11 @@ public class VoiceServer implements Runnable {
 	public void run() {
 		while (!socket.isClosed()) {
 			try {
-				System.out.println("LOL YES -----------------------------------------------------------");
 				receivePacket();
-				
 			} catch (IOException ex) {
 				ex.printStackTrace();
 			}
 		}
-		System.out.println("WTF SHOULD NOT HAPPEN LOLLL LL LXDODODODODOODODODODO");
 	}
 	
 	private void receivePacket() throws IOException {
@@ -46,8 +42,6 @@ public class VoiceServer implements Runnable {
 		final byte[] data = packet.getData();
 		final byte type = data[0];
 		final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(Arrays.copyOfRange(data, 1, 9));
-		
-		System.out.println("RECEIVED PACKET YXSADASDHJASDJKL HASJDKLHALSJKDhalsKHDJ");
 		
 		// Ignore packet if the secret cannot be matches to a player
 		if (player == null) {
@@ -61,9 +55,10 @@ public class VoiceServer implements Runnable {
 	}
 	
 	private void handleHandshakePacket(ServerPlayerEntity player, InetAddress address, int port) {
-		// DO NOT DO ANYTHING IF ALREADY HERE:
-		VerifiedPlayerDataList.addPlayer(player, new PlayerData(address, port));
-		VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ReadyMessage());
+		if (!VerifiedPlayerDataList.hasPlayerData(player)) {
+			VerifiedPlayerDataList.addPlayer(player, new PlayerData(address, port));
+			VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ReadyMessage());
+		}
 	}
 	
 }

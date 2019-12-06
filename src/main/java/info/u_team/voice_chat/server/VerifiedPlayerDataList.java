@@ -23,6 +23,10 @@ public class VerifiedPlayerDataList {
 		return MAP.get(player.getUniqueID());
 	}
 	
+	public static boolean hasPlayerData(ServerPlayerEntity player) {
+		return MAP.containsKey(player.getUniqueID());
+	}
+	
 	public static class PlayerData {
 		
 		private final InetAddress address;
