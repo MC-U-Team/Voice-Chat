@@ -64,12 +64,10 @@ public class VoiceClient {
 				ex.printStackTrace();
 			}
 		} catch (InterruptedException ex) {
-			System.out.println("STOPING CLIENT");
 		}
 	}
 	
 	public void setHandshakeDone() {
-		System.out.println("JA YEET -------------------------------------------------");
 		handshakeDone = true;
 	}
 	
@@ -82,19 +80,5 @@ public class VoiceClient {
 		final DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress);
 		socket.send(packet);
 	}
-	
-	// private final DatagramSocket socket;
-	// private final byte[] secret;
-	//
-	// public VoiceClient(DatagramSocket socket, byte[] secret) {
-	// this.socket = socket;
-	// this.secret = secret;
-	// Minecraft.getInstance().getConnection().getNetworkManager().isChannelOpen();
-	// }
-	//
-	// @Override
-	// public void run() {
-	//
-	// }
 	
 }
