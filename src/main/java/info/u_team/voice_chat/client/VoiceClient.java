@@ -29,6 +29,7 @@ public class VoiceClient {
 	}
 	
 	public void close() {
+		socket.close();
 		receiveThread.interrupt();
 		sendThread.interrupt();
 		try {
@@ -38,10 +39,12 @@ public class VoiceClient {
 		} catch (InterruptedException ex) {
 			// Should not happen. Who interrupts the main thread??
 		}
-		socket.close();
 	}
 	
 	private void receiveTask() {
+		while (!receiveThread.isInterrupted()) {
+			
+		}
 	}
 	
 	private void sendTask() {
@@ -53,9 +56,15 @@ public class VoiceClient {
 					wait(500);
 				}
 			}
+			while (!sendThread.isInterrupted()) {
+				
+			}
 		} catch (IOException ex) {
+			if (!socket.isClosed()) {
+				ex.printStackTrace();
+			}
 		} catch (InterruptedException ex) {
-			
+			System.out.println("STOPING CLIENT");
 		}
 	}
 	

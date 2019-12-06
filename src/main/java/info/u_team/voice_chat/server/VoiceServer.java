@@ -24,6 +24,7 @@ public class VoiceServer {
 	}
 	
 	public void close() {
+		socket.close();
 		thread.interrupt();
 		try {
 			// Wait for the thread to be closed
@@ -31,15 +32,16 @@ public class VoiceServer {
 		} catch (InterruptedException ex) {
 			// Should not happen. Who interrupts the main thread??
 		}
-		socket.close();
 	}
 	
 	public void serverTask() {
-		while (!socket.isClosed()) {
+		while (!thread.isInterrupted() && !socket.isClosed()) {
 			try {
 				receivePacket();
 			} catch (IOException ex) {
-				ex.printStackTrace();
+				if (!socket.isClosed()) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
