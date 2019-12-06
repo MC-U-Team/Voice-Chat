@@ -10,7 +10,9 @@ public class VerifiedPlayerDataList {
 	public static final Map<UUID, PlayerData> MAP = new HashMap<UUID, PlayerData>();
 	
 	public static synchronized void addPlayer(ServerPlayerEntity player, PlayerData playerData) {
-		MAP.put(player.getUniqueID(), playerData);
+		if (!MAP.containsKey(player.getUniqueID())) {
+			MAP.put(player.getUniqueID(), playerData);
+		}
 	}
 	
 	public static synchronized void removePlayer(ServerPlayerEntity player) {

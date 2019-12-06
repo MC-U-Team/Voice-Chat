@@ -2,6 +2,7 @@ package info.u_team.voice_chat.message;
 
 import java.util.function.Supplier;
 
+import info.u_team.voice_chat.client.VoiceClientManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
@@ -24,10 +25,6 @@ public class ServerPortMessage {
 		this.secret = secret;
 	}
 	
-	public int getPort() {
-		return port;
-	}
-	
 	public static void encode(ServerPortMessage message, PacketBuffer buffer) {
 		buffer.writeInt(message.port);
 		buffer.writeByteArray(message.secret);
@@ -41,6 +38,10 @@ public class ServerPortMessage {
 		
 		public static void handle(ServerPortMessage message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
+			if (VoiceClientManager.isRunning()) {
+				VoiceClientManager.stop();
+			}
+			VoiceClientManager.start(message.port, message.secret);
 			context.setPacketHandled(true);
 		}
 	}
