@@ -47,12 +47,14 @@ public class VoiceServer {
 	}
 	
 	private void receivePacket() throws IOException {
-		final DatagramPacket packet = new DatagramPacket(new byte[1000], 1000);
+		final DatagramPacket packet = new DatagramPacket(new byte[1500], 1500);
 		socket.receive(packet);
 		
 		final byte[] data = packet.getData();
 		final byte type = data[0];
 		final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(Arrays.copyOfRange(data, 1, 9));
+		final byte[] transmittedData = Arrays.copyOfRange(data, 9, packet.getLength() /** + 1 ?? */
+		);
 		
 		// Ignore packet if the secret cannot be matches to a player
 		if (player == null) {
@@ -60,16 +62,34 @@ public class VoiceServer {
 		}
 		
 		if (type == 0) {
-			handleHandshakePacket(player, packet.getAddress(), packet.getPort());
+			handleHandshakePacket(player, (InetSocketAddress) packet.getSocketAddress());
+		} else if (type == 1) {
+			handleVoicePacket(player, transmittedData);
 		}
 		
 	}
 	
-	private void handleHandshakePacket(ServerPlayerEntity player, InetAddress address, int port) {
+	private void handleHandshakePacket(ServerPlayerEntity player, InetSocketAddress address) {
 		if (!VerifiedPlayerDataList.hasPlayerData(player)) {
-			VerifiedPlayerDataList.addPlayer(player, new PlayerData(address, port));
+			VerifiedPlayerDataList.addPlayer(player, new PlayerData(address));
 			VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ReadyMessage());
 		}
+	}
+	
+	private void handleVoicePacket(ServerPlayerEntity player, byte[] transmittedData) throws IOException {
+		// Build packet
+		// TODO Add player id so the client can display which client send that voice packet
+		
+		// No logic, just send it to all players currently
+		VerifiedPlayerDataList.iterate((uuid, data) -> {
+			// TODO Should check if its not the sender, for testing we will send it to the sender too
+			try {
+				socket.send(new DatagramPacket(transmittedData, transmittedData.length, data.getAddress()));
+			} catch (IOException e) {
+				e.printStackTrace();
+				// dumb lamba -> should be replaced
+			}
+		});
 	}
 	
 }

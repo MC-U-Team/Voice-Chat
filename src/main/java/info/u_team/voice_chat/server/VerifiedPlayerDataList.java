@@ -1,13 +1,14 @@
 package info.u_team.voice_chat.server;
 
-import java.net.InetAddress;
+import java.net.*;
 import java.util.*;
+import java.util.function.BiConsumer;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class VerifiedPlayerDataList {
 	
-	public static final Map<UUID, PlayerData> MAP = new HashMap<UUID, PlayerData>();
+	private static final Map<UUID, PlayerData> MAP = new HashMap<UUID, PlayerData>();
 	
 	public static synchronized void addPlayer(ServerPlayerEntity player, PlayerData playerData) {
 		if (!MAP.containsKey(player.getUniqueID())) {
@@ -27,23 +28,21 @@ public class VerifiedPlayerDataList {
 		return MAP.containsKey(player.getUniqueID());
 	}
 	
+	public static void iterate(BiConsumer<UUID, PlayerData> consumer) {
+		MAP.forEach(consumer);
+	}
+	
 	public static class PlayerData {
 		
-		private final InetAddress address;
-		private final int port;
+		private final InetSocketAddress address;
 		
-		public PlayerData(InetAddress address, int port) {
+		public PlayerData(InetSocketAddress address) {
 			super();
 			this.address = address;
-			this.port = port;
 		}
 		
-		public InetAddress getAddress() {
+		public InetSocketAddress getAddress() {
 			return address;
-		}
-		
-		public int getPort() {
-			return port;
 		}
 	}
 	
