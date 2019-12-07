@@ -16,7 +16,7 @@ public class VoiceClient {
 	private final Thread receiveThread;
 	private final Thread sendThread;
 	
-	private final VoiceRecorder sender;
+	private final VoiceRecorder recorder;
 	private final VoicePlayer player;
 	
 	private boolean handshakeDone;
@@ -29,12 +29,14 @@ public class VoiceClient {
 		sendThread = new Thread(() -> sendTask(), "Voice Client Send");
 		receiveThread.start();
 		sendThread.start();
-		sender = new VoiceRecorder();
+		recorder = new VoiceRecorder();
 		player = new VoicePlayer();
 	}
 	
 	public void close() {
 		socket.close();
+		recorder.close();
+		player.close();
 		receiveThread.interrupt();
 		sendThread.interrupt();
 		try {
@@ -83,8 +85,8 @@ public class VoiceClient {
 	}
 	
 	private void sendPacket() throws IOException, InterruptedException {
-		if (sender.canSend()) {
-			final byte[] opusPacket = sender.getBytes();
+		if (recorder.canSend()) {
+			final byte[] opusPacket = recorder.getBytes();
 			if (opusPacket.length > 1) {
 				sendVoicePacket(opusPacket);
 			}

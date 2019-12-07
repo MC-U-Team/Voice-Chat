@@ -38,6 +38,10 @@ public class VoicePlayer extends VoiceInfo {
 		}
 	}
 	
+	public void close() {
+		sourceLine.close();
+	}
+	
 	private SourceDataLine findSpeakerOrUseDefault(String name) {
 		try {
 			for (Mixer.Info info : AudioSystem.getMixerInfo()) {

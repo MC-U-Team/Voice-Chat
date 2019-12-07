@@ -47,6 +47,10 @@ public class VoiceRecorder extends VoiceInfo {
 		}
 	}
 	
+	public void close() {
+		targetLine.close();
+	}
+	
 	private TargetDataLine findMicrophoneOrUseDefault(String name) {
 		try {
 			for (Mixer.Info info : AudioSystem.getMixerInfo()) {
