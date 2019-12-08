@@ -2,8 +2,9 @@ package info.u_team.voice_chat.server;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.*;
+import java.nio.ByteBuffer;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import info.u_team.voice_chat.init.VoiceChatNetworks;
 import info.u_team.voice_chat.message.*;
@@ -51,13 +52,16 @@ public class VoiceServer {
 		final DatagramPacket packet = new DatagramPacket(new byte[1500], 1500);
 		socket.receive(packet);
 		
-		final byte[] data = packet.getData();
-		final byte type = data[0];
-		final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(Arrays.copyOfRange(data, 1, 9));
-		final byte[] transmittedData = Arrays.copyOfRange(data, 9, packet.getLength() /** + 1 ?? */
-		);
+		final ByteBuffer buffer = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
 		
-		// Ignore packet if the secret cannot be matches to a player
+		final byte type = buffer.get();
+		final byte[] secret = new byte[8];
+		buffer.get(secret);
+		final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(secret);
+		final byte[] data = new byte[buffer.remaining()];
+		buffer.get(data);
+		
+		// Ignore packet if the secret cannot be matched to a player
 		if (player == null) {
 			return;
 		}
@@ -65,7 +69,7 @@ public class VoiceServer {
 		if (type == 0) {
 			handleHandshakePacket(player, (InetSocketAddress) packet.getSocketAddress());
 		} else if (type == 1) {
-			handleVoicePacket(player, transmittedData);
+			handleVoicePacket(player, data);
 		}
 		
 	}
