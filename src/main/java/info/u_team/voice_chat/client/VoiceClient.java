@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 import info.u_team.voice_chat.util.NetworkUtil;
+import net.minecraft.client.Minecraft;
 
 public class VoiceClient {
 	
@@ -124,7 +125,7 @@ public class VoiceClient {
 		
 		final UUID uuid = PlayerIDList.getPlayerByID(id);
 		if (uuid == null) {
-			System.out.println("Unknow uuid. That should not happen");
+			System.out.println("Unknown uuid. That should not happen");
 			return;
 		}
 		
@@ -136,6 +137,7 @@ public class VoiceClient {
 	
 	private void handleVoicePacket(UUID uuid, byte[] packet) {
 		player.play(packet);
+		System.out.println(Minecraft.getInstance().world.getPlayerByUuid(uuid));
 	}
 	
 }

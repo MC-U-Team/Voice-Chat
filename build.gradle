@@ -87,12 +87,21 @@ def normalManifest = {
 	)
 }
 
+configurations {
+    internal
+    compile.extendsFrom(internal)
+}
+
 jar {
 	classifier = ""
 
     from "LICENSE"
     
     exclude(".cache")    
+    
+    from {
+    	configurations.internal.collect { it.isDirectory() ? it : zipTree(it) }
+    }
        
    	manifest normalManifest
 }
@@ -104,6 +113,10 @@ task deobfJar(type: Jar) {
     from "LICENSE"
     
     exclude(".cache")    
+    
+    from {
+    	configurations.internal.collect { it.isDirectory() ? it : zipTree(it) }
+    }
         
     manifest normalManifest
 }
@@ -149,7 +162,7 @@ dependencies {
 	compile "info.u-team:u_team_core-${config.forge.mcversion}:${config.uteamcore.version}:dev"
   	compileOnly fg.deobf("mezz.jei:jei-${config.forge.mcversion}:${config.jei.version}:api")
   	runtimeOnly fg.deobf("mezz.jei:jei-${config.forge.mcversion}:${config.jei.version}")
-  	compile fileTree(dir: 'libs', include: '*.jar')
+  	internal fileTree(dir: 'libs', include: '*.jar')
 }
 
 compileJava {
