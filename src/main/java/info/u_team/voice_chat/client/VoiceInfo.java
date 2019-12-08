@@ -4,6 +4,8 @@ import javax.sound.sampled.AudioFormat;
 
 import org.concentus.*;
 
+import info.u_team.voice_chat.config.ClientConfig;
+
 public class VoiceInfo {
 	
 	protected static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
@@ -14,7 +16,7 @@ public class VoiceInfo {
 	static {
 		try {
 			ENCODER = new OpusEncoder(48000, 2, OpusApplication.OPUS_APPLICATION_AUDIO);
-			ENCODER.setBitrate(96000); // TODO Very high bitrate, we should decrease that eventually
+			ENCODER.setBitrate(ClientConfig.getInstance().bitrateValue.get());
 			ENCODER.setSignalType(OpusSignal.OPUS_SIGNAL_AUTO);
 			ENCODER.setComplexity(10);
 			
