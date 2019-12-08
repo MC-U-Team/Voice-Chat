@@ -2,7 +2,8 @@ package info.u_team.voice_chat.client;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.Arrays;
+import java.nio.ByteBuffer;
+import java.util.*;
 
 import info.u_team.voice_chat.util.NetworkUtil;
 
@@ -121,11 +122,23 @@ public class VoiceClient {
 	private void receivePacket() throws IOException {
 		final DatagramPacket packet = new DatagramPacket(new byte[1500], 1500);
 		socket.receive(packet);
-		// TODO logic with from what player etc
-		handleVoicePacket(Arrays.copyOf(packet.getData(), packet.getLength()));
+		
+		final ByteBuffer buffer = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
+		final short id = buffer.getShort();
+		
+		final UUID uuid = PlayerIDList.getPlayerByID(id);
+		if (uuid == null) {
+			System.out.println("Unknow uuid. That should not happen");
+			return;
+		}
+		
+		final byte[] data = new byte[buffer.remaining()];
+		buffer.get(data);
+		
+		handleVoicePacket(uuid, data);
 	}
 	
-	private void handleVoicePacket(byte[] packet) {
+	private void handleVoicePacket(UUID uuid, byte[] packet) {
 		player.play(packet);
 	}
 	

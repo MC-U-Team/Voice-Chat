@@ -83,16 +83,18 @@ public class VoiceServer {
 		}
 	}
 	
-	private void handleVoicePacket(ServerPlayerEntity player, byte[] transmittedData) throws IOException {
+	private void handleVoicePacket(ServerPlayerEntity player, byte[] data) throws IOException {
 		// Build packet
-		// TODO Add player id so the client can display which client send that voice packet
+		final ByteBuffer buffer = ByteBuffer.allocate(data.length + 2);
+		buffer.putShort(VerifiedPlayerDataList.getPlayerData(player).getId());
+		buffer.put(data);
 		
 		// No logic, just send it to all players currently
 		
 		for (Entry<UUID, PlayerData> entry : VerifiedPlayerDataList.getMap().entrySet()) {
 			// TODO Should check if its not the sender, for testing we will send it to the sender too
 			try {
-				socket.send(new DatagramPacket(transmittedData, transmittedData.length, entry.getValue().getAddress()));
+				socket.send(new DatagramPacket(buffer.array(), buffer.array().length, entry.getValue().getAddress()));
 			} catch (IOException ex) {
 				// We don't want to break if to one "client" we cannot send the data. Just log it for now
 				ex.printStackTrace();
