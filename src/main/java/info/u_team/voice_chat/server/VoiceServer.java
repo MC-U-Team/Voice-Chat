@@ -39,7 +39,9 @@ public class VoiceServer {
 	public void serverTask() {
 		while (!thread.isInterrupted() && !socket.isClosed()) {
 			try {
+				final long time = System.currentTimeMillis();
 				receivePacket();
+				System.out.println("Took: " + (System.currentTimeMillis() - time));
 			} catch (IOException ex) {
 				if (!socket.isClosed()) {
 					ex.printStackTrace();
@@ -52,26 +54,34 @@ public class VoiceServer {
 		final DatagramPacket packet = new DatagramPacket(new byte[1500], 1500);
 		socket.receive(packet);
 		
-		final ByteBuffer buffer = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
-		
-		final byte type = buffer.get();
-		final byte[] secret = new byte[8];
-		buffer.get(secret);
-		final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(secret);
-		final byte[] data = new byte[buffer.remaining()];
-		buffer.get(data);
-		
-		// Ignore packet if the secret cannot be matched to a player
-		if (player == null) {
-			return;
-		}
-		
-		if (type == 0) {
-			handleHandshakePacket(player, (InetSocketAddress) packet.getSocketAddress());
-		} else if (type == 1) {
-			handleVoicePacket(player, data);
-		}
-		
+		VoiceServerManager.EXECUTOR.execute(() -> {
+			try {
+				final ByteBuffer buffer = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
+				
+				final byte type = buffer.get();
+				final byte[] secret = new byte[8];
+				buffer.get(secret);
+				final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(secret);
+				final byte[] data = new byte[buffer.remaining()];
+				buffer.get(data);
+				
+				// Ignore packet if the secret cannot be matched to a player
+				if (player == null) {
+					return;
+				}
+				
+				if (type == 0) {
+					handleHandshakePacket(player, (InetSocketAddress) packet.getSocketAddress());
+				} else if (type == 1) {
+					handleVoicePacket(player, data);
+				}
+				
+			} catch (IOException ex) {
+				if (!socket.isClosed()) {
+					ex.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	private void handleHandshakePacket(ServerPlayerEntity player, InetSocketAddress address) {
