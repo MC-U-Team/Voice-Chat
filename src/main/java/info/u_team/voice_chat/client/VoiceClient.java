@@ -51,13 +51,13 @@ public class VoiceClient {
 	}
 	
 	private void receiveTask() {
-		try {
-			while (!receiveThread.isInterrupted() && !socket.isClosed()) {
+		while (!receiveThread.isInterrupted() && !socket.isClosed()) {
+			try {
 				receivePacket();
-			}
-		} catch (IOException ex) {
-			if (!socket.isClosed()) {
-				ex.printStackTrace();
+			} catch (IOException ex) {
+				if (!socket.isClosed()) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}
@@ -66,17 +66,25 @@ public class VoiceClient {
 		try {
 			// If handshake has not been done yet, send the packet every 500 ms
 			while (!handshakeDone && !socket.isClosed()) {
-				sendHandshakePacket();
-				synchronized (this) {
-					Thread.sleep(500);
+				try {
+					sendHandshakePacket();
+					synchronized (this) {
+						Thread.sleep(500);
+					}
+				} catch (IOException ex) {
+					if (!socket.isClosed()) {
+						ex.printStackTrace();
+					}
 				}
 			}
 			while (!sendThread.isInterrupted() && !socket.isClosed()) {
-				sendPacket();
-			}
-		} catch (IOException ex) {
-			if (!socket.isClosed()) {
-				ex.printStackTrace();
+				try {
+					sendPacket();
+				} catch (IOException ex) {
+					if (!socket.isClosed()) {
+						ex.printStackTrace();
+					}
+				}
 			}
 		} catch (InterruptedException ex) {
 		}
@@ -94,7 +102,7 @@ public class VoiceClient {
 			}
 		} else {
 			synchronized (this) {
-				Thread.sleep(200);
+				Thread.sleep(50);
 			}
 		}
 	}

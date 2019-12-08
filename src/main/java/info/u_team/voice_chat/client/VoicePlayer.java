@@ -16,6 +16,10 @@ public class VoicePlayer extends VoiceInfo {
 		setSourceLine(findSpeakerOrUseDefault(ClientConfig.getInstance().speakerValue.get()));
 	}
 	
+	public boolean canPlay() {
+		return sourceLine != null && sourceLine.isOpen();
+	}
+	
 	public void play(byte[] opusPacket) {
 		final byte[] data = new byte[960 * 2 * 2];
 		try {
