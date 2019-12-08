@@ -39,9 +39,7 @@ public class VoiceServer {
 	public void serverTask() {
 		while (!thread.isInterrupted() && !socket.isClosed()) {
 			try {
-				final long time = System.currentTimeMillis();
 				receivePacket();
-				System.out.println("Took: " + (System.currentTimeMillis() - time));
 			} catch (IOException ex) {
 				if (!socket.isClosed()) {
 					ex.printStackTrace();
