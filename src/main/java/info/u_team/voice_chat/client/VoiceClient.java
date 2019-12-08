@@ -99,24 +99,20 @@ public class VoiceClient {
 	}
 	
 	private void sendHandshakePacket() throws IOException {
-		// Build packet
-		byte[] data = new byte[9];
-		data[0] = 0; // Handshake byte
-		System.arraycopy(secret, 0, data, 1, secret.length);
+		final ByteBuffer buffer = ByteBuffer.allocate(9);
+		buffer.put((byte) 0);
+		buffer.put(secret);
 		
-		final DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress);
-		socket.send(packet);
+		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
 	}
 	
 	private void sendVoicePacket(byte[] opusPacket) throws IOException {
-		// Build packet
-		byte[] data = new byte[opusPacket.length + 9];
-		data[0] = 1; // Voice packet byte
-		System.arraycopy(secret, 0, data, 1, secret.length);
-		System.arraycopy(opusPacket, 0, data, 9, opusPacket.length);
+		final ByteBuffer buffer = ByteBuffer.allocate(9 + opusPacket.length);
+		buffer.put((byte) 1);
+		buffer.put(secret);
+		buffer.put(opusPacket);
 		
-		final DatagramPacket packet = new DatagramPacket(data, data.length, serverAddress);
-		socket.send(packet);
+		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
 	}
 	
 	private void receivePacket() throws IOException {

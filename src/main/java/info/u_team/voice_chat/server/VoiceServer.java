@@ -94,7 +94,7 @@ public class VoiceServer {
 		for (Entry<UUID, PlayerData> entry : VerifiedPlayerDataList.getMap().entrySet()) {
 			// TODO Should check if its not the sender, for testing we will send it to the sender too
 			try {
-				socket.send(new DatagramPacket(buffer.array(), buffer.array().length, entry.getValue().getAddress()));
+				socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), entry.getValue().getAddress()));
 			} catch (IOException ex) {
 				// We don't want to break if to one "client" we cannot send the data. Just log it for now
 				ex.printStackTrace();
