@@ -15,22 +15,50 @@ public class VoiceRecorder extends VoiceInfo {
 	
 	private TargetDataLine targetLine;
 	
+	private boolean keyPressed;
+	
+	private int stoppedPressing = 0;
+	
 	public VoiceRecorder() {
 		setTargetLine(findMicrophoneOrUseDefault(ClientConfig.getInstance().microphoneValue.get()));
 	}
 	
 	public boolean canSend() {
-		return targetLine != null && targetLine.isOpen() && VoiceChatKeybindings.PUSH_TALK.isKeyDown();
+		if (targetLine == null || !targetLine.isOpen()) {
+			return false;
+		}
+		final boolean currentState = VoiceChatKeybindings.PUSH_TALK.isKeyDown();
+		if (stoppedPressing > 0) {
+			keyPressed = currentState;
+			return true;
+		} else if (keyPressed && !currentState) {
+			stoppedPressing = 1;
+			keyPressed = currentState;
+			return true;
+		} else {
+			return keyPressed = currentState;
+		}
 	}
 	
 	public byte[] getBytes() {
-		final byte[] data = new byte[960 * 2 * 2]; // Used for 20 ms audio frames with 2 channels at 48khz
-		targetLine.read(data, 0, data.length);
-		try {
-			final int encodedLength = ENCODER.encode(data, 0, 960, data, 0, data.length);
-			return Arrays.copyOf(data, encodedLength);
-		} catch (OpusException ex) {
-			return new byte[0];
+		if (stoppedPressing > 0) {
+			stoppedPressing++;
+			if (stoppedPressing > 6) {
+				if (stoppedPressing >= 8) {
+					stoppedPressing = 0;
+				}
+				return new byte[] { 0, 0 }; // Packet so we know that we stop sending (send more for safety)
+			}
+			return new byte[] { -8, -1, -2 }; // Silent opus packet (f8fffe)
+		} else {
+			final byte[] data = new byte[960 * 2 * 2]; // Used for 20 ms audio frames with 2 channels at 48khz
+			targetLine.read(data, 0, data.length);
+			try {
+				final int encodedLength = ENCODER.encode(data, 0, 960, data, 0, data.length);
+				return Arrays.copyOf(data, encodedLength);
+			} catch (OpusException ex) {
+				return new byte[0];
+			}
 		}
 	}
 	

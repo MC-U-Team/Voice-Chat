@@ -17,5 +17,4 @@ public class ClientEventHandler {
 		}
 		PlayerIDList.clear();
 	}
-	
 }
