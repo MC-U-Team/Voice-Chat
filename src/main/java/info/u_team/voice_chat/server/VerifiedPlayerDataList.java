@@ -1,7 +1,8 @@
 package info.u_team.voice_chat.server;
 
-import java.net.*;
+import java.net.InetSocketAddress;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -28,21 +29,35 @@ public class VerifiedPlayerDataList {
 		return MAP.containsKey(player.getUniqueID());
 	}
 	
+	@Deprecated
 	public static void iterate(BiConsumer<UUID, PlayerData> consumer) {
 		MAP.forEach(consumer);
 	}
 	
+	public static Map<UUID, PlayerData> getMap() {
+		return Collections.unmodifiableMap(MAP);
+	}
+	
 	public static class PlayerData {
 		
+		private static final AtomicInteger COUNTER = new AtomicInteger();
+		
 		private final InetSocketAddress address;
+		private final short id;
 		
 		public PlayerData(InetSocketAddress address) {
-			super();
 			this.address = address;
+			// We don't care about collisions because there will never be more than 32k players connected to a voice server at the
+			// same time
+			id = (short) COUNTER.getAndIncrement();
 		}
 		
 		public InetSocketAddress getAddress() {
 			return address;
+		}
+		
+		public short getId() {
+			return id;
 		}
 	}
 	

@@ -38,10 +38,12 @@ public class ServerPortMessage {
 		
 		public static void handle(ServerPortMessage message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
-			if (VoiceClientManager.isRunning()) {
-				VoiceClientManager.stop();
-			}
-			VoiceClientManager.start(message.port, message.secret);
+			VoiceClientManager.EXECUTOR.execute(() -> {
+				if (VoiceClientManager.isRunning()) {
+					VoiceClientManager.stop();
+				}
+				VoiceClientManager.start(message.port, message.secret);
+			});
 			context.setPacketHandled(true);
 		}
 	}

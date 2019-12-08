@@ -1,8 +1,11 @@
 package info.u_team.voice_chat.client;
 
 import java.net.SocketException;
+import java.util.concurrent.*;
 
 public class VoiceClientManager {
+	
+	public static final Executor EXECUTOR = Executors.newCachedThreadPool();
 	
 	private static VoiceClient CLIENT;
 	

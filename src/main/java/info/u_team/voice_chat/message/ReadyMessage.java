@@ -19,7 +19,7 @@ public class ReadyMessage {
 		
 		public static void handle(ReadyMessage message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
-			VoiceClientManager.setHandshakeDone();
+			VoiceClientManager.setHandshakeDone(); // No need for async because we only set a boolean value
 			context.setPacketHandled(true);
 		}
 	}

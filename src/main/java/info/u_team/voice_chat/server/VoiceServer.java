@@ -2,10 +2,11 @@ package info.u_team.voice_chat.server;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.Arrays;
+import java.util.*;
+import java.util.Map.Entry;
 
 import info.u_team.voice_chat.init.VoiceChatNetworks;
-import info.u_team.voice_chat.message.ReadyMessage;
+import info.u_team.voice_chat.message.*;
 import info.u_team.voice_chat.server.VerifiedPlayerDataList.PlayerData;
 import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -71,8 +72,10 @@ public class VoiceServer {
 	
 	private void handleHandshakePacket(ServerPlayerEntity player, InetSocketAddress address) {
 		if (!VerifiedPlayerDataList.hasPlayerData(player)) {
-			VerifiedPlayerDataList.addPlayer(player, new PlayerData(address));
+			final PlayerData data = new PlayerData(address);
+			VerifiedPlayerDataList.addPlayer(player, data);
 			VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ReadyMessage());
+			VoiceChatNetworks.NETWORK.send(PacketDistributor.ALL.noArg(), new PlayerIDMessage(false, player.getUniqueID(), data.getId()));
 		}
 	}
 	
@@ -81,15 +84,16 @@ public class VoiceServer {
 		// TODO Add player id so the client can display which client send that voice packet
 		
 		// No logic, just send it to all players currently
-		VerifiedPlayerDataList.iterate((uuid, data) -> {
+		
+		for (Entry<UUID, PlayerData> entry : VerifiedPlayerDataList.getMap().entrySet()) {
 			// TODO Should check if its not the sender, for testing we will send it to the sender too
 			try {
-				socket.send(new DatagramPacket(transmittedData, transmittedData.length, data.getAddress()));
-			} catch (IOException e) {
-				e.printStackTrace();
-				// dumb lamba -> should be replaced
+				socket.send(new DatagramPacket(transmittedData, transmittedData.length, entry.getValue().getAddress()));
+			} catch (IOException ex) {
+				// We don't want to break if to one "client" we cannot send the data. Just log it for now
+				ex.printStackTrace();
 			}
-		});
+		}
 	}
 	
 }
