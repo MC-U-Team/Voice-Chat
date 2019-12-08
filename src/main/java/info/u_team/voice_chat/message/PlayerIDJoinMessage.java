@@ -3,6 +3,7 @@ package info.u_team.voice_chat.message;
 import java.util.UUID;
 import java.util.function.Supplier;
 
+import info.u_team.voice_chat.client.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
@@ -39,7 +40,7 @@ public class PlayerIDJoinMessage {
 		
 		public static void handle(PlayerIDJoinMessage message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
-			
+			VoiceClientManager.EXECUTOR.execute(() -> PlayerIDList.addAllPlayer(message.uuids, message.ids));
 			context.setPacketHandled(true);
 		}
 	}

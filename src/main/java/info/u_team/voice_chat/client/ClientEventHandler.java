@@ -15,6 +15,7 @@ public class ClientEventHandler {
 		if (VoiceClientManager.isRunning()) {
 			VoiceClientManager.stop();
 		}
+		PlayerIDList.clear();
 	}
 	
 }
