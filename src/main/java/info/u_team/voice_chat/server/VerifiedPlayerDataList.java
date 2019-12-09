@@ -3,7 +3,6 @@ package info.u_team.voice_chat.server;
 import java.net.InetSocketAddress;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.BiConsumer;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 
@@ -27,11 +26,6 @@ public class VerifiedPlayerDataList {
 	
 	public static boolean hasPlayerData(ServerPlayerEntity player) {
 		return MAP.containsKey(player.getUniqueID());
-	}
-	
-	@Deprecated
-	public static void iterate(BiConsumer<UUID, PlayerData> consumer) {
-		MAP.forEach(consumer);
 	}
 	
 	public static Map<UUID, PlayerData> getMap() {
