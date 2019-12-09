@@ -15,6 +15,10 @@ public class TalkingList {
 		MAP.entrySet().removeIf(entry -> currentTime - entry.getValue() > 200);
 	}
 	
+	public static Set<UUID> getTalkers() {
+		return Collections.unmodifiableSet(MAP.keySet());
+	}
+	
 	public static synchronized void clear() {
 		MAP.clear();
 	}

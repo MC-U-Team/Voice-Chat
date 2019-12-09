@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 import info.u_team.voice_chat.util.NetworkUtil;
+import net.minecraft.client.Minecraft;
 
 public class VoiceClient {
 	
@@ -119,7 +120,7 @@ public class VoiceClient {
 		buffer.put((byte) 1);
 		buffer.put(secret);
 		buffer.put(opusPacket);
-		
+		TalkingList.addOrUpdate(Minecraft.getInstance().player.getUniqueID()); // Add the client to the talker list if he is talking
 		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
 	}
 	
@@ -147,14 +148,6 @@ public class VoiceClient {
 			player.play(packet);
 		}
 		TalkingList.addOrUpdate(uuid);
-		
-//		final ClientPlayNetHandler connection = Minecraft.getInstance().getConnection();
-//		if (connection != null) {
-//			final NetworkPlayerInfo info = connection.getPlayerInfo(uuid);
-//			if (info != null) {
-//				System.out.println(info.getGameProfile().getName());
-//			}
-//		}
 	}
 	
 }
