@@ -20,7 +20,6 @@ public class VoiceClientManager {
 				
 				@Override
 				public void run() {
-					cancel();
 					TalkingList.removeAllThatAreInactiveFor200ms();
 				}
 			}, 200, 200);
