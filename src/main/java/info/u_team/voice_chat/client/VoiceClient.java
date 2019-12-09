@@ -7,6 +7,7 @@ import java.util.*;
 
 import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.play.*;
 
 public class VoiceClient {
 	
@@ -147,7 +148,14 @@ public class VoiceClient {
 		if (player.canPlay()) {
 			player.play(packet);
 		}
-		System.out.println(Minecraft.getInstance().world.getPlayerByUuid(uuid));
+		
+		final ClientPlayNetHandler connection = Minecraft.getInstance().getConnection();
+		if (connection != null) {
+			final NetworkPlayerInfo info = connection.getPlayerInfo(uuid);
+			if (info != null) {
+				System.out.println(info.getGameProfile().getName());
+			}
+		}
 	}
 	
 }
