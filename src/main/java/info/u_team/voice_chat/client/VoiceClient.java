@@ -10,6 +10,9 @@ import net.minecraft.client.Minecraft;
 
 public class VoiceClient {
 	
+	private final VoiceRecorder recorder;
+	private final VoicePlayer player;
+	
 	private final byte[] secret;
 	private final DatagramSocket socket;
 	
@@ -18,21 +21,18 @@ public class VoiceClient {
 	private final Thread receiveThread;
 	private final Thread sendThread;
 	
-	private final VoiceRecorder recorder;
-	private final VoicePlayer player;
-	
 	private boolean handshakeDone;
 	
 	public VoiceClient(int port, byte[] secret) throws SocketException {
 		this.secret = Arrays.copyOf(secret, secret.length);
+		recorder = new VoiceRecorder();
+		player = new VoicePlayer();
 		socket = new DatagramSocket();
 		serverAddress = NetworkUtil.findServerInetAddress(port);
 		receiveThread = new Thread(() -> receiveTask(), "Voice Client Receive");
 		sendThread = new Thread(() -> sendTask(), "Voice Client Send");
 		receiveThread.start();
 		sendThread.start();
-		recorder = new VoiceRecorder();
-		player = new VoicePlayer();
 	}
 	
 	public void close() {
