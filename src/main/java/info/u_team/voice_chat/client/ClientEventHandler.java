@@ -16,5 +16,6 @@ public class ClientEventHandler {
 			VoiceClientManager.stop();
 		}
 		PlayerIDList.clear();
+		TalkingList.clear();
 	}
 }
