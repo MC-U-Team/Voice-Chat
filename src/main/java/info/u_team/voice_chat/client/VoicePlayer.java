@@ -22,7 +22,8 @@ public class VoicePlayer extends VoiceInfo {
 	
 	public void play(byte[] opusPacket) {
 		if (opusPacket.length == 2 && opusPacket[0] == 0 && opusPacket[1] == 0) {
-			sourceLine.flush();
+			sourceLine.drain();
+			// sourceLine.flush();
 			return;
 		}
 		final byte[] data = new byte[960 * 2 * 2];
