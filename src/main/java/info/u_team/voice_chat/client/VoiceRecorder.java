@@ -36,6 +36,9 @@ public class VoiceRecorder extends VoiceInfo {
 			keyPressed = currentState;
 			return true;
 		} else {
+			if (!currentState) {
+				targetLine.flush();
+			}
 			return keyPressed = currentState;
 		}
 	}
