@@ -49,7 +49,7 @@ public class VoiceServer {
 	}
 	
 	private void receivePacket() throws IOException {
-		final DatagramPacket packet = new DatagramPacket(new byte[1500], 1500);
+		final DatagramPacket packet = new DatagramPacket(new byte[800], 800);
 		socket.receive(packet);
 		
 		VoiceServerManager.EXECUTOR.execute(() -> {
