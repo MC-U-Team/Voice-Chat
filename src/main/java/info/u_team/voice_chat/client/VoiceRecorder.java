@@ -68,7 +68,7 @@ public class VoiceRecorder extends VoiceInfo {
 		}
 		targetLine = newLine;
 		try {
-			targetLine.open(FORMAT);
+			targetLine.open(FORMAT, 960 * 2 * 2 * 2);
 			targetLine.start();
 		} catch (LineUnavailableException ex) {
 			targetLine = null;

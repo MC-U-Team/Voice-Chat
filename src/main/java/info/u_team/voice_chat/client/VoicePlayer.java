@@ -39,7 +39,7 @@ public class VoicePlayer extends VoiceInfo {
 		}
 		sourceLine = newLine;
 		try {
-			sourceLine.open(FORMAT);
+			sourceLine.open(FORMAT, 960 * 2 * 2 * 2);
 			sourceLine.start();
 		} catch (LineUnavailableException ex) {
 			sourceLine = null;
