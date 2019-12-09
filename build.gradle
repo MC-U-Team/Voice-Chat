@@ -46,13 +46,23 @@ sourceCompatibility = targetCompatibility = "1.8"
 minecraft {
     mappings channel: config.forge.mapping_channel, version: config.forge.mapping
     runs {
-        client = {
-            workingDirectory project.file("run/client").canonicalPath
-            mods {
-                voicechat {
+    	client = {
+            workingDirectory project.file("run/client/default").canonicalPath
+			mods {
+            	voicechat {
                     source sourceSets.main
 				}
-			}
+            }
+        }
+        client_first = {
+       		parents runs.getByName("client")
+            workingDirectory project.file("run/client/one").canonicalPath
+            args "--username HyCraftHD"
+        }
+        client_second = {
+       	 	parents runs.getByName("client")
+       	 	args "--username UTeam"
+            workingDirectory project.file("run/client/second").canonicalPath
         }
         server = {
             workingDirectory project.file("run/server").canonicalPath

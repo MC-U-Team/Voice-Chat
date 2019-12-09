@@ -6,6 +6,7 @@ import java.nio.ByteBuffer;
 import java.util.*;
 
 import info.u_team.voice_chat.util.NetworkUtil;
+import net.minecraft.client.Minecraft;
 
 public class VoiceClient {
 	
@@ -146,7 +147,7 @@ public class VoiceClient {
 		if (player.canPlay()) {
 			player.play(packet);
 		}
-		// System.out.println(Minecraft.getInstance().world.getPlayerByUuid(uuid));
+		System.out.println(Minecraft.getInstance().world.getPlayerByUuid(uuid));
 	}
 	
 }

@@ -100,7 +100,9 @@ public class VoiceServer {
 		// No logic, just send it to all players currently
 		
 		for (Entry<UUID, PlayerData> entry : VerifiedPlayerDataList.getMap().entrySet()) {
-			// TODO Should check if its not the sender, for testing we will send it to the sender too
+			if (player.getUniqueID().equals(entry.getKey())) {
+				continue; // Don't send the packet back to the sender
+			}
 			try {
 				socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), entry.getValue().getAddress()));
 			} catch (IOException ex) {
