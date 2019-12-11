@@ -5,23 +5,23 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-import info.u_team.voice_chat.util.NetworkUtil;
+import info.u_team.voice_chat.util.*;
 import net.minecraft.client.Minecraft;
 
 public class VoiceClient {
 	
-	private final VoiceRecorder recorder;
-	private final VoicePlayer player;
+	protected final VoiceRecorder recorder;
+	protected final VoicePlayer player;
 	
-	private final byte[] secret;
-	private final DatagramSocket socket;
+	protected final byte[] secret;
+	protected final DatagramSocket socket;
 	
-	private final InetSocketAddress serverAddress;
+	protected final InetSocketAddress serverAddress;
 	
-	private final Thread receiveThread;
-	private final Thread sendThread;
+	protected final Thread receiveThread;
+	protected final Thread sendThread;
 	
-	private boolean handshakeDone;
+	protected boolean handshakeDone;
 	
 	public VoiceClient(int port, byte[] secret) throws SocketException {
 		this.secret = Arrays.copyOf(secret, secret.length);
@@ -94,11 +94,11 @@ public class VoiceClient {
 		handshakeDone = true;
 	}
 	
-	private void sendPacket() throws IOException, InterruptedException {
+	protected void sendPacket() throws IOException, InterruptedException {
 		if (recorder.canSend()) {
 			final byte[] opusPacket = recorder.getBytes();
 			if (opusPacket.length > 1) {
-				sendVoicePacket(opusPacket);
+				sendOpusPacket(PacketType.VOICE, opusPacket);
 			}
 		} else {
 			synchronized (this) {
@@ -107,24 +107,24 @@ public class VoiceClient {
 		}
 	}
 	
-	private void sendHandshakePacket() throws IOException {
+	protected void sendHandshakePacket() throws IOException {
 		final ByteBuffer buffer = ByteBuffer.allocate(9);
-		buffer.put((byte) 0);
+		buffer.put(PacketType.HANDSHAKE.getID());
 		buffer.put(secret);
 		
 		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
 	}
 	
-	private void sendVoicePacket(byte[] opusPacket) throws IOException {
+	protected void sendOpusPacket(PacketType type, byte[] opusPacket) throws IOException {
 		final ByteBuffer buffer = ByteBuffer.allocate(9 + opusPacket.length);
-		buffer.put((byte) 1);
+		buffer.put(type.getID());
 		buffer.put(secret);
 		buffer.put(opusPacket);
 		TalkingList.addOrUpdate(Minecraft.getInstance().player.getUniqueID()); // Add the client to the talker list if he is talking
 		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
 	}
 	
-	private void receivePacket() throws IOException {
+	protected void receivePacket() throws IOException {
 		final DatagramPacket packet = new DatagramPacket(new byte[800], 800);
 		socket.receive(packet);
 		
@@ -143,7 +143,7 @@ public class VoiceClient {
 		handleVoicePacket(uuid, data);
 	}
 	
-	private void handleVoicePacket(UUID uuid, byte[] packet) {
+	protected void handleVoicePacket(UUID uuid, byte[] packet) {
 		if (player.canPlay()) {
 			player.play(packet);
 		}

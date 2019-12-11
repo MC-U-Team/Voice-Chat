@@ -4,6 +4,9 @@ import java.net.SocketException;
 import java.util.*;
 import java.util.concurrent.*;
 
+import info.u_team.voice_chat.client.musicplayer.MusicPlayerVoiceClient;
+import net.minecraftforge.fml.ModList;
+
 public class VoiceClientManager {
 	
 	public static final Executor EXECUTOR = Executors.newCachedThreadPool();
@@ -15,7 +18,7 @@ public class VoiceClientManager {
 	
 	public static synchronized void start(int port, byte[] secret) {
 		try {
-			CLIENT = new VoiceClient(port, secret);
+			CLIENT = getClient(port, secret);
 			TIMER.schedule(TIMER_TASK = new TimerTask() {
 				
 				@Override
@@ -47,6 +50,13 @@ public class VoiceClientManager {
 	
 	public static synchronized boolean isRunning() {
 		return CLIENT != null;
+	}
+	
+	private static VoiceClient getClient(int port, byte[] secret) throws SocketException {
+		if (ModList.get().isLoaded("musicplayer")) {
+			return new MusicPlayerVoiceClient(port, secret);
+		}
+		return new VoiceClient(port, secret);
 	}
 	
 }

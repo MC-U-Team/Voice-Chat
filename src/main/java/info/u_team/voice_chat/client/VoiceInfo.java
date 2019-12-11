@@ -6,7 +6,7 @@ import org.concentus.*;
 
 import info.u_team.voice_chat.config.ClientConfig;
 
-class VoiceInfo {
+public class VoiceInfo {
 	
 	protected static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
 	

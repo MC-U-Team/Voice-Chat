@@ -20,7 +20,11 @@ public class VoicePlayer extends VoiceInfo {
 		return sourceLine != null && sourceLine.isOpen();
 	}
 	
+	private long lastTime;
+	
 	public void play(byte[] opusPacket) {
+		System.out.println(System.currentTimeMillis() - lastTime);
+		lastTime = System.currentTimeMillis();
 		if (opusPacket.length == 2 && opusPacket[0] == 0 && opusPacket[1] == 0) {
 			sourceLine.drain();
 			// sourceLine.flush();
