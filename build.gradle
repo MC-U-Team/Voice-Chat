@@ -102,7 +102,15 @@ jar {
 
     from "LICENSE"
     
-    exclude(".cache")    
+    jar.dependsOn ":opus-java:build"
+    jar.dependsOn ":audio-client:build"
+
+	from "opus-java/build/classes/java/main"
+    from "opus-java/CONCENTUS-LICENSE"
+     
+    from "audio-client/build/classes/java/main"
+                  
+    exclude(".cache")      
            
    	manifest normalManifest
 }
@@ -113,6 +121,14 @@ task deobfJar(type: Jar) {
     from sourceSets.main.output
     from "LICENSE"
     
+    jar.dependsOn ":opus-java:build"
+    jar.dependsOn ":audio-client:build"
+
+	from "opus-java/build/classes/java/main"
+    from "opus-java/CONCENTUS-LICENSE"
+     
+    from "audio-client/build/classes/java/main"
+        
     exclude(".cache")    
             
     manifest normalManifest
@@ -157,7 +173,6 @@ sourceSets {
 dependencies {
     minecraft "net.minecraftforge:forge:$config.forge.version"
 	compile project(":audio-client")
-	compile project(":opus-java")
 	compile "info.u-team:u_team_core-${config.forge.mcversion}:${config.uteamcore.version}:dev"
   	compileOnly fg.deobf("mezz.jei:jei-${config.forge.mcversion}:${config.jei.version}:api")
   	runtimeOnly fg.deobf("mezz.jei:jei-${config.forge.mcversion}:${config.jei.version}")
