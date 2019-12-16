@@ -2,7 +2,9 @@ package info.u_team.voice_chat.audio_client.micro;
 
 import javax.sound.sampled.*;
 
-public class MicroData {
+import info.u_team.voice_chat.audio_client.api.ResourceClosable;
+
+public class MicroData implements ResourceClosable {
 	
 	private static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
 	private static final DataLine.Info MIC_INFO = new DataLine.Info(TargetDataLine.class, FORMAT);
@@ -59,6 +61,13 @@ public class MicroData {
 			targetLine.read(array, 0, array.length);
 		}
 		return array;
+	}
+	
+	@Override
+	public void close() {
+		if (isAvailable()) {
+			targetLine.close();
+		}
 	}
 	
 }

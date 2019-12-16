@@ -9,6 +9,7 @@ import org.concentus.OpusException;
 import info.u_team.music_player.musicplayer.MusicPlayerManager;
 import info.u_team.voice_chat.audio_client.util.*;
 import info.u_team.voice_chat.client.*;
+import info.u_team.voice_chat.packet.PacketType;
 import info.u_team.voice_chat.util.*;
 
 public class MusicPlayerVoiceClient extends VoiceClient {

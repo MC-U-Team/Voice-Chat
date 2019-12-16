@@ -1,4 +1,4 @@
-package info.u_team.voice_chat.util;
+package info.u_team.voice_chat.audio_client.util;
 
 public class EndianUtil {
 	

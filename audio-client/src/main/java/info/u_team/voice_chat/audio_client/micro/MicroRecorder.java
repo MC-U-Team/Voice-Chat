@@ -3,10 +3,11 @@ package info.u_team.voice_chat.audio_client.micro;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
+import info.u_team.voice_chat.audio_client.api.ResourceClosable;
 import info.u_team.voice_chat.audio_client.api.opus.IOpusEncoder;
 import info.u_team.voice_chat.audio_client.util.Util;
 
-public class MicroRecorder {
+public class MicroRecorder implements ResourceClosable {
 	
 	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(Util.createDaemonFactory("micro recorder"));
 	
@@ -40,6 +41,7 @@ public class MicroRecorder {
 		send = false;
 	}
 	
+	@Override
 	public void close() {
 		EXECUTOR.shutdown();
 	}
