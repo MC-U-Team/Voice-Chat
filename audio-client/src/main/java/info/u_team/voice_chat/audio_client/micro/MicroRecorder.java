@@ -3,13 +3,13 @@ package info.u_team.voice_chat.audio_client.micro;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-import info.u_team.voice_chat.audio_client.api.ResourceClosable;
+import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.api.opus.IOpusEncoder;
-import info.u_team.voice_chat.audio_client.util.Util;
+import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
-public class MicroRecorder implements ResourceClosable {
+public class MicroRecorder implements NoExceptionCloseable {
 	
-	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(Util.createDaemonFactory("micro recorder"));
+	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("micro recorder"));
 	
 	private final MicroData microData;
 	private final Consumer<byte[]> opusPacketConsumer;
@@ -33,7 +33,7 @@ public class MicroRecorder implements ResourceClosable {
 			while (send && microData.isAvailable()) {
 				opusPacketConsumer.accept(encoder.encode(microData.read(buffer)));
 			}
-			Util.execute(5, 20, () -> opusPacketConsumer.accept(encoder.silence()));
+			ThreadUtil.execute(5, 20, () -> opusPacketConsumer.accept(encoder.silence()));
 		});
 	}
 	

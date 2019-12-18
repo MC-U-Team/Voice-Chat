@@ -2,7 +2,7 @@ package info.u_team.voice_chat.audio_client.util;
 
 import java.util.concurrent.*;
 
-public class Util {
+public class ThreadUtil {
 	
 	public static void execute(int count, int delay, Runnable run) {
 		for (int i = 0; i < count; i++) {

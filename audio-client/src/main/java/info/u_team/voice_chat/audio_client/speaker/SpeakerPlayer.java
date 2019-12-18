@@ -3,11 +3,11 @@ package info.u_team.voice_chat.audio_client.speaker;
 import java.util.concurrent.*;
 
 import info.u_team.voice_chat.audio_client.api.opus.IOpusDecoder;
-import info.u_team.voice_chat.audio_client.util.Util;
+import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
 public class SpeakerPlayer {
 	
-	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(Util.createDaemonFactory("speaker player"));
+	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("speaker player"));
 	
 	private final SpeakerData speakerData;
 	private final IOpusDecoder decoder;

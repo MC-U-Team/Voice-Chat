@@ -2,9 +2,9 @@ package info.u_team.voice_chat.audio_client.micro;
 
 import javax.sound.sampled.*;
 
-import info.u_team.voice_chat.audio_client.api.ResourceClosable;
+import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 
-public class MicroData implements ResourceClosable {
+public class MicroData implements NoExceptionCloseable {
 	
 	private static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
 	private static final DataLine.Info MIC_INFO = new DataLine.Info(TargetDataLine.class, FORMAT);
