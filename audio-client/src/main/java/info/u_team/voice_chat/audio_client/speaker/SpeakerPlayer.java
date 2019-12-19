@@ -1,45 +1,35 @@
 package info.u_team.voice_chat.audio_client.speaker;
 
+import java.util.*;
 import java.util.concurrent.*;
 
+import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.api.opus.IOpusDecoder;
 import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
-public class SpeakerPlayer {
+public class SpeakerPlayer implements NoExceptionCloseable {
 	
-	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("speaker player"));
+	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool(ThreadUtil.createDaemonFactory("speaker player"));
 	
 	private final SpeakerData speakerData;
 	private final IOpusDecoder decoder;
-	private final SpeakerBuffer buffer;
 	
-	private volatile boolean play;
+	private final Map<Integer, SpeakerBufferPusher> bufferMap;
 	
 	public SpeakerPlayer(SpeakerData speakerData, IOpusDecoder decoder) {
 		this.speakerData = speakerData;
 		this.decoder = decoder;
-		buffer = new SpeakerBuffer(10);
+		bufferMap = new HashMap<>();
 	}
 	
-	public void accept(byte[] opusPacket) {
-		if (speakerData.isAvailable()) {
-			buffer.pushPacket(decoder.decoder(opusPacket));
+	public void accept(int id, byte[] opusPacket) {
+		if (speakerData.isAvailable(id)) {
+			bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(EXECUTOR, id, speakerData)).pushPacket(decoder.decoder(opusPacket));
 		}
 	}
 	
-	public void start() {
-		play = true;
-		EXECUTOR.execute(() -> {
-			while (play) {
-				if (speakerData.isAvailable() && speakerData.freeBuffer() > 0) {
-					speakerData.write(buffer.getNextPacket());
-				}
-			}
-		});
-	}
-	
+	@Override
 	public void close() {
-		play = false;
 		EXECUTOR.shutdown();
 	}
 }
