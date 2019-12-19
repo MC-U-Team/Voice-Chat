@@ -65,7 +65,7 @@ public class MicroData implements NoExceptionCloseable {
 	
 	@Override
 	public void close() {
-		if (isAvailable()) {
+		if (targetLine != null) {
 			targetLine.close();
 		}
 	}

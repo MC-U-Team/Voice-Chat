@@ -30,6 +30,8 @@ public class SpeakerPlayer implements NoExceptionCloseable {
 	
 	@Override
 	public void close() {
+		bufferMap.values().forEach(SpeakerBufferPusher::close);
+		bufferMap.clear();
 		EXECUTOR.shutdown();
 	}
 }
