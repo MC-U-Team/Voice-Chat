@@ -6,12 +6,11 @@ import java.nio.ByteBuffer;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import info.u_team.voice_chat.audio_client.util.*;
 import info.u_team.voice_chat.init.VoiceChatNetworks;
 import info.u_team.voice_chat.message.*;
 import info.u_team.voice_chat.packet.PacketType;
 import info.u_team.voice_chat.server.VerifiedPlayerDataList.PlayerData;
-import info.u_team.voice_chat.util.*;
+import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.fml.network.PacketDistributor;
 

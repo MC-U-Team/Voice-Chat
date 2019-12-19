@@ -1,6 +1,6 @@
 package info.u_team.voice_chat.util;
 
-import java.net.*;
+import java.net.InetSocketAddress;
 
 import info.u_team.voice_chat.config.CommonConfig;
 import net.minecraft.client.Minecraft;

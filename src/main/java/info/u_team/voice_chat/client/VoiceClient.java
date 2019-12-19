@@ -5,9 +5,8 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-import info.u_team.voice_chat.audio_client.util.*;
 import info.u_team.voice_chat.packet.PacketType;
-import info.u_team.voice_chat.util.*;
+import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.client.Minecraft;
 
 public class VoiceClient {
