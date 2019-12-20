@@ -33,7 +33,7 @@ public class Server {
 					final byte[] secret = new byte[8];
 					buffer.get(secret);
 					
-					final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(secret);
+					final ServerPlayerEntity player = PlayerSecretManager.getPlayerBySecret(secret);
 					
 					if (player == null) { // Ignore packets that do not have a valid player as sender
 						return;

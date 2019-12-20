@@ -8,7 +8,6 @@ import java.util.UUID;
 
 import info.u_team.voice_chat.init.VoiceChatNetworks;
 import info.u_team.voice_chat.message.*;
-import info.u_team.voice_chat.packet.PacketType;
 import info.u_team.voice_chat.server.VerifiedPlayerDataList.PlayerData;
 import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -57,10 +56,10 @@ public class VoiceServer {
 			try {
 				final ByteBuffer buffer = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
 				
-				final PacketType type = PacketType.byID(buffer.get());
+				final byte type = buffer.get();
 				final byte[] secret = new byte[8];
 				buffer.get(secret);
-				final ServerPlayerEntity player = PlayerSecretList.getPlayerBySecret(secret);
+				final ServerPlayerEntity player = PlayerSecretManager.getPlayerBySecret(secret);
 				final byte[] data = new byte[buffer.remaining()];
 				buffer.get(data);
 				
@@ -69,10 +68,10 @@ public class VoiceServer {
 					return;
 				}
 				
-				if (type == PacketType.HANDSHAKE) {
+				if (type == 0) {
 					handleHandshakePacket(player, (InetSocketAddress) packet.getSocketAddress());
-				} else if (type.isOpus()) {
-					handleOpusPacket(type, player, data);
+				} else {
+					handleOpusPacket(player, data);
 				}
 				
 			} catch (IOException ex) {
@@ -92,7 +91,7 @@ public class VoiceServer {
 		}
 	}
 	
-	private void handleOpusPacket(PacketType type, ServerPlayerEntity player, byte[] data) throws IOException {
+	private void handleOpusPacket(ServerPlayerEntity player, byte[] data) throws IOException {
 		// Build packet
 		final ByteBuffer buffer = ByteBuffer.allocate(data.length + 2);
 		buffer.putShort(VerifiedPlayerDataList.getPlayerData(player).getId());

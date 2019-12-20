@@ -26,10 +26,10 @@ public class ServerEventHandler {
 		}
 		final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		// Add player secret
-		PlayerSecretList.addPlayer(player);
+		PlayerSecretManager.addPlayer(player);
 		
 		// Send packet with port and secret
-		VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ServerPortMessage(CommonConfig.getInstance().portValue.get(), PlayerSecretList.getSecretByPlayer(player)));
+		VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ServerPortMessage(CommonConfig.getInstance().portValue.get(), PlayerSecretManager.getSecretByPlayer(player)));
 		
 		// Send packet with all currently connected players and their id
 		final Map<UUID, PlayerData> map = VerifiedPlayerDataList.getMap();
@@ -56,7 +56,7 @@ public class ServerEventHandler {
 		// Remove verified player
 		VerifiedPlayerDataList.removePlayer(player);
 		// Remove player secret
-		PlayerSecretList.removePlayer(player);
+		PlayerSecretManager.removePlayer(player);
 		
 		// Send message to all players that this client is not connected anymore (we don't care if this is send to the
 		// disconnecting player)

@@ -8,7 +8,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fml.*;
 
-public class PlayerSecretList {
+public class PlayerSecretManager {
 	
 	private static final BiMap<UUID, Secret> MAP = HashBiMap.create();
 	private static final Random RANDOM = new Random();

@@ -5,7 +5,6 @@ import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.*;
 
-import info.u_team.voice_chat.packet.PacketType;
 import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.client.Minecraft;
 
@@ -99,7 +98,7 @@ public class VoiceClient {
 		if (recorder.canSend()) {
 			final byte[] opusPacket = recorder.getBytes();
 			if (opusPacket.length > 1) {
-				sendOpusPacket(PacketType.VOICE, opusPacket);
+				sendOpusPacket(opusPacket);
 			}
 		} else {
 			synchronized (this) {
@@ -110,15 +109,15 @@ public class VoiceClient {
 	
 	protected void sendHandshakePacket() throws IOException {
 		final ByteBuffer buffer = ByteBuffer.allocate(9);
-		buffer.put(PacketType.HANDSHAKE.getID());
+		buffer.put((byte)0);
 		buffer.put(secret);
 		
 		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
 	}
 	
-	protected void sendOpusPacket(PacketType type, byte[] opusPacket) throws IOException {
+	protected void sendOpusPacket(byte[] opusPacket) throws IOException {
 		final ByteBuffer buffer = ByteBuffer.allocate(9 + opusPacket.length);
-		buffer.put(type.getID());
+		buffer.put((byte)1);
 		buffer.put(secret);
 		buffer.put(opusPacket);
 		TalkingList.addOrUpdate(Minecraft.getInstance().player.getUniqueID()); // Add the client to the talker list if he is talking
