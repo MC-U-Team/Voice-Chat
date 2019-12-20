@@ -2,6 +2,7 @@ package info.u_team.voice_chat.packet;
 
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.logging.log4j.*;
@@ -12,6 +13,10 @@ import info.u_team.voice_chat.packet.PacketRegistry.Context.Sender;
 import net.minecraft.entity.player.PlayerEntity;
 
 public class PacketRegistry {
+	
+	public static final int MAX_PACKET_SIZE = 1000;
+	
+	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
@@ -41,7 +46,7 @@ public class PacketRegistry {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <MSG> MSG decode(byte[] array) {
+	public static <MSG> MSG decode(byte[] array, int length) {
 		if (array.length == 0) {
 			return null;
 		}
@@ -50,7 +55,7 @@ public class PacketRegistry {
 			LOGGER.error("The message with the id %s is not registered and cannot be decoded.", array[0]);
 			return null;
 		}
-		return packet.decode(ByteBuffer.wrap(array, 1, array.length));
+		return packet.decode(ByteBuffer.wrap(array, 1, length));
 	}
 	
 	public static <MSG> void handle(MSG message, Sender sender) {
