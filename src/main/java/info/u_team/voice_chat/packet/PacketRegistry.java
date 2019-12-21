@@ -45,9 +45,7 @@ public class PacketRegistry {
 		final byte[] array = new byte[buffer.capacity() + 1];
 		
 		array[0] = packets.inverse().getOrDefault(packet, (byte) -1);
-		if (buffer.capacity() > 0) {
-			buffer.get(array, 1, array.length);
-		}
+		buffer.get(array, 1, array.length - 1);
 		
 		return array;
 	}
@@ -62,12 +60,8 @@ public class PacketRegistry {
 			LOGGER.error("The message with the id %i is not registered and cannot be decoded.", array[0]);
 			return null;
 		}
-		final ByteBuffer buffer;
-		if (length > 1) {
-			buffer = ByteBuffer.wrap(array, 1, length);
-		} else {
-			buffer = ByteBuffer.allocate(0);
-		}
+		final ByteBuffer buffer = ByteBuffer.allocate(length - 1);
+		buffer.put(array, 1, length - 1);
 		return packet.decode(buffer);
 	}
 	

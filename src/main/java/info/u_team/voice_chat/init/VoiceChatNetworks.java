@@ -3,7 +3,7 @@ package info.u_team.voice_chat.init;
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.message.*;
 import info.u_team.voice_chat.packet.PacketRegistry;
-import info.u_team.voice_chat.packet.message.HandshakePacket;
+import info.u_team.voice_chat.packet.message.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -28,5 +28,7 @@ public class VoiceChatNetworks {
 		NETWORK.registerMessage(3, PlayerIDMessage.class, PlayerIDMessage::encode, PlayerIDMessage::decode, PlayerIDMessage.Handler::handle);
 		
 		PacketRegistry.register(0, HandshakePacket.class, HandshakePacket::encode, HandshakePacket::decode, HandshakePacket.Handler::handle);
+		
+		PacketRegistry.register(1, VoiceToServerPacket.class, VoiceToServerPacket::encode, VoiceToServerPacket::decode, VoiceToServerPacket.Handler::handle);
 	}
 }
