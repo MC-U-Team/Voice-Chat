@@ -5,13 +5,13 @@ import java.util.concurrent.*;
 
 public class VoiceServerManager {
 	
-	public static final Executor EXECUTOR = Executors.newCachedThreadPool();
+	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 	
 	private static VoiceServer SERVER;
 	
 	public synchronized static void start() {
 		try {
-			SERVER = new VoiceServer();
+			SERVER = new VoiceServer(EXECUTOR);
 		} catch (SocketException ex) {
 			ex.printStackTrace();
 		}
@@ -24,8 +24,12 @@ public class VoiceServerManager {
 		}
 	}
 	
-	public synchronized static boolean isRunning() {
+	public static boolean isRunning() {
 		return SERVER != null;
+	}
+	
+	public static VoiceServer getServer() {
+		return SERVER;
 	}
 	
 }

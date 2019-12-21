@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 
-public class VerifiedPlayerDataList {
+public class VerifiedPlayerManager {
 	
 	private static final Map<UUID, PlayerData> MAP = new HashMap<UUID, PlayerData>();
 	

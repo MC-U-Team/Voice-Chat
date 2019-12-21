@@ -4,7 +4,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import info.u_team.voice_chat.VoiceChatMod;
-import info.u_team.voice_chat.client.TalkingList;
+import info.u_team.voice_chat.client.TalkingManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.play.*;
 import net.minecraftforge.api.distmarker.Dist;
@@ -25,7 +25,7 @@ public class GuiOverlayHandler {
 		}
 		Minecraft.getInstance().fontRenderer.drawString("Speakers", 10, 10, 0xFFFFFF);
 		AtomicInteger counter = new AtomicInteger();
-		TalkingList.getTalkers().stream().map(GuiOverlayHandler::getName).forEach(name -> {
+		TalkingManager.getTalkers().stream().map(GuiOverlayHandler::getName).forEach(name -> {
 			Minecraft.getInstance().fontRenderer.drawString(name, 10, counter.getAndIncrement() * 15 + 30, 0xFFFFFF);
 		});
 		

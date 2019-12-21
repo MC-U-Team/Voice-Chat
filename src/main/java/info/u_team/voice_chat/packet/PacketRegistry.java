@@ -1,8 +1,8 @@
 package info.u_team.voice_chat.packet;
 
+import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.logging.log4j.*;
@@ -10,18 +10,23 @@ import org.apache.logging.log4j.*;
 import com.google.common.collect.*;
 
 import info.u_team.voice_chat.packet.PacketRegistry.Context.Sender;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.*;
 
 public class PacketRegistry {
 	
+	/**
+	 * This is the max good put packet size
+	 */
 	public static final int MAX_PACKET_SIZE = 1000;
-	
-	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
 	
 	private static final Logger LOGGER = LogManager.getLogger();
 	
 	private static final Map<Class<?>, Packet<?>> packetClasses = new HashMap<>();
 	private static final BiMap<Byte, Packet<?>> packets = HashBiMap.create();
+	
+	public static <MSG> void register(int id, Class<MSG> packetClass, Function<MSG, ByteBuffer> encoder, Function<ByteBuffer, MSG> decoder, BiConsumer<MSG, Supplier<Context>> messageConsumer) {
+		register((byte) id, packetClass, encoder, decoder, messageConsumer);
+	}
 	
 	public static <MSG> void register(byte id, Class<MSG> packetClass, Function<MSG, ByteBuffer> encoder, Function<ByteBuffer, MSG> decoder, BiConsumer<MSG, Supplier<Context>> messageConsumer) {
 		final Packet<MSG> packet = new Packet<MSG>(encoder, decoder, messageConsumer);
@@ -58,17 +63,21 @@ public class PacketRegistry {
 		return packet.decode(ByteBuffer.wrap(array, 1, length));
 	}
 	
-	public static <MSG> void handle(MSG message, Sender sender) {
-		handle(message, sender, null);
+	public static <MSG> void handle(MSG message, Sender sender, InetSocketAddress address) {
+		handle(message, sender, address, null);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public static <MSG> void handle(MSG message, Sender sender, PlayerEntity player) {
+	public static <MSG> void handle(MSG message, Sender sender, InetSocketAddress address, ServerPlayerEntity player) {
 		final Packet<MSG> packet = (Packet<MSG>) packetClasses.get(message);
 		if (packet == null) {
 			LOGGER.error("The message %s is not registered and cannot be handled.", message);
 		}
-		packet.getMessageConsumer().accept(message, () -> new Context(sender, player));
+		try {
+			packet.getMessageConsumer().accept(message, () -> new Context(sender, address, player));
+		} catch (Exception ex) {
+			LOGGER.warn("An exception occured while handling the message %s", message, ex);
+		}
 	}
 	
 	private static class Packet<MSG> {
@@ -99,11 +108,13 @@ public class PacketRegistry {
 	
 	public static class Context {
 		
-		private Sender sender;
-		private final PlayerEntity player;
+		private final Sender sender;
+		private final InetSocketAddress address;
+		private final ServerPlayerEntity player;
 		
-		public Context(Sender sender, PlayerEntity player) {
+		public Context(Sender sender, InetSocketAddress address, ServerPlayerEntity player) {
 			this.sender = sender;
+			this.address = address;
 			this.player = player;
 		}
 		
@@ -111,11 +122,15 @@ public class PacketRegistry {
 			return sender;
 		}
 		
+		public InetSocketAddress getAddress() {
+			return address;
+		}
+		
 		public boolean hasPlayer() {
 			return player != null;
 		}
 		
-		public PlayerEntity getPlayer() {
+		public ServerPlayerEntity getPlayer() {
 			return player;
 		}
 		

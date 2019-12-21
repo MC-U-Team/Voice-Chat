@@ -3,151 +3,95 @@ package info.u_team.voice_chat.client;
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Arrays;
+import java.util.concurrent.*;
 
+import info.u_team.voice_chat.packet.PacketRegistry;
+import info.u_team.voice_chat.packet.PacketRegistry.Context.Sender;
+import info.u_team.voice_chat.packet.message.HandshakePacket;
 import info.u_team.voice_chat.util.NetworkUtil;
-import net.minecraft.client.Minecraft;
 
 public class VoiceClient {
 	
-	protected final VoiceRecorder recorder;
-	protected final VoicePlayer player;
+	private final DatagramSocket socket;
 	
-	protected final byte[] secret;
-	protected final DatagramSocket socket;
+	private final InetSocketAddress serverAddress;
 	
-	protected final InetSocketAddress serverAddress;
+	private final byte[] secret;
 	
-	protected final Thread receiveThread;
-	protected final Thread sendThread;
+	private volatile boolean handshakeMode;
 	
-	protected boolean handshakeDone;
+	private final Future<?> handshakeTask;
+	private final Future<?> task;
 	
-	public VoiceClient(int port, byte[] secret) throws SocketException {
+	public VoiceClient(ExecutorService service, int port, byte[] secret) throws SocketException {
 		this.secret = Arrays.copyOf(secret, secret.length);
-		recorder = new VoiceRecorder();
-		player = new VoicePlayer();
 		socket = new DatagramSocket();
 		serverAddress = NetworkUtil.findServerInetAddress(port);
-		receiveThread = new Thread(() -> receiveTask(), "Voice Client Receive");
-		sendThread = new Thread(() -> sendTask(), "Voice Client Send");
-		receiveThread.start();
-		sendThread.start();
+		handshakeMode = true;
+		handshakeTask = service.submit(() -> {
+			while (!Thread.currentThread().isInterrupted() && handshakeMode) {
+				try {
+					sendIntern(new HandshakePacket());
+					Thread.sleep(500);
+				} catch (InterruptedException ex) {
+					return; // Can happen so we just exist this task
+				}
+			}
+		});
+		task = service.submit(() -> {
+			while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
+				try {
+					final DatagramPacket packet = new DatagramPacket(new byte[PacketRegistry.MAX_PACKET_SIZE + 2], PacketRegistry.MAX_PACKET_SIZE + 2);
+					socket.receive(packet);
+					
+					if (packet.getLength() < 1) { // Ignore too small packets (1 byte the packet id)
+						return;
+					}
+					
+					final Object message = PacketRegistry.decode(packet.getData(), packet.getLength());
+					if (message != null) {
+						PacketRegistry.handle(message, Sender.SERVER, (InetSocketAddress) packet.getSocketAddress());
+					}
+				} catch (IOException ex) {
+					if (!socket.isClosed()) {
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
+	}
+	
+	public <MSG> void send(MSG message) {
+		if (handshakeTask.isDone()) {
+			sendIntern(message);
+		}
+	}
+	
+	private <MSG> void sendIntern(MSG message) {
+		final byte[] data = PacketRegistry.encode(message);
+		
+		final ByteBuffer buffer = ByteBuffer.allocate(8 + data.length);
+		buffer.put(secret);
+		buffer.put(data);
+		
+		try {
+			socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
+		} catch (IOException ex) {
+			if (!socket.isClosed()) {
+				ex.printStackTrace();
+			}
+		}
 	}
 	
 	public void close() {
 		socket.close();
-		recorder.close();
-		player.close();
-		receiveThread.interrupt();
-		sendThread.interrupt();
-		try {
-			// Wait for both threads to be closed
-			receiveThread.join();
-			sendThread.join();
-		} catch (InterruptedException ex) {
-			// Should not happen. Who interrupts the main thread??
-		}
-	}
-	
-	private void receiveTask() {
-		while (!receiveThread.isInterrupted() && !socket.isClosed()) {
-			try {
-				receivePacket();
-			} catch (IOException ex) {
-				if (!socket.isClosed()) {
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
-	
-	private void sendTask() {
-		try {
-			// If handshake has not been done yet, send the packet every 500 ms
-			while (!handshakeDone && !socket.isClosed()) {
-				try {
-					sendHandshakePacket();
-					synchronized (this) {
-						Thread.sleep(500);
-					}
-				} catch (IOException ex) {
-					if (!socket.isClosed()) {
-						ex.printStackTrace();
-					}
-				}
-			}
-			while (!sendThread.isInterrupted() && !socket.isClosed()) {
-				try {
-					sendPacket();
-				} catch (IOException ex) {
-					if (!socket.isClosed()) {
-						ex.printStackTrace();
-					}
-				}
-			}
-		} catch (InterruptedException ex) {
-		}
+		setHandshakeDone();
+		task.cancel(true);
 	}
 	
 	public void setHandshakeDone() {
-		handshakeDone = true;
+		handshakeTask.cancel(true);
+		handshakeMode = false;
 	}
-	
-	protected void sendPacket() throws IOException, InterruptedException {
-		if (recorder.canSend()) {
-			final byte[] opusPacket = recorder.getBytes();
-			if (opusPacket.length > 1) {
-				sendOpusPacket(opusPacket);
-			}
-		} else {
-			synchronized (this) {
-				Thread.sleep(50);
-			}
-		}
-	}
-	
-	protected void sendHandshakePacket() throws IOException {
-		final ByteBuffer buffer = ByteBuffer.allocate(9);
-		buffer.put((byte)0);
-		buffer.put(secret);
-		
-		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
-	}
-	
-	protected void sendOpusPacket(byte[] opusPacket) throws IOException {
-		final ByteBuffer buffer = ByteBuffer.allocate(9 + opusPacket.length);
-		buffer.put((byte)1);
-		buffer.put(secret);
-		buffer.put(opusPacket);
-		TalkingList.addOrUpdate(Minecraft.getInstance().player.getUniqueID()); // Add the client to the talker list if he is talking
-		socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
-	}
-	
-	protected void receivePacket() throws IOException {
-		final DatagramPacket packet = new DatagramPacket(new byte[800], 800);
-		socket.receive(packet);
-		
-		final ByteBuffer buffer = ByteBuffer.wrap(packet.getData(), 0, packet.getLength());
-		final short id = buffer.getShort();
-		
-		final UUID uuid = PlayerIDList.getPlayerByID(id);
-		if (uuid == null) {
-			System.out.println("Unknown uuid. That should not happen");
-			return;
-		}
-		
-		final byte[] data = new byte[buffer.remaining()];
-		buffer.get(data);
-		
-		handleVoicePacket(uuid, data);
-	}
-	
-	protected void handleVoicePacket(UUID uuid, byte[] packet) {
-		if (player.canPlay()) {
-			player.play(packet);
-		}
-		TalkingList.addOrUpdate(uuid);
-	}
-	
 }

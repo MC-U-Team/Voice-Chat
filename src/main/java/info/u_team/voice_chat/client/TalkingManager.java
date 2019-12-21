@@ -2,7 +2,7 @@ package info.u_team.voice_chat.client;
 
 import java.util.*;
 
-public class TalkingList {
+public class TalkingManager {
 	
 	private static final Map<UUID, Long> MAP = new HashMap<>();
 	

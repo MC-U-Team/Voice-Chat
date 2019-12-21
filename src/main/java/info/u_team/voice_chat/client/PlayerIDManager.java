@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.google.common.collect.*;
 
-public class PlayerIDList {
+public class PlayerIDManager {
 	
 	private static final BiMap<UUID, Short> MAP = HashBiMap.create();
 	

@@ -7,7 +7,7 @@ import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.config.CommonConfig;
 import info.u_team.voice_chat.init.VoiceChatNetworks;
 import info.u_team.voice_chat.message.*;
-import info.u_team.voice_chat.server.VerifiedPlayerDataList.PlayerData;
+import info.u_team.voice_chat.server.VerifiedPlayerManager.PlayerData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraftforge.event.entity.player.PlayerEvent.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,10 +29,10 @@ public class ServerEventHandler {
 		PlayerSecretManager.addPlayer(player);
 		
 		// Send packet with port and secret
-		VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ServerPortMessage(CommonConfig.getInstance().portValue.get(), PlayerSecretManager.getSecretByPlayer(player)));
+		VoiceChatNetworks.NETWORK.send(PacketDistributor.PLAYER.with(() -> player), new ServerPortHandshakeMessage(CommonConfig.getInstance().portValue.get(), PlayerSecretManager.getSecretByPlayer(player)));
 		
 		// Send packet with all currently connected players and their id
-		final Map<UUID, PlayerData> map = VerifiedPlayerDataList.getMap();
+		final Map<UUID, PlayerData> map = VerifiedPlayerManager.getMap();
 		
 		final UUID[] uuids = new UUID[map.size()];
 		final short[] ids = new short[map.size()];
@@ -54,7 +54,7 @@ public class ServerEventHandler {
 		final ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
 		
 		// Remove verified player
-		VerifiedPlayerDataList.removePlayer(player);
+		VerifiedPlayerManager.removePlayer(player);
 		// Remove player secret
 		PlayerSecretManager.removePlayer(player);
 		

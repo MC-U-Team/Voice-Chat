@@ -2,6 +2,8 @@ package info.u_team.voice_chat.init;
 
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.message.*;
+import info.u_team.voice_chat.packet.PacketRegistry;
+import info.u_team.voice_chat.packet.message.HandshakePacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -19,10 +21,12 @@ public class VoiceChatNetworks {
 	
 	@SubscribeEvent
 	public static void register(FMLCommonSetupEvent event) {
-		NETWORK.registerMessage(0, ServerPortMessage.class, ServerPortMessage::encode, ServerPortMessage::decode, ServerPortMessage.Handler::handle);
-		NETWORK.registerMessage(1, ReadyMessage.class, ReadyMessage::encode, ReadyMessage::decode, ReadyMessage.Handler::handle);
+		NETWORK.registerMessage(0, ServerPortHandshakeMessage.class, ServerPortHandshakeMessage::encode, ServerPortHandshakeMessage::decode, ServerPortHandshakeMessage.Handler::handle);
+		
+		NETWORK.registerMessage(1, HandshakeDoneMessage.class, HandshakeDoneMessage::encode, HandshakeDoneMessage::decode, HandshakeDoneMessage.Handler::handle);
 		NETWORK.registerMessage(2, PlayerIDJoinMessage.class, PlayerIDJoinMessage::encode, PlayerIDJoinMessage::decode, PlayerIDJoinMessage.Handler::handle);
 		NETWORK.registerMessage(3, PlayerIDMessage.class, PlayerIDMessage::encode, PlayerIDMessage::decode, PlayerIDMessage.Handler::handle);
+		
+		PacketRegistry.register(0, HandshakePacket.class, HandshakePacket::encode, HandshakePacket::decode, HandshakePacket.Handler::handle);
 	}
-	
 }
