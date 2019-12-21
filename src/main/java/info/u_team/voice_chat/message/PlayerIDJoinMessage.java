@@ -40,7 +40,7 @@ public class PlayerIDJoinMessage {
 		
 		public static void handle(PlayerIDJoinMessage message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
-			VoiceClientManager.EXECUTOR.execute(() -> PlayerIDManager.addAllPlayer(message.uuids, message.ids));
+			VoiceClientManager.EXECUTOR.execute(() -> PlayerIDManager.addAllPlayers(message.uuids, message.ids));
 			context.setPacketHandled(true);
 		}
 	}

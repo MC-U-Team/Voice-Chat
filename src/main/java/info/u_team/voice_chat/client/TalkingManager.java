@@ -6,11 +6,11 @@ public class TalkingManager {
 	
 	private static final Map<UUID, Long> MAP = new HashMap<>();
 	
-	public static synchronized void addOrUpdate(UUID uuid) {
+	public static void addOrUpdate(UUID uuid) {
 		MAP.put(uuid, System.currentTimeMillis());
 	}
 	
-	public static synchronized void removeAllThatAreInactiveFor200ms() {
+	public static void removeAllThatAreInactiveFor200ms() {
 		final long currentTime = System.currentTimeMillis();
 		MAP.entrySet().removeIf(entry -> currentTime - entry.getValue() > 200);
 	}
@@ -19,7 +19,7 @@ public class TalkingManager {
 		return Collections.unmodifiableSet(MAP.keySet());
 	}
 	
-	public static synchronized void clear() {
+	public static void clear() {
 		MAP.clear();
 	}
 }
