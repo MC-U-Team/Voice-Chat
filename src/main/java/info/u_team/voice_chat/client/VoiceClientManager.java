@@ -3,9 +3,11 @@ package info.u_team.voice_chat.client;
 import java.net.SocketException;
 import java.util.concurrent.*;
 
+import info.u_team.voice_chat.audio_client.util.ThreadUtil;
+
 public class VoiceClientManager {
 	
-	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool();
+	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool(ThreadUtil.createDaemonFactory("voice client"));
 	
 	private static VoiceClient CLIENT;
 	
