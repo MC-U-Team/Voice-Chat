@@ -40,6 +40,7 @@ public class VoiceToClientPacket {
 	public static class Handler {
 		
 		public static void handle(VoiceToClientPacket message, Supplier<Context> contextSupplier) {
+			
 		}
 	}
 	
