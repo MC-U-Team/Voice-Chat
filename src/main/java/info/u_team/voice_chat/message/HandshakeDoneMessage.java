@@ -19,9 +19,7 @@ public class HandshakeDoneMessage {
 		
 		public static void handle(HandshakeDoneMessage message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
-			final long time = System.currentTimeMillis();
 			VoiceClientManager.setHandshakeDone();
-			System.out.println(System.currentTimeMillis() - time);
 			context.setPacketHandled(true);
 		}
 	}
