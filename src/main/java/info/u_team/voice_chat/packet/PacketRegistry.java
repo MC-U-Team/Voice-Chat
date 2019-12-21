@@ -36,16 +36,18 @@ public class PacketRegistry {
 	
 	@SuppressWarnings("unchecked")
 	public static <MSG> byte[] encode(MSG message) {
-		final Packet<MSG> packet = (Packet<MSG>) packetClasses.get(message);
+		final Packet<MSG> packet = (Packet<MSG>) packetClasses.get(message.getClass());
 		if (packet == null) {
-			LOGGER.error("The message %s is not registered and cannot be encoded.", message);
+			LOGGER.error("The message %s is not registered and cannot be encoded.", message.toString());
 			return null;
 		}
 		final ByteBuffer buffer = packet.encode(message);
 		final byte[] array = new byte[buffer.capacity() + 1];
 		
 		array[0] = packets.inverse().getOrDefault(packet, (byte) -1);
-		buffer.get(array, 1, array.length);
+		if (buffer.capacity() > 0) {
+			buffer.get(array, 1, array.length);
+		}
 		
 		return array;
 	}
@@ -57,10 +59,16 @@ public class PacketRegistry {
 		}
 		final Packet<MSG> packet = (Packet<MSG>) packets.get(array[0]);
 		if (packet == null) {
-			LOGGER.error("The message with the id %s is not registered and cannot be decoded.", array[0]);
+			LOGGER.error("The message with the id %i is not registered and cannot be decoded.", array[0]);
 			return null;
 		}
-		return packet.decode(ByteBuffer.wrap(array, 1, length));
+		final ByteBuffer buffer;
+		if (length > 1) {
+			buffer = ByteBuffer.wrap(array, 1, length);
+		} else {
+			buffer = ByteBuffer.allocate(0);
+		}
+		return packet.decode(buffer);
 	}
 	
 	public static <MSG> void handle(MSG message, Sender sender, InetSocketAddress address) {
@@ -69,14 +77,14 @@ public class PacketRegistry {
 	
 	@SuppressWarnings("unchecked")
 	public static <MSG> void handle(MSG message, Sender sender, InetSocketAddress address, ServerPlayerEntity player) {
-		final Packet<MSG> packet = (Packet<MSG>) packetClasses.get(message);
+		final Packet<MSG> packet = (Packet<MSG>) packetClasses.get(message.getClass());
 		if (packet == null) {
-			LOGGER.error("The message %s is not registered and cannot be handled.", message);
+			LOGGER.error("The message %s is not registered and cannot be handled.", message.toString());
 		}
 		try {
 			packet.getMessageConsumer().accept(message, () -> new Context(sender, address, player));
 		} catch (Exception ex) {
-			LOGGER.warn("An exception occured while handling the message %s", message, ex);
+			LOGGER.warn("An exception occured while handling the message %s", message.toString(), ex);
 		}
 	}
 	

@@ -29,15 +29,19 @@ public class VoiceClient {
 		socket = new DatagramSocket();
 		serverAddress = NetworkUtil.findServerInetAddress(port);
 		handshakeMode = true;
+		
 		handshakeTask = service.submit(() -> {
 			while (!Thread.currentThread().isInterrupted() && handshakeMode) {
 				try {
+					System.out.println("SEND HANDSHAKE PACKET");
 					sendIntern(new HandshakePacket());
 					Thread.sleep(500);
 				} catch (InterruptedException ex) {
+					System.out.println("EXIT INTER");
 					return; // Can happen so we just exist this task
 				}
 			}
+			System.out.println("EXIT LOOPÜ ENDED");
 		});
 		task = service.submit(() -> {
 			while (!Thread.currentThread().isInterrupted() && !socket.isClosed()) {
@@ -93,5 +97,6 @@ public class VoiceClient {
 	public void setHandshakeDone() {
 		handshakeTask.cancel(true);
 		handshakeMode = false;
+		System.out.println("Handshake done ------------------------------------------ >>");
 	}
 }

@@ -28,5 +28,25 @@ public class VoiceChatNetworks {
 		NETWORK.registerMessage(3, PlayerIDMessage.class, PlayerIDMessage::encode, PlayerIDMessage::decode, PlayerIDMessage.Handler::handle);
 		
 		PacketRegistry.register(0, HandshakePacket.class, HandshakePacket::encode, HandshakePacket::decode, HandshakePacket.Handler::handle);
+		
+		System.out.println("ENDECO ----------------------------------------------------------------------------------------");
+		byte[] array = PacketRegistry.encode(new HandshakePacket());
+		
+		System.out.println(array.length);
+		System.out.println(bytesToHex(array));
+		
+		System.out.println(PacketRegistry.decode(array, array.length).toString());
+		
 	}
+	
+	private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    public static String bytesToHex(byte[] bytes) {
+        char[] hexChars = new char[bytes.length * 2];
+        for ( int j = 0; j < bytes.length; j++ ) {
+            int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
+    }
 }

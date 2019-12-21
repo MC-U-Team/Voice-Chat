@@ -32,7 +32,7 @@ public class VoiceClientManager {
 		return CLIENT;
 	}
 	
-	public static synchronized void setHandshakeDone() {
+	public static void setHandshakeDone() {
 		if (CLIENT != null) {
 			CLIENT.setHandshakeDone();
 		}
