@@ -3,10 +3,12 @@ package info.u_team.voice_chat.server;
 import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
+import java.util.*;
 import java.util.concurrent.*;
 
 import info.u_team.voice_chat.packet.PacketRegistry;
 import info.u_team.voice_chat.packet.PacketRegistry.Context.Sender;
+import info.u_team.voice_chat.server.VerifiedPlayerManager.PlayerData;
 import info.u_team.voice_chat.util.NetworkUtil;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
@@ -55,22 +57,28 @@ public class VoiceServer {
 		});
 	}
 	
-	public <MSG> void send(ServerPlayerEntity player, MSG message) {
-		sendIntern(player, message);
+	public <MSG> void sendPlayer(ServerPlayerEntity player, MSG message) {
+		sendIntern(Arrays.asList(VerifiedPlayerManager.getPlayerData(player)), message);
 	}
 	
-	private <MSG> void sendIntern(ServerPlayerEntity player, MSG message) {
+	public <MSG> void sendAll(MSG message) {
+		sendIntern(VerifiedPlayerManager.getMap().values(), message);
+	}
+	
+	private <MSG> void sendIntern(Collection<PlayerData> players, MSG message) {
 		final byte[] data = PacketRegistry.encode(message);
 		if (data == null) {
 			return;
 		}
-		try {
-			socket.send(new DatagramPacket(data, data.length, VerifiedPlayerManager.getPlayerData(player).getAddress()));
-		} catch (IOException ex) {
-			if (!socket.isClosed()) {
-				ex.printStackTrace();
+		players.stream().forEach(playerData -> {
+			try {
+				socket.send(new DatagramPacket(data, data.length, playerData.getAddress()));
+			} catch (IOException ex) {
+				if (!socket.isClosed()) {
+					ex.printStackTrace();
+				}
 			}
-		}
+		});
 	}
 	
 	public void close() {

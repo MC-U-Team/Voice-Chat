@@ -31,14 +31,17 @@ public class VoiceToServerPacket {
 		
 		public static void handle(VoiceToServerPacket message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
-			/*
-			 * if (!context.hasPlayer()) { return; }
-			 * 
-			 * final ServerPlayerEntity player = context.getPlayer();
-			 * 
-			 * if (!VerifiedPlayerManager.hasPlayerData(player)) { return; }
-			 */
+			if (!context.hasPlayer()) {
+				return;
+			}
+			
+			final ServerPlayerEntity player = context.getPlayer();
+			
+			if (!VerifiedPlayerManager.hasPlayerData(player)) {
+				return;
+			}
+			
+			
 		}
 	}
-	
 }
