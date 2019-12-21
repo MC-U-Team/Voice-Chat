@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.net.*;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 import info.u_team.voice_chat.packet.PacketRegistry;
 import info.u_team.voice_chat.packet.PacketRegistry.Context.Sender;
@@ -63,6 +65,10 @@ public class VoiceServer {
 	
 	public <MSG> void sendAll(MSG message) {
 		sendIntern(VerifiedPlayerManager.getMap().values(), message);
+	}
+	
+	public <MSG> void sendAllExcept(MSG message, ServerPlayerEntity except) {
+		sendIntern(VerifiedPlayerManager.getMap().entrySet().stream().filter(entry -> !entry.getKey().equals(except.getUniqueID())).map(Entry::getValue).collect(Collectors.toList()), message);
 	}
 	
 	private <MSG> void sendIntern(Collection<PlayerData> players, MSG message) {

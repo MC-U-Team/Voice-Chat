@@ -4,7 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
-import info.u_team.voice_chat.server.VerifiedPlayerManager;
+import info.u_team.voice_chat.server.*;
+import info.u_team.voice_chat.server.VerifiedPlayerManager.PlayerData;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class VoiceToServerPacket {
@@ -37,11 +38,15 @@ public class VoiceToServerPacket {
 			
 			final ServerPlayerEntity player = context.getPlayer();
 			
-			if (!VerifiedPlayerManager.hasPlayerData(player)) {
+			final PlayerData playerData = VerifiedPlayerManager.getPlayerData(player);
+			
+			if (playerData == null) {
 				return;
 			}
 			
-			
+			// TODO currently send the data to everybody even the sender
+			// VoiceServerManager.getServer().sendAllExcept(message, player);
+			VoiceServerManager.getServer().sendAll(new VoiceToClientPacket(playerData.getId(), message.opusPacket));
 		}
 	}
 }

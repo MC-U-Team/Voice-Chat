@@ -30,5 +30,6 @@ public class VoiceChatNetworks {
 		PacketRegistry.register(0, HandshakePacket.class, HandshakePacket::encode, HandshakePacket::decode, HandshakePacket.Handler::handle);
 		
 		PacketRegistry.register(1, VoiceToServerPacket.class, VoiceToServerPacket::encode, VoiceToServerPacket::decode, VoiceToServerPacket.Handler::handle);
+		PacketRegistry.register(2, VoiceToClientPacket.class, VoiceToClientPacket::encode, VoiceToClientPacket::decode, VoiceToClientPacket.Handler::handle);
 	}
 }
