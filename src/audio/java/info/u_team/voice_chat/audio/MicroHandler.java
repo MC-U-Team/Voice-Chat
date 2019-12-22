@@ -21,7 +21,7 @@ public class MicroHandler implements NoExceptionCloseable {
 		recorder = new MicroRecorder(data, this::sendVoicePacket, encoder);
 	}
 	
-	private void sendVoicePacket(byte[] opusPacket) {
+	protected void sendVoicePacket(byte[] opusPacket) {
 		if (VoiceClientManager.isRunning()) {
 			VoiceClientManager.getClient().send(new VoiceToServerPacket(opusPacket));
 		}
