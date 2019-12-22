@@ -2,6 +2,7 @@ package info.u_team.voice_chat.message;
 
 import java.util.function.Supplier;
 
+import info.u_team.voice_chat.audio.*;
 import info.u_team.voice_chat.client.VoiceClientManager;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
@@ -34,6 +35,8 @@ public class ServerPortHandshakeMessage {
 					VoiceClientManager.stop();
 				}
 				VoiceClientManager.start(message.port, message.secret);
+				MicroManager.start();
+				SpeakerManager.start();
 			});
 			context.setPacketHandled(true);
 		}
