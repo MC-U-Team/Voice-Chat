@@ -1,37 +1,26 @@
 package info.u_team.voice_chat.audio;
 
-import org.concentus.OpusSignal;
-
-import info.u_team.voice_chat.audio_client.api.opus.IOpusEncoder;
-import info.u_team.voice_chat.audio_client.micro.*;
-import info.u_team.voice_chat.audio_client.opus.PcmOpusEncoder;
-
 public class MicroManager {
 	
-	private static final IOpusEncoder encoder = new PcmOpusEncoder(48000, 2, 20, 64000, 1000, OpusSignal.OPUS_SIGNAL_VOICE);
+	private static MicroHandler MICRO;
 	
-	private final MicroData data;
-	private final MicroRecorder recorder;
-	
-	public MicroManager() {
-		data = new MicroData("");
-		recorder = new MicroRecorder(data, this::handeVoicePacket, encoder);
+	public synchronized static void start() {
+		MICRO = new MicroHandler();
 	}
 	
-	private void handeVoicePacket(byte[] opusPacket) {
+	public synchronized static void stop() {
+		if (MICRO != null) {
+			MICRO.close();
+			MICRO = null;
+		}
 	}
 	
-	public void start() {
-		recorder.start();
+	public static boolean isRunning() {
+		return MICRO != null;
 	}
 	
-	public void stop() {
-		recorder.stop();
-	}
-	
-	public void close() {
-		data.close();
-		recorder.close();
+	public static MicroHandler getHandler() {
+		return MICRO;
 	}
 	
 }

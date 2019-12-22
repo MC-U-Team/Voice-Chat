@@ -3,6 +3,7 @@ package info.u_team.voice_chat.packet.message;
 import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
+import info.u_team.voice_chat.audio.*;
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
 
 public class VoiceToClientPacket {
@@ -13,14 +14,6 @@ public class VoiceToClientPacket {
 	public VoiceToClientPacket(short id, byte[] opusPacket) {
 		this.id = id;
 		this.opusPacket = opusPacket;
-	}
-	
-	public short getId() {
-		return id;
-	}
-	
-	public byte[] getOpusPacket() {
-		return opusPacket;
 	}
 	
 	public static ByteBuffer encode(VoiceToClientPacket message) {
@@ -40,7 +33,9 @@ public class VoiceToClientPacket {
 	public static class Handler {
 		
 		public static void handle(VoiceToClientPacket message, Supplier<Context> contextSupplier) {
-			
+			if (SpeakerManager.isRunning()) {
+				SpeakerManager.getHandler().receiveVoicePacket(message.id, message.opusPacket);
+			}
 		}
 	}
 	

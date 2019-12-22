@@ -16,10 +16,6 @@ public class VoiceToServerPacket {
 		this.opusPacket = opusPacket;
 	}
 	
-	public byte[] getOpusPacket() {
-		return opusPacket;
-	}
-	
 	public static ByteBuffer encode(VoiceToServerPacket message) {
 		return ByteBuffer.wrap(message.opusPacket);
 	}
