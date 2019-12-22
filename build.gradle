@@ -163,7 +163,9 @@ artifacts {
 
 sourceSets {
 	main {
-		java
+		java {
+			srcDirs += "src/audio/java"
+		}
 		resources {
 			srcDirs += "src/generated/resources"
 		}
