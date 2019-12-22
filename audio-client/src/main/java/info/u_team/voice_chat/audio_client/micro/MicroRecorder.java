@@ -9,7 +9,8 @@ import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
 public class MicroRecorder implements NoExceptionCloseable {
 	
-	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("micro recorder"));
+//	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("micro recorder"));
+	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool(ThreadUtil.createDaemonFactory("micro recorder"));
 	
 	private final MicroData microData;
 	private final Consumer<byte[]> opusPacketConsumer;

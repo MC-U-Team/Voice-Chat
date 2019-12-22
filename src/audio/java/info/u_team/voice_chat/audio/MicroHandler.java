@@ -35,6 +35,10 @@ public class MicroHandler implements NoExceptionCloseable {
 		recorder.stop();
 	}
 	
+	public void setMicro(String micro) {
+		data.setTargetLine(micro);
+	}
+	
 	@Override
 	public void close() {
 		recorder.close();
