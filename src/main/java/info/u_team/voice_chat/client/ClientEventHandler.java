@@ -2,8 +2,10 @@ package info.u_team.voice_chat.client;
 
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.audio.*;
+import info.u_team.voice_chat.init.VoiceChatKeybindings;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggedOutEvent;
+import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -24,5 +26,17 @@ public class ClientEventHandler {
 		}
 		PlayerIDManager.clear();
 		TalkingManager.clear();
+	}
+	
+	@SubscribeEvent
+	public static void keyPress(KeyInputEvent event) {
+		if (VoiceChatKeybindings.PUSH_TALK.isPressed()) {
+			if (MicroManager.isRunning()) {
+				MicroManager.getHandler().start();
+			}
+		}
+		if (MicroManager.isRunning()) {
+			MicroManager.getHandler().stop();
+		}
 	}
 }
