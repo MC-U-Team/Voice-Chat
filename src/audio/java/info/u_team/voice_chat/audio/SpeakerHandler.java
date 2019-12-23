@@ -17,6 +17,10 @@ public class SpeakerHandler implements NoExceptionCloseable {
 		player.accept(id, opusPacket);
 	}
 	
+	public void setSpeaker(String mixer) {
+		data.setMixer(mixer);
+	}
+	
 	@Override
 	public void close() {
 		player.close();

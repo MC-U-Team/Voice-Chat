@@ -29,8 +29,8 @@ public class MicroHandler implements NoExceptionCloseable {
 		recorder.stop();
 	}
 	
-	public void setMicro(String micro) {
-		data.setTargetLine(micro);
+	public void setMicro(String mixer) {
+		data.setMixer(mixer);
 	}
 	
 	@Override
