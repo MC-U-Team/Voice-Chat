@@ -34,6 +34,12 @@ public class ServerPortHandshakeMessage {
 				if (VoiceClientManager.isRunning()) {
 					VoiceClientManager.stop();
 				}
+				if (MicroManager.isRunning()) {
+					MicroManager.stop();
+				}
+				if (SpeakerManager.isRunning()) {
+					SpeakerManager.stop();
+				}
 				VoiceClientManager.start(message.port, message.secret);
 				MicroManager.start();
 				SpeakerManager.start();

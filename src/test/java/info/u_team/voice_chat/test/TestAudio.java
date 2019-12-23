@@ -24,6 +24,7 @@ public class TestAudio {
 			
 			@Override
 			protected void sendVoicePacket(byte[] opusPacket) {
+				System.out.println("Send opus packet to server with size: " + opusPacket.length);
 				speaker.receiveVoicePacket(0, opusPacket);
 			}
 		};
@@ -43,6 +44,7 @@ public class TestAudio {
 		final JFrame frame = new JFrame();
 		frame.setSize(300, 300);
 		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyEventDispatcher() {
 			
