@@ -22,8 +22,8 @@ public class SpeakerData implements NoExceptionCloseable {
 	private final ScheduledFuture<?> cleanupTask;
 	
 	public SpeakerData(String speakerName) {
-		setMixer(speakerName);
 		sourceLines = new ConcurrentHashMap<>();
+		setMixer(speakerName);
 		cleanupTask = executor.scheduleWithFixedDelay(() -> {
 			final long currentTime = System.currentTimeMillis();
 			sourceLines.forEach((id, lineInfo) -> {
