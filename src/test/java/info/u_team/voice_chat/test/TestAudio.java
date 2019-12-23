@@ -24,7 +24,6 @@ public class TestAudio {
 			
 			@Override
 			protected void sendVoicePacket(byte[] opusPacket) {
-				System.out.println("MICRO 1");
 				speaker.receiveVoicePacket(0, opusPacket);
 			}
 		};
@@ -33,7 +32,6 @@ public class TestAudio {
 			
 			@Override
 			protected void sendVoicePacket(byte[] opusPacket) {
-				System.out.println("MICRO 2");
 				speaker.receiveVoicePacket(1, opusPacket);
 			}
 		};

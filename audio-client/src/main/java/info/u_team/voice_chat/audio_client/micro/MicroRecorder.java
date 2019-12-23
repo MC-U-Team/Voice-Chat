@@ -3,13 +3,17 @@ package info.u_team.voice_chat.audio_client.micro;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
+import org.concentus.OpusSignal;
+
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.api.opus.IOpusEncoder;
+import info.u_team.voice_chat.audio_client.opus.PcmOpusEncoder;
 import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
 public class MicroRecorder implements NoExceptionCloseable {
 	
-//	public static final ExecutorService EXECUTOR = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("micro recorder"));
+	// public static final ExecutorService EXECUTOR =
+		// Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("micro recorder"));
 	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool(ThreadUtil.createDaemonFactory("micro recorder"));
 	
 	private final MicroData microData;
@@ -18,10 +22,10 @@ public class MicroRecorder implements NoExceptionCloseable {
 	
 	private volatile boolean send;
 	
-	public MicroRecorder(MicroData microData, Consumer<byte[]> opusPacketConsumer, IOpusEncoder encoder) {
+	public MicroRecorder(MicroData microData, Consumer<byte[]> opusPacketConsumer) {
 		this.microData = microData;
 		this.opusPacketConsumer = opusPacketConsumer;
-		this.encoder = encoder;
+		this.encoder = new PcmOpusEncoder(48000, 2, 20, 64000, 1000, OpusSignal.OPUS_SIGNAL_VOICE);
 	}
 	
 	public void start() {
