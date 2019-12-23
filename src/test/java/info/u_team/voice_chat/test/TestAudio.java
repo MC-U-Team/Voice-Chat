@@ -36,6 +36,7 @@ public class TestAudio {
 			}
 		};
 		
+		// Just my mics for testing
 		micro1.setMicro("Mikrofon (Auna Mic CM 900)");
 		micro2.setMicro("Mikrofon (USB PnP Sound Device)");
 		
