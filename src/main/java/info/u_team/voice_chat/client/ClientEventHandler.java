@@ -6,6 +6,7 @@ import info.u_team.voice_chat.init.VoiceChatKeybindings;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggedOutEvent;
 import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
+import net.minecraftforge.event.TickEvent.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
@@ -29,14 +30,13 @@ public class ClientEventHandler {
 	}
 	
 	@SubscribeEvent
-	public static void keyPress(KeyInputEvent event) {
-		if (VoiceChatKeybindings.PUSH_TALK.isPressed()) {
-			if (MicroManager.isRunning()) {
+	public static void keyPress(ClientTickEvent event) {
+		if (event.phase == Phase.START) {
+			if (VoiceChatKeybindings.PUSH_TALK.isKeyDown() && MicroManager.isRunning() && !MicroManager.getHandler().isSending()) {
 				MicroManager.getHandler().start();
+			} else if (MicroManager.isRunning() && MicroManager.getHandler().isSending()) {
+				MicroManager.getHandler().stop();
 			}
-		}
-		if (MicroManager.isRunning()) {
-			MicroManager.getHandler().stop();
 		}
 	}
 }

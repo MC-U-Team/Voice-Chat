@@ -44,6 +44,10 @@ public class MicroRecorder implements NoExceptionCloseable {
 		send = false;
 	}
 	
+	public boolean isSending() {
+		return send;
+	}
+	
 	@Override
 	public void close() {
 		executor.shutdown();

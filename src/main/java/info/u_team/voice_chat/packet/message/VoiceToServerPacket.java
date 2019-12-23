@@ -43,7 +43,9 @@ public class VoiceToServerPacket {
 			// TODO currently send the data to everybody even the sender
 			// VoiceServerManager.getServer().sendAllExcept(message, player);
 			
-			VoiceServerManager.getServer().sendAll(new VoiceToClientPacket(playerData.getId(), message.opusPacket));
+			System.out.println("RECEIVE PACKET WITH SIZE: " + message.opusPacket.length);
+			
+//			VoiceServerManager.getServer().sendAll(new VoiceToClientPacket(playerData.getId(), message.opusPacket));
 		}
 	}
 }
