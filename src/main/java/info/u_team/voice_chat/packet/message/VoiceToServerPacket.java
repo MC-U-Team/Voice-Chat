@@ -3,7 +3,6 @@ package info.u_team.voice_chat.packet.message;
 import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
-import info.u_team.voice_chat.packet.PacketRegistry;
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
 import info.u_team.voice_chat.server.*;
 import info.u_team.voice_chat.server.VerifiedPlayerManager.PlayerData;
@@ -44,9 +43,7 @@ public class VoiceToServerPacket {
 			// TODO currently send the data to everybody even the sender
 			// VoiceServerManager.getServer().sendAllExcept(message, player);
 			
-			System.out.println("RECEIVE PACKET WITH SIZE: " + message.opusPacket.length + " -> " + PacketRegistry.encode(new VoiceToClientPacket(playerData.getId(), message.opusPacket)).length);
-			
-			// VoiceServerManager.getServer().sendAll(new VoiceToClientPacket(playerData.getId(), message.opusPacket));
+			VoiceServerManager.getServer().sendAll(new VoiceToClientPacket(playerData.getId(), message.opusPacket));
 		}
 	}
 }

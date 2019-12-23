@@ -24,8 +24,10 @@ public class ClientEventHandler {
 		if (VoiceClientManager.isRunning()) {
 			VoiceClientManager.stop();
 		}
+		if (TalkingManager.isRunning()) {
+			TalkingManager.stop();
+		}
 		PlayerIDManager.clear();
-		TalkingManager.clear();
 	}
 	
 	@SubscribeEvent

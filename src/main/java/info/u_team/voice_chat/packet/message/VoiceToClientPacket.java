@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
 import info.u_team.voice_chat.audio.*;
+import info.u_team.voice_chat.client.*;
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
 
 public class VoiceToClientPacket {
@@ -35,6 +36,7 @@ public class VoiceToClientPacket {
 		public static void handle(VoiceToClientPacket message, Supplier<Context> contextSupplier) {
 			if (SpeakerManager.isRunning()) {
 				SpeakerManager.getHandler().receiveVoicePacket(message.id, message.opusPacket);
+				TalkingManager.addOrUpdate(PlayerIDManager.getPlayerByID(message.id));
 			}
 		}
 	}

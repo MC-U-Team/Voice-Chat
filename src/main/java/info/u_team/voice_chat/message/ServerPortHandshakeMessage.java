@@ -3,7 +3,7 @@ package info.u_team.voice_chat.message;
 import java.util.function.Supplier;
 
 import info.u_team.voice_chat.audio.*;
-import info.u_team.voice_chat.client.VoiceClientManager;
+import info.u_team.voice_chat.client.*;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;
 
@@ -40,9 +40,13 @@ public class ServerPortHandshakeMessage {
 				if (SpeakerManager.isRunning()) {
 					SpeakerManager.stop();
 				}
+				if (TalkingManager.isRunning()) {
+					TalkingManager.stop();
+				}
 				VoiceClientManager.start(message.port, message.secret);
 				MicroManager.start();
 				SpeakerManager.start();
+				TalkingManager.start();
 			});
 			context.setPacketHandled(true);
 		}

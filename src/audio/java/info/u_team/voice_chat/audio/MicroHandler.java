@@ -2,8 +2,9 @@ package info.u_team.voice_chat.audio;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.micro.*;
-import info.u_team.voice_chat.client.VoiceClientManager;
+import info.u_team.voice_chat.client.*;
 import info.u_team.voice_chat.packet.message.VoiceToServerPacket;
+import net.minecraft.client.Minecraft;
 
 public class MicroHandler implements NoExceptionCloseable {
 	
@@ -18,6 +19,7 @@ public class MicroHandler implements NoExceptionCloseable {
 	protected void sendVoicePacket(byte[] opusPacket) {
 		if (VoiceClientManager.isRunning()) {
 			VoiceClientManager.getClient().send(new VoiceToServerPacket(opusPacket));
+			TalkingManager.addOrUpdate(Minecraft.getInstance().player.getUniqueID());
 		}
 	}
 	
