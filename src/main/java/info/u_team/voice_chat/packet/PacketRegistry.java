@@ -42,6 +42,7 @@ public class PacketRegistry {
 			return null;
 		}
 		final ByteBuffer buffer = packet.encode(message);
+		buffer.position(0);
 		final byte[] array = new byte[buffer.capacity() + 1];
 		
 		array[0] = packets.inverse().getOrDefault(packet, (byte) -1);
@@ -62,6 +63,7 @@ public class PacketRegistry {
 		}
 		final ByteBuffer buffer = ByteBuffer.allocate(length - 1);
 		buffer.put(array, 1, length - 1);
+		buffer.position(0);
 		return packet.decode(buffer);
 	}
 	

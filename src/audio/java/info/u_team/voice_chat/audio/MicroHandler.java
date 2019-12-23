@@ -17,7 +17,6 @@ public class MicroHandler implements NoExceptionCloseable {
 	
 	protected void sendVoicePacket(byte[] opusPacket) {
 		if (VoiceClientManager.isRunning()) {
-			System.out.println("Send opus packet to server with size: " + opusPacket.length);
 			VoiceClientManager.getClient().send(new VoiceToServerPacket(opusPacket));
 		}
 	}
