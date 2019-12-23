@@ -3,51 +3,59 @@ package info.u_team.voice_chat.audio_client.micro;
 import javax.sound.sampled.*;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
+import info.u_team.voice_chat.audio_client.util.AudioUtil;
 
 public class MicroData implements NoExceptionCloseable {
 	
 	private static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
 	private static final DataLine.Info MIC_INFO = new DataLine.Info(TargetDataLine.class, FORMAT);
 	
+	private Mixer mixer;
 	private TargetDataLine targetLine;
 	
 	public MicroData(String microName) {
-		setTargetLine(microName);
+		setMixer(microName);
 	}
 	
-	public void setTargetLine(String microName) {
-		openTargetLine(findMicrophoneOrUseDefault(microName));
+	private boolean createLine() {
+		if (mixer != null) {
+			try {
+				final TargetDataLine line = (TargetDataLine) mixer.getLine(MIC_INFO);
+				line.open(FORMAT, 960 * 2 * 2 * 4);
+				line.start();
+				targetLine = line;
+				return true;
+			} catch (LineUnavailableException ex) {
+			}
+		}
+		return false;
 	}
 	
-	private void openTargetLine(TargetDataLine newLine) {
+	private void closeLine() {
 		if (targetLine != null) {
+			targetLine.flush();
+			targetLine.stop();
 			targetLine.close();
 		}
-		targetLine = newLine;
-		try {
-			targetLine.open(FORMAT, 960 * 2 * 2 * 4);
-			targetLine.start();
-		} catch (LineUnavailableException ex) {
-			targetLine = null;
-		}
 	}
 	
-	private TargetDataLine findMicrophoneOrUseDefault(String name) {
-		try {
-			for (Mixer.Info info : AudioSystem.getMixerInfo()) {
-				final Mixer mixer = AudioSystem.getMixer(info);
-				if (mixer.isLineSupported(MIC_INFO) && info.getName().equals(name)) {
-					return (TargetDataLine) mixer.getLine(MIC_INFO);
-				}
-			}
-			return (TargetDataLine) AudioSystem.getLine(MIC_INFO);
-		} catch (LineUnavailableException ex) {
-			return null;
+	public void setMixer(String name) {
+		closeLine();
+		if (mixer != null) {
+			mixer.close();
 		}
+		mixer = AudioUtil.findMixer(name, MIC_INFO);
 	}
 	
 	public boolean isAvailable() {
-		return targetLine != null;
+		if (mixer != null) {
+			if (targetLine != null) {
+				return targetLine.isOpen();
+			} else {
+				return createLine();
+			}
+		}
+		return false;
 	}
 	
 	public void flush() {
@@ -65,8 +73,9 @@ public class MicroData implements NoExceptionCloseable {
 	
 	@Override
 	public void close() {
-		if (targetLine != null) {
-			targetLine.close();
+		closeLine();
+		if (mixer != null) {
+			mixer.close();
 		}
 	}
 	

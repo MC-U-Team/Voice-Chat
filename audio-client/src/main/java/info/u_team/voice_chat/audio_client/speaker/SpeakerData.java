@@ -56,9 +56,12 @@ public class SpeakerData implements NoExceptionCloseable {
 	}
 	
 	public void setMixer(String name) {
-		mixer = AudioUtil.findMixer(name, SPEAKER_INFO);
 		sourceLines.values().forEach(this::closeLine);
 		sourceLines.clear();
+		if (mixer != null) {
+			mixer.close();
+		}
+		mixer = AudioUtil.findMixer(name, SPEAKER_INFO);
 	}
 	
 	public boolean isAvailable(int id) {
