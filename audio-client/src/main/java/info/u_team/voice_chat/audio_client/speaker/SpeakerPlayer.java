@@ -8,7 +8,7 @@ import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
 public class SpeakerPlayer implements NoExceptionCloseable {
 	
-	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool(ThreadUtil.createDaemonFactory("speaker player"));
+	private final ExecutorService executor = Executors.newCachedThreadPool(ThreadUtil.createDaemonFactory("speaker player"));
 	
 	private final SpeakerData speakerData;
 	
@@ -21,7 +21,7 @@ public class SpeakerPlayer implements NoExceptionCloseable {
 	
 	public void accept(int id, byte[] opusPacket) {
 		if (speakerData.isAvailable(id)) {
-			bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(EXECUTOR, id, speakerData)).decodeAndPushPacket(opusPacket);
+			bufferMap.computeIfAbsent(id, $ -> new SpeakerBufferPusher(executor, id, speakerData)).decodeAndPushPacket(opusPacket);
 		}
 	}
 	
@@ -29,6 +29,6 @@ public class SpeakerPlayer implements NoExceptionCloseable {
 	public void close() {
 		bufferMap.values().forEach(SpeakerBufferPusher::close);
 		bufferMap.clear();
-		EXECUTOR.shutdown();
+		executor.shutdown();
 	}
 }

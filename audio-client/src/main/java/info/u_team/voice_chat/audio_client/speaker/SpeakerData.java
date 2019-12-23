@@ -10,7 +10,7 @@ import info.u_team.voice_chat.audio_client.util.*;
 
 public class SpeakerData implements NoExceptionCloseable {
 	
-	private final ScheduledExecutorService CLEANUP_EXECUTOR = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createDaemonFactory("speaker data cleanup"));
+	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createDaemonFactory("speaker data cleanup"));
 	
 	private static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
 	private static final DataLine.Info SPEAKER_INFO = new DataLine.Info(SourceDataLine.class, FORMAT);
@@ -24,7 +24,7 @@ public class SpeakerData implements NoExceptionCloseable {
 	public SpeakerData(String speakerName) {
 		setMixer(speakerName);
 		sourceLines = new ConcurrentHashMap<>();
-		cleanupTask = CLEANUP_EXECUTOR.scheduleWithFixedDelay(() -> {
+		cleanupTask = executor.scheduleWithFixedDelay(() -> {
 			final long currentTime = System.currentTimeMillis();
 			sourceLines.forEach((id, lineInfo) -> {
 				if (currentTime - lineInfo.getLastAccessed() > 30000) {
@@ -94,6 +94,7 @@ public class SpeakerData implements NoExceptionCloseable {
 	@Override
 	public void close() {
 		cleanupTask.cancel(false);
+		executor.shutdown();
 		sourceLines.values().forEach(this::closeLine);
 		sourceLines.clear();
 		if (mixer != null) {

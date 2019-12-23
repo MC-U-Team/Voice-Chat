@@ -12,9 +12,7 @@ import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
 public class MicroRecorder implements NoExceptionCloseable {
 	
-	// public static final ExecutorService EXECUTOR =
-		// Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("micro recorder"));
-	public static final ExecutorService EXECUTOR = Executors.newCachedThreadPool(ThreadUtil.createDaemonFactory("micro recorder"));
+	private final ExecutorService executor = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("micro recorder"));
 	
 	private final MicroData microData;
 	private final Consumer<byte[]> opusPacketConsumer;
@@ -33,7 +31,7 @@ public class MicroRecorder implements NoExceptionCloseable {
 			return;
 		}
 		send = true;
-		EXECUTOR.execute(() -> {
+		executor.execute(() -> {
 			final byte[] buffer = new byte[960 * 2 * 2];
 			while (send && microData.isAvailable()) {
 				opusPacketConsumer.accept(encoder.encode(microData.read(buffer)));
@@ -48,6 +46,6 @@ public class MicroRecorder implements NoExceptionCloseable {
 	
 	@Override
 	public void close() {
-		EXECUTOR.shutdown();
+		executor.shutdown();
 	}
 }
