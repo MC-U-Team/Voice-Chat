@@ -10,10 +10,10 @@ import info.u_team.voice_chat.audio_client.util.*;
 
 public class SpeakerData implements NoExceptionCloseable {
 	
-	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createDaemonFactory("speaker data cleanup"));
+	public static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
+	public static final DataLine.Info SPEAKER_INFO = new DataLine.Info(SourceDataLine.class, FORMAT);
 	
-	private static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
-	private static final DataLine.Info SPEAKER_INFO = new DataLine.Info(SourceDataLine.class, FORMAT);
+	private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createDaemonFactory("speaker data cleanup"));
 	
 	private Mixer mixer;
 	
@@ -55,8 +55,10 @@ public class SpeakerData implements NoExceptionCloseable {
 		line.close();
 	}
 	
-	private void setMixer(String name) {
+	public void setMixer(String name) {
 		mixer = AudioUtil.findMixer(name, SPEAKER_INFO);
+		sourceLines.values().forEach(this::closeLine);
+		sourceLines.clear();
 	}
 	
 	public boolean isAvailable(int id) {
