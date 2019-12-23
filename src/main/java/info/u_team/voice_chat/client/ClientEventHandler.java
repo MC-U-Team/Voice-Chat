@@ -1,8 +1,9 @@
 package info.u_team.voice_chat.client;
 
 import info.u_team.voice_chat.VoiceChatMod;
+import info.u_team.voice_chat.api.IIntegration;
 import info.u_team.voice_chat.audio.*;
-import info.u_team.voice_chat.init.VoiceChatKeybindings;
+import info.u_team.voice_chat.init.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggedOutEvent;
 import net.minecraftforge.event.TickEvent.*;
@@ -27,6 +28,7 @@ public class ClientEventHandler {
 		if (TalkingManager.isRunning()) {
 			TalkingManager.stop();
 		}
+		VoiceChatIntegrations.INTEGRATIONS.forEach(IIntegration::stop);
 		PlayerIDManager.clear();
 	}
 	

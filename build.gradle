@@ -165,6 +165,7 @@ sourceSets {
 	main {
 		java {
 			srcDirs += "src/audio/java"
+			srcDirs += "src/musicplayer-integration/java"
 		}
 		resources {
 			srcDirs += "src/generated/resources"
