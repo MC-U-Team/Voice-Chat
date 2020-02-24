@@ -18,6 +18,10 @@ apply plugin: "eclipse"
 apply plugin: "com.matthewprenger.cursegradle"
 apply plugin: "maven"
 
+repositories {
+    mavenCentral()
+}
+
 group = "info.u-team"
 archivesBaseName = generateArchivesBaseName()
 version = generateVersion()
@@ -63,6 +67,11 @@ minecraft {
 			}
         }
     }
+}
+
+configurations {
+    internal
+    compile.extendsFrom(internal)
 }
 
 jar {
@@ -148,6 +157,18 @@ dependencies {
 	compile getUTeamCoreDependency()
 	compile project(":audio-client")
   	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
+	internal ("org.lwjgl:lwjgl-opus:3.2.2") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-linux") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-macos") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows") {
+		transitive=false
+	}
 }
 
 curseforge {
