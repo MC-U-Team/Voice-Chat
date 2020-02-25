@@ -33,6 +33,7 @@ minecraft {
     runs {
     	client = {
             workingDirectory project.file("run/client/default").canonicalPath
+            property "voicechat.dev", "\"${project.rootDir}\""            
 			mods {
             	"${config.mod.modid}" {
                     source sourceSets.main
