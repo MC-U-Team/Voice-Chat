@@ -107,17 +107,12 @@ jar {
     from "audio-client/build/classes/java/main"
                   
     into ("META-INF/libraries") {
-		//from configurations.internal
-		
 		from {
-			println "------------------------------------------------------------------"
-			
-			//project.configurations.internal.resolvedConfiguration.resolvedArtifacts.each {
-			configurations.internal.incoming.artifacts.forEach {
-				def file = it.getFile()
-				def fileName = it.getId().getFileName()
-				def artifact = it.getId().getComponentIdentifier().getDisplayName()
-				def classifier = it.getId().getName().getClassifier()
+			configurations.internal.incoming.artifacts.getArtifacts().stream().map { resolvedArtifact ->
+				def file = resolvedArtifact.getFile()
+				def fileName = resolvedArtifact.getId().getFileName()
+				def artifact = resolvedArtifact.getId().getComponentIdentifier().getDisplayName()
+				def classifier = resolvedArtifact.getId().getName().getClassifier()
 				if(classifier != null) {
 					artifact += ":" + classifier
 				}
@@ -125,36 +120,8 @@ jar {
 				def metaFile = new File(jar.getTemporaryDir(), fileName + ".meta")
 				metaFile.text = "Maven-Artifact: " + artifact
 				
-				// + "" + it.getId().getName().getClassifier()
-				println "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-				 /*println "getClassifier " + it.getClassifier()
-				 println "getExtension " + it.getExtension()
-				 println "getFile " + it.getFile()
-				 println "getId " + it.getId()
-				 println "getModuleVersion " + it.getModuleVersion()
-				 println "getName " + it.getName()	
-				 println "getType " + it.getType()		
-				 println "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"	 */
-			}
-			
-			//println configurations.internal.getResolvedConfiguration().getFiles()
-			
-			/*configurations.internal.getDependencies().each { def dependency ->
-				println dependency.getGroup()
-				println dependency.getName()
-				println dependency.getVersion()
-				println dependency.getArtifacts().stream().findAny().map {artifact -> artifact.getClassifier() }.orElse("")
-				println configurations.internal.fileCollection​(dependency)
-				
-				//def file = new File(jar.getTemporaryDir(), jarFile.name + ".meta")
-				//file.text = "Maven-Artifact: com.electronwill.night-config:core:3.6.0"
-			}
-			/*configurations.internal.each { File jarFile -> 
-				println (jarFile.getGroup())
-				File file = new File(jar.getTemporaryDir(), jarFile.name + ".meta")
-				file.text = "Maven-Artifact: com.electronwill.night-config:core:3.6.0"
-				return file
-			}*/
+				return [file, metaFile]
+			}.collect()
 		}
 	}
                   
