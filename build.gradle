@@ -74,25 +74,6 @@ configurations {
     compile.extendsFrom(internal)
 }
 
-dependencies {
-    minecraft getForgeDependency()
-	compile getUTeamCoreDependency()
-	compile project(":audio-client")
-  	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
-	internal ("org.lwjgl:lwjgl-opus:3.2.2") {
-		transitive=false
-	}
-	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-linux") {
-		transitive=false
-	}
-	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-macos") {
-		transitive=false
-	}
-	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows") {
-		transitive=false
-	}
-}
-
 jar {
 	classifier = ""
 
@@ -105,34 +86,14 @@ jar {
     from "opus-java/CONCENTUS-LICENSE"
      
     from "audio-client/build/classes/java/main"
-                  
-    into ("META-INF/libraries") {
-		from {
-			configurations.internal.incoming.artifacts.getArtifacts().stream().map { resolvedArtifact ->
-				def file = resolvedArtifact.getFile()
-				def fileName = resolvedArtifact.getId().getFileName()
-				def artifact = resolvedArtifact.getId().getComponentIdentifier().getDisplayName()
-				def classifier = resolvedArtifact.getId().getName().getClassifier()
-				if(classifier != null) {
-					artifact += ":" + classifier
-				}
-
-				def metaFile = new File(jar.getTemporaryDir(), fileName + ".meta")
-				metaFile.text = "Maven-Artifact: " + artifact
-				
-				return [file, metaFile]
-			}.collect()
-		}
+    
+    into ("dependencies/internal") {
+		from configurations.internal		
 	}
                   
     exclude(".cache")      
            
    	manifest normalManifest
-    manifest {
-   		attributes "ContainedDeps": configurations.internal.incoming.artifacts.getArtifacts().stream().map { resolvedArtifact -> 
-   			resolvedArtifact.getId().getFileName()
-   		}.collect().join(" ")
-   	}
 }
 
 task deobfJar(type: Jar) {
@@ -192,6 +153,25 @@ sourceSets {
 		resources {
 			srcDirs += "src/generated/resources"
 		}
+	}
+}
+
+dependencies {
+    minecraft getForgeDependency()
+	compile getUTeamCoreDependency()
+	compile project(":audio-client")
+  	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
+	internal ("org.lwjgl:lwjgl-opus:3.2.2") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-linux") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-macos") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows") {
+		transitive=false
 	}
 }
 
