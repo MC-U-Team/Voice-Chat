@@ -74,6 +74,25 @@ configurations {
     compile.extendsFrom(internal)
 }
 
+dependencies {
+    minecraft getForgeDependency()
+	compile getUTeamCoreDependency()
+	compile project(":audio-client")
+  	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
+	internal ("org.lwjgl:lwjgl-opus:3.2.2") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-linux") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-macos") {
+		transitive=false
+	}
+	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows") {
+		transitive=false
+	}
+}
+
 jar {
 	classifier = ""
 
@@ -87,9 +106,64 @@ jar {
      
     from "audio-client/build/classes/java/main"
                   
+    into ("META-INF/libraries") {
+		//from configurations.internal
+		
+		from {
+			println "------------------------------------------------------------------"
+			
+			//project.configurations.internal.resolvedConfiguration.resolvedArtifacts.each {
+			configurations.internal.incoming.artifacts.forEach {
+				def file = it.getFile()
+				def fileName = it.getId().getFileName()
+				def artifact = it.getId().getComponentIdentifier().getDisplayName()
+				def classifier = it.getId().getName().getClassifier()
+				if(classifier != null) {
+					artifact += ":" + classifier
+				}
+
+				def metaFile = new File(jar.getTemporaryDir(), fileName + ".meta")
+				metaFile.text = "Maven-Artifact: " + artifact
+				
+				// + "" + it.getId().getName().getClassifier()
+				println "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+				 /*println "getClassifier " + it.getClassifier()
+				 println "getExtension " + it.getExtension()
+				 println "getFile " + it.getFile()
+				 println "getId " + it.getId()
+				 println "getModuleVersion " + it.getModuleVersion()
+				 println "getName " + it.getName()	
+				 println "getType " + it.getType()		
+				 println "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"	 */
+			}
+			
+			//println configurations.internal.getResolvedConfiguration().getFiles()
+			
+			/*configurations.internal.getDependencies().each { def dependency ->
+				println dependency.getGroup()
+				println dependency.getName()
+				println dependency.getVersion()
+				println dependency.getArtifacts().stream().findAny().map {artifact -> artifact.getClassifier() }.orElse("")
+				println configurations.internal.fileCollection​(dependency)
+				
+				//def file = new File(jar.getTemporaryDir(), jarFile.name + ".meta")
+				//file.text = "Maven-Artifact: com.electronwill.night-config:core:3.6.0"
+			}
+			/*configurations.internal.each { File jarFile -> 
+				println (jarFile.getGroup())
+				File file = new File(jar.getTemporaryDir(), jarFile.name + ".meta")
+				file.text = "Maven-Artifact: com.electronwill.night-config:core:3.6.0"
+				return file
+			}*/
+		}
+	}
+                  
     exclude(".cache")      
            
    	manifest normalManifest
+   	manifest {
+   		attributes "ContainedDeps": "Test.jar"
+   	}
 }
 
 task deobfJar(type: Jar) {
@@ -149,25 +223,6 @@ sourceSets {
 		resources {
 			srcDirs += "src/generated/resources"
 		}
-	}
-}
-
-dependencies {
-    minecraft getForgeDependency()
-	compile getUTeamCoreDependency()
-	compile project(":audio-client")
-  	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
-	internal ("org.lwjgl:lwjgl-opus:3.2.2") {
-		transitive=false
-	}
-	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-linux") {
-		transitive=false
-	}
-	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-macos") {
-		transitive=false
-	}
-	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows") {
-		transitive=false
 	}
 }
 
