@@ -1,7 +1,7 @@
 package info.u_team.voice_chat.dependency;
 
 import java.io.IOException;
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.net.*;
 import java.nio.file.*;
 import java.util.function.Consumer;
@@ -9,7 +9,6 @@ import java.util.stream.Stream;
 
 import org.apache.logging.log4j.*;
 
-import cpw.mods.modlauncher.TransformingClassLoader;
 import info.u_team.voice_chat.VoiceChatMod;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.moddiscovery.ModFile;
@@ -50,15 +49,12 @@ public class DependencyManager {
 	
 	private static void addToInternalDependencies(URL url) {
 		try {
-			final TransformingClassLoader transformingClassLoader = (TransformingClassLoader) VoiceChatMod.class.getClassLoader();
-			final Field field = TransformingClassLoader.class.getDeclaredField("delegatedClassLoader");
-			field.setAccessible(true);
-			final URLClassLoader delegateClassLoader = (URLClassLoader) field.get(transformingClassLoader);
+			final URLClassLoader systemClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 			final Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
 			method.setAccessible(true);
-			method.invoke(delegateClassLoader, url);
+			method.invoke(systemClassLoader, url);
 		} catch (final Exception ex) {
-			LOGGER.error(MARKER, "Method addURL on delegated class loader of transforming classloader could not be invoked", ex);
+			LOGGER.error(MARKER, "Method addURL on system classloader could not be invoked", ex);
 		}
 	}
 }
