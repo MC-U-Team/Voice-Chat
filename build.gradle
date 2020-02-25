@@ -128,7 +128,7 @@ jar {
     exclude(".cache")      
            
    	manifest normalManifest
-   	manifest {
+    manifest {
    		attributes "ContainedDeps": configurations.internal.incoming.artifacts.getArtifacts().stream().map { resolvedArtifact -> 
    			resolvedArtifact.getId().getFileName()
    		}.collect().join(" ")
