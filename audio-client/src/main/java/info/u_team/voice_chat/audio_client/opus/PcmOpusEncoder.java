@@ -41,7 +41,9 @@ public class PcmOpusEncoder implements IOpusEncoder {
 		inputShortBuffer.reset();
 		outputBuffer.reset();
 		
+		inputBuffer.limit(pcm.length);
 		inputBuffer.put(pcm);
+		inputBuffer.reset();
 		
 		final int encodedLength = Opus.opus_encode(instance, inputShortBuffer, frameSize, outputBuffer);
 		

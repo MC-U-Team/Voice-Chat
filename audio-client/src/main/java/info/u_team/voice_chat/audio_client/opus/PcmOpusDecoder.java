@@ -38,7 +38,9 @@ public class PcmOpusDecoder implements IOpusDecoder {
 		outputBuffer.reset();
 		outputShortBuffer.reset();
 		
+		inputBuffer.limit(opus.length);
 		inputBuffer.put(opus);
+		inputBuffer.reset();
 		
 		Opus.opus_decode(instance, inputBuffer, outputShortBuffer, frameSize, 0);
 		
