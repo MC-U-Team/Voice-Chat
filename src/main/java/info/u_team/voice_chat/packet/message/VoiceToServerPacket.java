@@ -41,9 +41,10 @@ public class VoiceToServerPacket {
 			}
 			
 			// TODO currently send the data to everybody even the sender
-			VoiceServerManager.getServer().sendAllExcept(new VoiceToClientPacket(playerData.getId(), message.opusPacket), player);
+			// VoiceServerManager.getServer().sendAllExcept(new VoiceToClientPacket(playerData.getId(), message.opusPacket),
+			// player);
 			
-			// VoiceServerManager.getServer().sendAll(new VoiceToClientPacket(playerData.getId(), message.opusPacket));
+			VoiceServerManager.getServer().sendAll(new VoiceToClientPacket(playerData.getId(), message.opusPacket));
 		}
 	}
 }
