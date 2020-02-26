@@ -1,6 +1,6 @@
 package info.u_team.voice_chat.musicplayer_integration;
 
-import org.concentus.OpusSignal;
+import org.lwjgl.util.opus.Opus;
 
 import info.u_team.music_player.musicplayer.MusicPlayerManager;
 import info.u_team.voice_chat.api.IIntegration;
@@ -13,7 +13,7 @@ import net.minecraft.client.Minecraft;
 
 public class MusicPlayerIntegration implements IIntegration {
 	
-	private final IOpusEncoder encoder = new PcmOpusEncoder(48000, 2, 20, 96000, 1000, OpusSignal.OPUS_SIGNAL_MUSIC);
+	private final IOpusEncoder encoder = new PcmOpusEncoder(48000, 2, 20, 96000, Opus.OPUS_SIGNAL_MUSIC, 1000);
 	
 	@Override
 	public void start() {
