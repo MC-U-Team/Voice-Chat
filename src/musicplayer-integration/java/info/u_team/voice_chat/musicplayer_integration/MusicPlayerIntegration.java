@@ -24,7 +24,7 @@ public class MusicPlayerIntegration implements IIntegration {
 		executor = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("music player sender"));
 		encoder = new PcmOpusEncoder(48000, 2, 20, 96000, Opus.OPUS_SIGNAL_MUSIC, 1000);
 		
-		MusicPlayerManager.getPlayer().setOutputConsumer((buffer, length) -> {
+		MusicPlayerManager.getPlayer().setOutputConsumer((buffer, length) -> executor.execute(() -> {
 			if (MusicPlayerManager.getPlayer().getVolume() == 0) {
 				return;
 			}
@@ -33,7 +33,7 @@ public class MusicPlayerIntegration implements IIntegration {
 				VoiceClientManager.getClient().send(new MusicToServerPacket(encoder.encode(buffer)));
 				TalkingManager.addOrUpdate(Minecraft.getInstance().player.getUniqueID());
 			}
-		});
+		}));
 	}
 	
 	@Override
