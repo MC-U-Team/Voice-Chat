@@ -80,7 +80,6 @@ jar {
 
     from "LICENSE"
     
-    jar.dependsOn ":opus-java:build"
     jar.dependsOn ":audio-client:build"
 
 	from "opus-java/build/classes/java/main"
@@ -103,14 +102,17 @@ task deobfJar(type: Jar) {
     from sourceSets.main.output
     from "LICENSE"
     
-    jar.dependsOn ":opus-java:build"
     jar.dependsOn ":audio-client:build"
 
 	from "opus-java/build/classes/java/main"
     from "opus-java/CONCENTUS-LICENSE"
      
     from "audio-client/build/classes/java/main"
-        
+    
+    into ("dependencies/internal") {
+		from configurations.internal		
+	}
+	
     exclude(".cache")    
             
     manifest normalManifest
