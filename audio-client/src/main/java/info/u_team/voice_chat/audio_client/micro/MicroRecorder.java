@@ -3,7 +3,7 @@ package info.u_team.voice_chat.audio_client.micro;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-import org.concentus.OpusSignal;
+import org.lwjgl.util.opus.Opus;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.api.opus.IOpusEncoder;
@@ -23,7 +23,7 @@ public class MicroRecorder implements NoExceptionCloseable {
 	public MicroRecorder(MicroData microData, Consumer<byte[]> opusPacketConsumer) {
 		this.microData = microData;
 		this.opusPacketConsumer = opusPacketConsumer;
-		this.encoder = new PcmOpusEncoder(48000, 2, 20, 64000, 1000, OpusSignal.OPUS_SIGNAL_VOICE);
+		this.encoder = new PcmOpusEncoder(48000, 2, 20, 64000, Opus.OPUS_SIGNAL_VOICE, 1000);
 	}
 	
 	public void start() {

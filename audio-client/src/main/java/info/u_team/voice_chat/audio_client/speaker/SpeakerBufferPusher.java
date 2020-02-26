@@ -13,7 +13,7 @@ public class SpeakerBufferPusher implements NoExceptionCloseable {
 	
 	public SpeakerBufferPusher(ExecutorService executor, int id, SpeakerData speakerData) {
 		buffer = new SpeakerBuffer(10);
-		decoder = new PcmOpusDecoder(48000, 2, 20);
+		decoder = new PcmOpusDecoder(48000, 2, 20, 1000);
 		future = executor.submit(() -> {
 			while (!Thread.currentThread().isInterrupted()) {
 				if (speakerData.isAvailable(id) && speakerData.freeBuffer(id) > 0) {
