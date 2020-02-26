@@ -1,37 +1,57 @@
 package info.u_team.voice_chat.audio_client.opus;
 
-import java.util.Arrays;
+import java.nio.*;
 
-import org.concentus.*;
+import org.lwjgl.system.MemoryUtil;
+import org.lwjgl.util.opus.Opus;
 
 import info.u_team.voice_chat.audio_client.api.opus.IOpusDecoder;
 
 public class PcmOpusDecoder implements IOpusDecoder {
 	
-	private final OpusDecoder decoder;
-	
 	private final int frameSize;
 	
-	private final byte[] buffer;
+	private final long instance;
 	
-	public PcmOpusDecoder(int sampleRate, int channel, int milliseconds) {
-		try {
-			decoder = new OpusDecoder(sampleRate, channel);
-		} catch (OpusException ex) {
-			throw new RuntimeException(ex);
-		}
+	private final ByteBuffer inputBuffer;
+	private final ByteBuffer outputBuffer;
+	private final ShortBuffer outputShortBuffer;
+	
+	public PcmOpusDecoder(int sampleRate, int channel, int milliseconds, int bufferSize) {
 		frameSize = sampleRate / (1000 / milliseconds);
-		buffer = new byte[frameSize * channel * 2];
+		
+		instance = Opus.opus_decoder_create(sampleRate, channel, null);
+		
+		inputBuffer = MemoryUtil.memCalloc(bufferSize);
+		outputBuffer = MemoryUtil.memCalloc(frameSize * channel * 2);
+		outputBuffer.order(ByteOrder.LITTLE_ENDIAN);
+		outputShortBuffer = inputBuffer.asShortBuffer();
+		
+		inputBuffer.mark();
+		outputBuffer.mark();
+		outputShortBuffer.mark();
 	}
 	
 	@Override
 	public byte[] decoder(byte[] opus) {
-		try {
-			decoder.decode(opus, 0, opus.length, buffer, 0, frameSize, false);
-			return Arrays.copyOf(buffer, buffer.length);
-		} catch (OpusException ex) {
-			return new byte[buffer.length];
-		}
+		inputBuffer.reset();
+		outputBuffer.reset();
+		outputShortBuffer.reset();
+		
+		inputBuffer.put(opus);
+		
+		Opus.opus_decode(instance, inputBuffer, outputShortBuffer, frameSize, 0);
+		
+		final byte[] buffer = new byte[outputBuffer.capacity()];
+		outputBuffer.get(buffer);
+		return buffer;
+	}
+	
+	@Override
+	public void close() {
+		Opus.opus_encoder_destroy(instance);
+		MemoryUtil.memFree(inputBuffer);
+		MemoryUtil.memFree(outputBuffer);
 	}
 	
 }
