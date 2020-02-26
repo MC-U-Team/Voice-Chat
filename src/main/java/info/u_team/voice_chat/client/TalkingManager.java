@@ -9,7 +9,7 @@ public class TalkingManager {
 	
 	private static final ScheduledExecutorService EXECUTOR = Executors.newSingleThreadScheduledExecutor(ThreadUtil.createDaemonFactory("talking manager cleanup"));
 	
-	private static final Map<UUID, Long> MAP = new HashMap<>();
+	private static final Map<UUID, Long> MAP = new ConcurrentHashMap<>();
 	
 	private static Future<?> TASK;
 	
