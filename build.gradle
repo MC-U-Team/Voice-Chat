@@ -82,9 +82,6 @@ jar {
     
     jar.dependsOn ":audio-client:build"
 
-	from "opus-java/build/classes/java/main"
-    from "opus-java/CONCENTUS-LICENSE"
-     
     from "audio-client/build/classes/java/main"
     
     into ("dependencies/internal") {
@@ -104,9 +101,6 @@ task deobfJar(type: Jar) {
     
     jar.dependsOn ":audio-client:build"
 
-	from "opus-java/build/classes/java/main"
-    from "opus-java/CONCENTUS-LICENSE"
-     
     from "audio-client/build/classes/java/main"
     
     into ("dependencies/internal") {
