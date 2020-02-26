@@ -51,7 +51,7 @@ public class PcmOpusDecoder implements IOpusDecoder {
 	
 	@Override
 	public void close() {
-		Opus.opus_encoder_destroy(instance);
+		Opus.opus_decoder_destroy(instance);
 		MemoryUtil.memFree(inputBuffer);
 		MemoryUtil.memFree(outputBuffer);
 	}
