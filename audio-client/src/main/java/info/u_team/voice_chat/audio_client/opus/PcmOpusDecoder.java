@@ -25,7 +25,7 @@ public class PcmOpusDecoder implements IOpusDecoder {
 		inputBuffer = MemoryUtil.memCalloc(bufferSize);
 		outputBuffer = MemoryUtil.memCalloc(frameSize * channel * 2);
 		outputBuffer.order(ByteOrder.LITTLE_ENDIAN);
-		outputShortBuffer = inputBuffer.asShortBuffer();
+		outputShortBuffer = outputBuffer.asShortBuffer();
 		
 		inputBuffer.mark();
 		outputBuffer.mark();
