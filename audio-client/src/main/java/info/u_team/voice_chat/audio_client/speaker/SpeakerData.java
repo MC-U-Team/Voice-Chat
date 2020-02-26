@@ -59,7 +59,9 @@ public class SpeakerData implements NoExceptionCloseable {
 		sourceLines.values().forEach(this::closeLine);
 		sourceLines.clear();
 		if (mixer != null) {
-			mixer.close();
+			if (!AudioUtil.hasLinesOpen(mixer)) {
+				mixer.close();
+			}
 		}
 		mixer = AudioUtil.findMixer(name, SPEAKER_INFO);
 	}
@@ -103,7 +105,9 @@ public class SpeakerData implements NoExceptionCloseable {
 		sourceLines.values().forEach(this::closeLine);
 		sourceLines.clear();
 		if (mixer != null) {
-			mixer.close();
+			if (!AudioUtil.hasLinesOpen(mixer)) {
+				mixer.close();
+			}
 		}
 	}
 	

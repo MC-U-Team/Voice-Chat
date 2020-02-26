@@ -33,4 +33,8 @@ public class AudioUtil {
 		return list;
 	}
 	
+	public static boolean hasLinesOpen(Mixer mixer) {
+		return mixer.getSourceLines().length != 0 || mixer.getTargetLines().length != 0;
+	}
+	
 }
