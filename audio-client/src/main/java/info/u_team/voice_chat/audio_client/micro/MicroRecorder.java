@@ -51,5 +51,6 @@ public class MicroRecorder implements NoExceptionCloseable {
 	@Override
 	public void close() {
 		executor.shutdown();
+		encoder.close();
 	}
 }

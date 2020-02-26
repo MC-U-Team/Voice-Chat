@@ -34,6 +34,7 @@ public class SpeakerBufferPusher implements NoExceptionCloseable {
 	@Override
 	public void close() {
 		future.cancel(true);
+		decoder.close();
 	}
 	
 }
