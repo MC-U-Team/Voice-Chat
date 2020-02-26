@@ -24,23 +24,29 @@ public class MusicPlayerIntegration implements IIntegration {
 		executor = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("music player sender"));
 		encoder = new PcmOpusEncoder(48000, 2, 20, 96000, Opus.OPUS_SIGNAL_MUSIC, 1000);
 		
-		MusicPlayerManager.getPlayer().setOutputConsumer((buffer, length) -> executor.execute(() -> {
-			if (MusicPlayerManager.getPlayer().getVolume() == 0) {
-				return;
-			}
-			EndianUtil.endianConverter(buffer, 4); // We need little endian for opus but get big endian
-			if (VoiceClientManager.isRunning()) {
-				VoiceClientManager.getClient().send(new MusicToServerPacket(encoder.encode(buffer)));
-				TalkingManager.addOrUpdate(Minecraft.getInstance().player.getUniqueID());
-			}
-		}));
+		// MusicPlayerManager.getPlayer().setOutputConsumer((buffer, length) -> executor.execute(() -> {
+		// if (MusicPlayerManager.getPlayer().getVolume() == 0) {
+		// return;
+		// }
+		// EndianUtil.endianConverter(buffer, 4); // We need little endian for opus but get big endian
+		// if (VoiceClientManager.isRunning()) {
+		// VoiceClientManager.getClient().send(new MusicToServerPacket(encoder.encode(buffer)));
+		// TalkingManager.addOrUpdate(Minecraft.getInstance().player.getUniqueID());
+		// }
+		// }));
 	}
 	
 	@Override
 	public void stop() {
-		MusicPlayerManager.getPlayer().setOutputConsumer(null);
-		executor.shutdown();
-		encoder.close();
+		// MusicPlayerManager.getPlayer().setOutputConsumer(null);
+		if (executor != null) {
+			executor.shutdown();
+			executor = null;
+		}
+		if (encoder != null) {
+			encoder.close();
+			encoder = null;
+		}
 	}
 	
 }
