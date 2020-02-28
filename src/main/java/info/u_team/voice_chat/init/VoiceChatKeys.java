@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @EventBusSubscriber(modid = VoiceChatMod.MODID, value = Dist.CLIENT, bus = Bus.MOD)
-public class VoiceChatKeybindings {
+public class VoiceChatKeys {
 	
 	public static final KeyBinding PUSH_TALK = new KeyBinding("push_talk", KeyConflictContext.UNIVERSAL, KeyModifier.NONE, InputMappings.Type.KEYSYM, GLFW.GLFW_KEY_KP_1, "Voice Chat");
 	
