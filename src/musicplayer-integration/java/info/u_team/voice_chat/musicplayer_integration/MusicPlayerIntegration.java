@@ -49,5 +49,4 @@ public class MusicPlayerIntegration implements IIntegration {
 			encoder = null;
 		}
 	}
-	
 }
