@@ -42,6 +42,7 @@ public class MicroRecorder implements NoExceptionCloseable {
 	
 	public void stop() {
 		send = false;
+		microData.flush();
 	}
 	
 	public boolean isSending() {
