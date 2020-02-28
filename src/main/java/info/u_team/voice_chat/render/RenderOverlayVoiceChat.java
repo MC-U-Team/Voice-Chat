@@ -3,30 +3,35 @@ package info.u_team.voice_chat.render;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+
+import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.client.TalkingManager;
-import net.minecraft.client.*;
-import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.network.play.*;
 import net.minecraft.client.renderer.*;
+import net.minecraft.util.ResourceLocation;
 
 public class RenderOverlayVoiceChat {
 	
+	private static ResourceLocation SPEAKING = new ResourceLocation(VoiceChatMod.MODID, "textures/gui/speaking.png");
+	
 	public static void draw() {
 		final Minecraft minecraft = Minecraft.getInstance();
-		final MainWindow window = minecraft.getMainWindow();
-		final int width = window.getScaledWidth();
-		final int height = window.getScaledHeight();
-		
 		final FontRenderer fontRenderer = minecraft.fontRenderer;
 		
 		final AtomicInteger counter = new AtomicInteger();
 		TalkingManager.getTalkers().stream().map(RenderOverlayVoiceChat::getName).forEach(name -> {
-//			Minecraft.getInstance().fontRenderer.drawString(name, 10, counter.getAndIncrement() * 15 + 30, 0xFFFFFF);
+			drawEntry(5, 5 + counter.getAndIncrement() * 15, minecraft, fontRenderer, name);
 		});
 	}
 	
-	public static void drawEntry(int x, int y) {
-		
+	public static void drawEntry(int x, int y, Minecraft minecraft, FontRenderer fontRenderer, String name) {
+		minecraft.getTextureManager().bindTexture(SPEAKING);
+		RenderSystem.color3f(0, 0, 0);
+		AbstractGui.blit(x, y, 8, 8, 0, 0, 128, 128, 128, 128);
+		renderString(fontRenderer, name, 15 + x * (1 / 0.75F), 1.5F + y * (1 / 0.75F), 0xFF0000, Matrix4f.makeScale(0.75F, 0.75F, 0), false);
 	}
 	
 	private static String getName(UUID uuid) {
