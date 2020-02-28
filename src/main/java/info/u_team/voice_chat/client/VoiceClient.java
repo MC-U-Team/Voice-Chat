@@ -87,7 +87,8 @@ public class VoiceClient {
 	
 	public void close() {
 		socket.close();
-		setHandshakeDone();
+		handshakeTask.cancel(true);
+		handshakeMode = false;
 		task.cancel(true);
 	}
 	
