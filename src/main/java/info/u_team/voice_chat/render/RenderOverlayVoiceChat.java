@@ -23,7 +23,7 @@ public class RenderOverlayVoiceChat {
 		
 		final AtomicInteger counter = new AtomicInteger();
 		TalkingManager.getTalkers().stream().map(RenderOverlayVoiceChat::getName).forEach(name -> {
-			drawEntry(5, 5 + counter.getAndIncrement() * 15, minecraft, fontRenderer, name);
+			drawEntry(5, 5 + counter.getAndIncrement() * 8, minecraft, fontRenderer, name);
 		});
 	}
 	
@@ -31,7 +31,7 @@ public class RenderOverlayVoiceChat {
 		minecraft.getTextureManager().bindTexture(SPEAKING);
 		RenderSystem.color3f(0, 0, 0);
 		AbstractGui.blit(x, y, 8, 8, 0, 0, 128, 128, 128, 128);
-		renderString(fontRenderer, name, 15 + x * (1 / 0.75F), 1.5F + y * (1 / 0.75F), 0xFF0000, Matrix4f.makeScale(0.75F, 0.75F, 0), false);
+		renderString(fontRenderer, name, 15 + x * (1 / 0.75F), 1.5F + y * (1 / 0.75F), 0xFFFF00, Matrix4f.makeScale(0.75F, 0.75F, 0), false);
 	}
 	
 	private static String getName(UUID uuid) {
