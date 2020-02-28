@@ -35,7 +35,7 @@ public class ClientEventHandler {
 	@SubscribeEvent
 	public static void keyPress(ClientTickEvent event) {
 		if (event.phase == Phase.START) {
-			if (VoiceChatKeybindings.PUSH_TALK.isKeyDown()) {
+			if (VoiceChatKeys.PUSH_TALK.isKeyDown()) {
 				if (MicroManager.isRunning() && !MicroManager.getHandler().isSending()) {
 					MicroManager.getHandler().start();
 				}
