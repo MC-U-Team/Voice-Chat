@@ -5,9 +5,9 @@ import java.util.*;
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.api.IIntegration;
 import info.u_team.voice_chat.musicplayer_integration.MusicPlayerIntegration;
+import info.u_team.voice_chat.musicplayer_integration.util.MusicPlayerIntegrationUtil;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -19,7 +19,7 @@ public class VoiceChatIntegrations {
 	
 	@SubscribeEvent
 	public static void register(FMLClientSetupEvent event) {
-		if (ModList.get().isLoaded("musicplayer")) {
+		if (MusicPlayerIntegrationUtil.isMusicPlayerInstalled()) {
 			INTEGRATIONS.add(MusicPlayerIntegration.getInstance());
 		}
 	}
