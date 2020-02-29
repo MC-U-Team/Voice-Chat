@@ -79,6 +79,7 @@ jar {
 	classifier = ""
 
     from "LICENSE"
+    from "audio-client/src/main/resources/LICENSE-DEPENDENCIES"
     
     jar.dependsOn ":audio-client:build"
 
@@ -98,6 +99,7 @@ task deobfJar(type: Jar) {
 
     from sourceSets.main.output
     from "LICENSE"
+    from "audio-client/src/main/resources/LICENSE-DEPENDENCIES"
     
     jar.dependsOn ":audio-client:build"
 
