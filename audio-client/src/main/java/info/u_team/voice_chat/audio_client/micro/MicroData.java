@@ -57,6 +57,7 @@ public class MicroData implements NoExceptionCloseable {
 		final Mixer oldMixer = mixer;
 		mixer = AudioUtil.findMixer(name, MIC_INFO);
 		closeLine();
+		targetLine = null;
 		if (oldMixer != null) {
 			if (!AudioUtil.hasLinesOpen(oldMixer)) {
 				oldMixer.close();
