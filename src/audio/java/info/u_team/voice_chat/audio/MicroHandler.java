@@ -9,11 +9,13 @@ import net.minecraft.client.Minecraft;
 
 public class MicroHandler implements NoExceptionCloseable {
 	
+	private final ClientConfig config;
+	
 	private final MicroData data;
 	private final MicroRecorder recorder;
 	
 	public MicroHandler() {
-		final ClientConfig config = ClientConfig.getInstance();
+		config = ClientConfig.getInstance();
 		data = new MicroData(config.microphoneValue.get(), config.microphoneVolumeValue.get());
 		recorder = new MicroRecorder(data, this::sendVoicePacket, config.bitrateValue.get());
 	}
@@ -43,6 +45,8 @@ public class MicroHandler implements NoExceptionCloseable {
 	
 	public void setMicro(String mixer) {
 		data.setMixer(mixer);
+		config.microphoneValue.set(mixer);
+		ClientConfig.CONFIG.save();
 	}
 	
 	public int getVolume() {
@@ -51,6 +55,8 @@ public class MicroHandler implements NoExceptionCloseable {
 	
 	public void setVolume(int volume) {
 		data.setVolume(volume);
+		config.microphoneVolumeValue.set(volume);
+		ClientConfig.CONFIG.save();
 	}
 	
 	@Override
