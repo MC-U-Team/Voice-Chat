@@ -37,8 +37,16 @@ public class MicroHandler implements NoExceptionCloseable {
 		return recorder.isSending();
 	}
 	
+	public String getMicro() {
+		return data.getMixer();
+	}
+	
 	public void setMicro(String mixer) {
 		data.setMixer(mixer);
+	}
+	
+	public int getVolume() {
+		return data.getVolume();
 	}
 	
 	public void setVolume(int volume) {

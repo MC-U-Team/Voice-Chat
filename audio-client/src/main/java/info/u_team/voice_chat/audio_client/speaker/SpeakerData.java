@@ -60,6 +60,13 @@ public class SpeakerData implements NoExceptionCloseable {
 		line.close();
 	}
 	
+	public String getMixer() {
+		if (mixer != null) {
+			return mixer.getMixerInfo().getName();
+		}
+		return null;
+	}
+	
 	public void setMixer(String name) {
 		sourceLines.values().forEach(this::closeLine);
 		sourceLines.clear();
@@ -69,6 +76,10 @@ public class SpeakerData implements NoExceptionCloseable {
 			}
 		}
 		mixer = AudioUtil.findMixer(name, SPEAKER_INFO);
+	}
+	
+	public int getVolume() {
+		return volume;
 	}
 	
 	public void setVolume(int volume) {
