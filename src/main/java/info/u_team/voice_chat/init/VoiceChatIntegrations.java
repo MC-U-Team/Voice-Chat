@@ -20,7 +20,7 @@ public class VoiceChatIntegrations {
 	@SubscribeEvent
 	public static void register(FMLClientSetupEvent event) {
 		if (ModList.get().isLoaded("musicplayer")) {
-			INTEGRATIONS.add(new MusicPlayerIntegration());
+			INTEGRATIONS.add(MusicPlayerIntegration.getInstance());
 		}
 	}
 	

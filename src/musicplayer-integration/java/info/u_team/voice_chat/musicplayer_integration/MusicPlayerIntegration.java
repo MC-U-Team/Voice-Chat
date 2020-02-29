@@ -16,6 +16,15 @@ import net.minecraft.client.Minecraft;
 
 public class MusicPlayerIntegration implements IIntegration {
 	
+	private static MusicPlayerIntegration INSTANCE;
+	
+	public static MusicPlayerIntegration getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new MusicPlayerIntegration();
+		}
+		return INSTANCE;
+	}
+	
 	private ExecutorService executor;
 	
 	private IOpusEncoder encoder;
