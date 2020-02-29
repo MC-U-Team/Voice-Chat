@@ -6,11 +6,13 @@ import info.u_team.voice_chat.config.ClientConfig;
 
 public class SpeakerHandler implements NoExceptionCloseable {
 	
+	private final ClientConfig config;
+	
 	private final SpeakerData data;
 	private final SpeakerPlayer player;
 	
 	public SpeakerHandler() {
-		final ClientConfig config = ClientConfig.getInstance();
+		config = ClientConfig.getInstance();
 		data = new SpeakerData(config.speakerValue.get(), config.speakerVolumeValue.get());
 		player = new SpeakerPlayer(data);
 	}
@@ -25,6 +27,8 @@ public class SpeakerHandler implements NoExceptionCloseable {
 	
 	public void setSpeaker(String mixer) {
 		data.setMixer(mixer);
+		config.speakerValue.set(mixer);
+		ClientConfig.CONFIG.save();
 	}
 	
 	public int getVolume() {
@@ -33,6 +37,8 @@ public class SpeakerHandler implements NoExceptionCloseable {
 	
 	public void setVolume(int volume) {
 		data.setVolume(volume);
+		config.speakerVolumeValue.set(volume);
+		ClientConfig.CONFIG.save();
 	}
 	
 	@Override
