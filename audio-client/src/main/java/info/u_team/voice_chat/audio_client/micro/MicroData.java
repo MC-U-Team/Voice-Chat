@@ -7,8 +7,8 @@ import info.u_team.voice_chat.audio_client.util.AudioUtil;
 
 public class MicroData implements NoExceptionCloseable {
 	
-	private static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
-	private static final DataLine.Info MIC_INFO = new DataLine.Info(TargetDataLine.class, FORMAT);
+	public static final AudioFormat FORMAT = new AudioFormat(48000, 16, 2, true, false);
+	public static final DataLine.Info MIC_INFO = new DataLine.Info(TargetDataLine.class, FORMAT);
 	
 	private Mixer mixer;
 	private TargetDataLine targetLine;
