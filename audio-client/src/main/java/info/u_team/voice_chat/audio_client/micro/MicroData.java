@@ -51,13 +51,17 @@ public class MicroData implements NoExceptionCloseable {
 	}
 	
 	public void setMixer(String name) {
+		if (mixer != null && mixer.getMixerInfo().getName().equals(name)) {
+			return;
+		}
+		final Mixer oldMixer = mixer;
+		mixer = AudioUtil.findMixer(name, MIC_INFO);
 		closeLine();
-		if (mixer != null) {
-			if (!AudioUtil.hasLinesOpen(mixer)) {
-				mixer.close();
+		if (oldMixer != null) {
+			if (!AudioUtil.hasLinesOpen(oldMixer)) {
+				oldMixer.close();
 			}
 		}
-		mixer = AudioUtil.findMixer(name, MIC_INFO);
 	}
 	
 	public int getVolume() {
