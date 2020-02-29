@@ -7,8 +7,13 @@ import net.minecraftforge.fml.ModList;
 
 public class MusicPlayerIntegrationUtil {
 	
+	private static Boolean INSTALLED;
+	
 	public static boolean isMusicPlayerInstalled() {
-		return ModList.get().isLoaded("musicplayer");
+		if (INSTALLED == null) {
+			INSTALLED = ModList.get().isLoaded("musicplayer");
+		}
+		return INSTALLED;
 	}
 	
 	public static boolean isShowIngameMenueOverlay() {
