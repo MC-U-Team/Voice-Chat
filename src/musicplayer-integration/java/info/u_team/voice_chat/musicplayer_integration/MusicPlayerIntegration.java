@@ -35,6 +35,7 @@ public class MusicPlayerIntegration implements IIntegration {
 	public void start() {
 		executor = Executors.newSingleThreadExecutor(ThreadUtil.createDaemonFactory("music player sender"));
 		encoder = new PcmOpusEncoder(48000, 2, 20, ClientConfig.getInstance().musicBitrateValue.get(), Opus.OPUS_SIGNAL_MUSIC, 1000);
+		shouldStream = false;
 		MusicPlayerManager.getPlayer().setOutputConsumer((buffer, length) -> executor.execute(() -> {
 			if (!shouldStream) {
 				return;
@@ -62,6 +63,7 @@ public class MusicPlayerIntegration implements IIntegration {
 			encoder.close();
 			encoder = null;
 		}
+		shouldStream = false;
 	}
 	
 	public void setShouldStream(boolean shouldStream) {
