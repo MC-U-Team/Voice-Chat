@@ -23,10 +23,10 @@ public class SpeakerData implements NoExceptionCloseable {
 	
 	private final ScheduledFuture<?> cleanupTask;
 	
-	public SpeakerData(String speakerName) {
+	public SpeakerData(String speakerName, int volume) {
 		sourceLines = new ConcurrentHashMap<>();
 		setMixer(speakerName);
-		setVolume(100);
+		setVolume(volume);
 		cleanupTask = executor.scheduleWithFixedDelay(() -> {
 			final long currentTime = System.currentTimeMillis();
 			sourceLines.forEach((id, lineInfo) -> {
