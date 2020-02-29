@@ -1,5 +1,6 @@
 package info.u_team.voice_chat.audio_client.util;
 
+import java.nio.*;
 import java.util.*;
 
 import javax.sound.sampled.*;
@@ -35,6 +36,24 @@ public class AudioUtil {
 	
 	public static boolean hasLinesOpen(Mixer mixer) {
 		return mixer.getSourceLines().length != 0 || mixer.getTargetLines().length != 0;
+	}
+	
+	public static int calculateVolumeMultiplier(int volume) {
+		return (int) ((float) Math.tan(volume * 0.0079F) * 10000);
+	}
+	
+	public static void changeVolume(byte[] pcm, int volume, int multiplier) {
+		if (volume == 100) {
+			return;
+		}
+		changeVolume(pcm, multiplier);
+	}
+	
+	public static void changeVolume(byte[] pcm, int multiplier) {
+		final ShortBuffer buffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+		for (int index = buffer.position(); index < buffer.limit(); index++) {
+			buffer.put(index, (short) Math.max(Short.MIN_VALUE, Math.min(Short.MAX_VALUE, buffer.get(index) * multiplier / 10000)));
+		}
 	}
 	
 }
