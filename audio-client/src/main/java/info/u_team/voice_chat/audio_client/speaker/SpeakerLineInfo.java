@@ -8,6 +8,8 @@ public class SpeakerLineInfo {
 	
 	private long lastAccessed;
 	
+	private boolean gainControlFound;
+	
 	public SpeakerLineInfo(SourceDataLine line) {
 		this.line = line;
 		lastAccessed = System.currentTimeMillis();
@@ -16,6 +18,7 @@ public class SpeakerLineInfo {
 	public void setGain(int volume) {
 		if (line.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
 			((FloatControl) line.getControl(FloatControl.Type.MASTER_GAIN)).setValue(20F * (float) Math.log10(volume / 100F));
+			gainControlFound = true;
 		}
 	}
 	
@@ -26,6 +29,10 @@ public class SpeakerLineInfo {
 	
 	public long getLastAccessed() {
 		return lastAccessed;
+	}
+	
+	public boolean isGainControlFound() {
+		return gainControlFound;
 	}
 	
 }
