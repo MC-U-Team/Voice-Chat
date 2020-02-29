@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 
 @EventBusSubscriber(modid = VoiceChatMod.MODID, value = Dist.CLIENT, bus = Bus.FORGE)
-public class VoiceChatModClientEventHandler {
+public class VoiceChatClientEventHandler {
 	
 	@SubscribeEvent
 	public static void render(RenderGameOverlayEvent.Post event) {
