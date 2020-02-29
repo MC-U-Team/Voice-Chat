@@ -41,6 +41,10 @@ public class MicroHandler implements NoExceptionCloseable {
 		data.setMixer(mixer);
 	}
 	
+	public void setVolume(int volume) {
+		data.setVolume(volume);
+	}
+	
 	@Override
 	public void close() {
 		recorder.close();

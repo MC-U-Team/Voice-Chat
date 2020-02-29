@@ -25,10 +25,6 @@ public class SpeakerPlayer implements NoExceptionCloseable {
 		}
 	}
 	
-	public void setVolume(int volume) {
-		speakerData.setVolume(volume);
-	}
-	
 	@Override
 	public void close() {
 		bufferMap.values().forEach(SpeakerBufferPusher::close);

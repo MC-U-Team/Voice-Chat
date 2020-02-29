@@ -45,10 +45,6 @@ public class MicroRecorder implements NoExceptionCloseable {
 		microData.flush();
 	}
 	
-	public void setVolume(int volume) {
-		microData.setVolume(volume);
-	}
-	
 	public boolean isSending() {
 		return send;
 	}

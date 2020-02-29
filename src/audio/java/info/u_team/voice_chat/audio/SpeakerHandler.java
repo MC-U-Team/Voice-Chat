@@ -23,6 +23,10 @@ public class SpeakerHandler implements NoExceptionCloseable {
 		data.setMixer(mixer);
 	}
 	
+	public void setVolume(int volume) {
+		data.setVolume(volume);
+	}
+	
 	@Override
 	public void close() {
 		player.close();
