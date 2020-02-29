@@ -32,7 +32,9 @@ public class ServerPortHandshakeMessage {
 		
 		public static void handle(ServerPortHandshakeMessage message, Supplier<Context> contextSupplier) {
 			final Context context = contextSupplier.get();
+			System.out.println("GOT message for voice server port: " + message.port);
 			VoiceClientManager.EXECUTOR.execute(() -> {
+				System.out.println("Stopping all manager");
 				if (VoiceClientManager.isRunning()) {
 					VoiceClientManager.stop();
 				}
@@ -45,6 +47,7 @@ public class ServerPortHandshakeMessage {
 				if (TalkingManager.isRunning()) {
 					TalkingManager.stop();
 				}
+				System.out.println("Start voice client with handshake init");
 				VoiceClientManager.start(message.port, message.secret);
 				MicroManager.start();
 				SpeakerManager.start();

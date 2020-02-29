@@ -33,6 +33,7 @@ public class VoiceClient {
 		handshakeTask = service.submit(() -> {
 			while (!Thread.currentThread().isInterrupted() && handshakeMode) {
 				try {
+					System.out.println("SEND HANDSHAKE PACKET");
 					sendIntern(new HandshakePacket());
 					Thread.sleep(500);
 				} catch (InterruptedException ex) {
