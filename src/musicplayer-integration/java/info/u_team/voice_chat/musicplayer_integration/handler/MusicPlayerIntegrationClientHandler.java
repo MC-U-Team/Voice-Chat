@@ -22,13 +22,24 @@ public class MusicPlayerIntegrationClientHandler {
 		}
 		final Screen gui = event.getGui();
 		if (gui instanceof VoiceChatSettingsGui) {
-			final ActiveButton streamButton = new ActiveButton(13, 190, 200, 15, "Stream music to other players", 0x80FF00FF);
+			final ActiveButton streamButton = new ActiveButton(13, 190, gui.width - 24, 15, "Stream music to other players", 0x80FF00FF);
 			streamButton.setActive(MusicPlayerIntegration.getInstance().isShouldStream());
 			streamButton.setPressable(() -> {
 				MusicPlayerIntegration.getInstance().setShouldStream(!streamButton.isActive());
 				streamButton.setActive(!streamButton.isActive());
 			});
 			event.addWidget(streamButton);
+		}
+	}
+	
+	@SubscribeEvent
+	public static void on(GuiScreenEvent.DrawScreenEvent.Post event) {
+		if (!MusicPlayerIntegrationUtil.isMusicPlayerInstalled()) {
+			return;
+		}
+		final Screen gui = event.getGui();
+		if (gui instanceof VoiceChatSettingsGui) {
+			gui.getMinecraft().fontRenderer.drawString("Select speaker", 13, 172, 0xFFFFFF);
 		}
 	}
 	
