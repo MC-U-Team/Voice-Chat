@@ -1,7 +1,5 @@
 package info.u_team.voice_chat.audio_client.micro;
 
-import java.nio.*;
-
 import javax.sound.sampled.*;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
@@ -15,11 +13,12 @@ public class MicroData implements NoExceptionCloseable {
 	private Mixer mixer;
 	private TargetDataLine targetLine;
 	
-	private double volume;
+	private int volume;
+	private int multiplier;
 	
 	public MicroData(String microName) {
 		setMixer(microName);
-		volume = 1;
+		setVolume(100);
 	}
 	
 	private boolean createLine() {
@@ -54,8 +53,9 @@ public class MicroData implements NoExceptionCloseable {
 		mixer = AudioUtil.findMixer(name, MIC_INFO);
 	}
 	
-	public void setVolume(double volume) {
+	public void setVolume(int volume) {
 		this.volume = volume;
+		multiplier = AudioUtil.calculateVolumeMultiplier(volume);
 	}
 	
 	public boolean isAvailable() {
@@ -78,50 +78,9 @@ public class MicroData implements NoExceptionCloseable {
 	public byte[] read(byte[] array) {
 		if (isAvailable()) {
 			targetLine.read(array, 0, array.length);
-//			adjustVolume(array, volume);
-			volumeChange(array);
+			AudioUtil.changeVolume(array, volume, multiplier);
 		}
 		return array;
-	}
-	
-	// private void adjustVolume(byte[] pcm, double volume) {
-	// if (Math.abs(volume - 1) < 0.001) {
-	// return;
-	// }
-	// final ShortBuffer shortBuffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
-	// for (int index = 0; index < shortBuffer.capacity(); index++) {
-	// shortBuffer.put(index, (short) (shortBuffer.get(index) * volume));
-	// }
-	// return;
-	// }
-	
-	private int integerMultiplier;
-	private int currentVolume;
-	
-	private void volumeChange(byte[] pcm) {
-		currentVolume = 100;
-		
-		if (currentVolume <= 150) {
-			float floatMultiplier = (float) Math.tan(currentVolume * 0.0079f);
-			integerMultiplier = (int) (floatMultiplier * 10000);
-		} else {
-			integerMultiplier = 24621 * currentVolume / 150;
-		}
-		
-		final ShortBuffer buffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
-		
-		System.out.println(integerMultiplier);
-		
-		if (currentVolume == 100) {
-			return;
-		}
-		
-		int endOffset = buffer.limit();
-		
-		for (int i = buffer.position(); i < endOffset; i++) {
-			int value = buffer.get(i) * integerMultiplier / 10000;
-			buffer.put(i, (short) Math.max(-32767, Math.min(32767, value)));
-		}
 	}
 	
 	@Override
