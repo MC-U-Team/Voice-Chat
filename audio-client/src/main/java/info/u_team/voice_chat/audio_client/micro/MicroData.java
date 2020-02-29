@@ -78,20 +78,50 @@ public class MicroData implements NoExceptionCloseable {
 	public byte[] read(byte[] array) {
 		if (isAvailable()) {
 			targetLine.read(array, 0, array.length);
-			adjustVolume(array, volume);
+//			adjustVolume(array, volume);
+			volumeChange(array);
 		}
 		return array;
 	}
 	
-	private void adjustVolume(byte[] pcm, double volume) {
-		if (Math.abs(volume - 1) < 0.001) {
+	// private void adjustVolume(byte[] pcm, double volume) {
+	// if (Math.abs(volume - 1) < 0.001) {
+	// return;
+	// }
+	// final ShortBuffer shortBuffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+	// for (int index = 0; index < shortBuffer.capacity(); index++) {
+	// shortBuffer.put(index, (short) (shortBuffer.get(index) * volume));
+	// }
+	// return;
+	// }
+	
+	private int integerMultiplier;
+	private int currentVolume;
+	
+	private void volumeChange(byte[] pcm) {
+		currentVolume = 100;
+		
+		if (currentVolume <= 150) {
+			float floatMultiplier = (float) Math.tan(currentVolume * 0.0079f);
+			integerMultiplier = (int) (floatMultiplier * 10000);
+		} else {
+			integerMultiplier = 24621 * currentVolume / 150;
+		}
+		
+		final ShortBuffer buffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+		
+		System.out.println(integerMultiplier);
+		
+		if (currentVolume == 100) {
 			return;
 		}
-		final ShortBuffer shortBuffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
-		for (int index = 0; index < shortBuffer.capacity(); index++) {
-			shortBuffer.put(index, (short) (shortBuffer.get(index) * volume));
+		
+		int endOffset = buffer.limit();
+		
+		for (int i = buffer.position(); i < endOffset; i++) {
+			int value = buffer.get(i) * integerMultiplier / 10000;
+			buffer.put(i, (short) Math.max(-32767, Math.min(32767, value)));
 		}
-		return;
 	}
 	
 	@Override
