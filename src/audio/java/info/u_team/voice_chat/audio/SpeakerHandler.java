@@ -9,7 +9,7 @@ public class SpeakerHandler implements NoExceptionCloseable {
 	private final SpeakerPlayer player;
 	
 	public SpeakerHandler() {
-		data = new SpeakerData("");
+		data = new SpeakerData("", 100);
 		player = new SpeakerPlayer(data);
 	}
 	

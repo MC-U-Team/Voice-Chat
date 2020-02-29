@@ -12,7 +12,7 @@ public class MicroHandler implements NoExceptionCloseable {
 	private final MicroRecorder recorder;
 	
 	public MicroHandler() {
-		data = new MicroData("");
+		data = new MicroData("", 100);
 		recorder = new MicroRecorder(data, this::sendVoicePacket);
 	}
 	
