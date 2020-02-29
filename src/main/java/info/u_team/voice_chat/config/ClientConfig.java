@@ -27,6 +27,7 @@ public class ClientConfig {
 	public final IntValue speakerVolumeValue;
 	
 	public final IntValue bitrateValue;
+	public final IntValue musicBitrateValue;
 	
 	private ClientConfig(Builder builder) {
 		builder.comment("Voice settings").push("client");
@@ -41,6 +42,7 @@ public class ClientConfig {
 		builder.pop();
 		
 		bitrateValue = builder.comment("The bitrate your voice packets are send to the server. If packet loss occurs try to lower the bitrate.").defineInRange("bitrate", 64000, 8000, 128000);
+		musicBitrateValue = builder.comment("The bitrate your music packets are send to the server if your stream your music player. If packet loss occurs try to lower the bitrate.").defineInRange("bitrate", 96000, 8000, 128000);
 		builder.pop();
 	}
 	
