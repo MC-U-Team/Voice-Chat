@@ -16,9 +16,9 @@ public class MicroData implements NoExceptionCloseable {
 	private int volume;
 	private int multiplier;
 	
-	public MicroData(String microName) {
+	public MicroData(String microName, int volume) {
 		setMixer(microName);
-		setVolume(100);
+		setVolume(volume);
 	}
 	
 	private boolean createLine() {
