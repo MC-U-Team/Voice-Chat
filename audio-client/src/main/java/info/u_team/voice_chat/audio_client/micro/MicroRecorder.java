@@ -20,10 +20,10 @@ public class MicroRecorder implements NoExceptionCloseable {
 	
 	private volatile boolean send;
 	
-	public MicroRecorder(MicroData microData, Consumer<byte[]> opusPacketConsumer) {
+	public MicroRecorder(MicroData microData, Consumer<byte[]> opusPacketConsumer, int bitrate) {
 		this.microData = microData;
 		this.opusPacketConsumer = opusPacketConsumer;
-		this.encoder = new PcmOpusEncoder(48000, 2, 20, 64000, Opus.OPUS_SIGNAL_VOICE, 1000);
+		this.encoder = new PcmOpusEncoder(48000, 2, 20, bitrate, Opus.OPUS_SIGNAL_VOICE, 1000);
 	}
 	
 	public void start() {

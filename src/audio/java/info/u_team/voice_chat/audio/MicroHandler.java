@@ -15,7 +15,7 @@ public class MicroHandler implements NoExceptionCloseable {
 	public MicroHandler() {
 		final ClientConfig config = ClientConfig.getInstance();
 		data = new MicroData(config.microphoneValue.get(), config.microphoneVolumeValue.get());
-		recorder = new MicroRecorder(data, this::sendVoicePacket);
+		recorder = new MicroRecorder(data, this::sendVoicePacket, config.bitrateValue.get());
 	}
 	
 	protected void sendVoicePacket(byte[] opusPacket) {
