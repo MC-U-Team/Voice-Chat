@@ -3,6 +3,7 @@ package info.u_team.voice_chat.audio;
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.micro.*;
 import info.u_team.voice_chat.client.*;
+import info.u_team.voice_chat.config.ClientConfig;
 import info.u_team.voice_chat.packet.message.VoiceToServerPacket;
 import net.minecraft.client.Minecraft;
 
@@ -12,7 +13,8 @@ public class MicroHandler implements NoExceptionCloseable {
 	private final MicroRecorder recorder;
 	
 	public MicroHandler() {
-		data = new MicroData("", 100);
+		final ClientConfig config = ClientConfig.getInstance();
+		data = new MicroData(config.microphoneValue.get(), config.microphoneVolumeValue.get());
 		recorder = new MicroRecorder(data, this::sendVoicePacket);
 	}
 	
