@@ -11,7 +11,7 @@ authors="HyCraftHD"
 	version="${file.jarVersion}"
 	displayName="Voice Chat"
 	updateJSONURL="https://api.u-team.info/update/voicechat.json"
-	description="This mod adds a simple voice chat to minecraft."
+	description="This mod adds a simple voice chat to minecraft. Use it with the music player mod to stream your music to your friends"
 	
 	[[dependencies.voicechat]]
 	    modId="forge"
