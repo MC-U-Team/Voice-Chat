@@ -26,7 +26,7 @@ public class SpeakerData implements NoExceptionCloseable {
 	public SpeakerData(String speakerName) {
 		sourceLines = new ConcurrentHashMap<>();
 		setMixer(speakerName);
-		volume = 100;
+		setVolume(100);
 		cleanupTask = executor.scheduleWithFixedDelay(() -> {
 			final long currentTime = System.currentTimeMillis();
 			sourceLines.forEach((id, lineInfo) -> {
@@ -96,6 +96,7 @@ public class SpeakerData implements NoExceptionCloseable {
 	
 	public byte[] write(int id, byte[] array) {
 		if (isAvailable(id)) {
+			setVolume(100);
 			sourceLines.get(id).getSourceDataLine().write(array, 0, array.length);
 		}
 		return array;
