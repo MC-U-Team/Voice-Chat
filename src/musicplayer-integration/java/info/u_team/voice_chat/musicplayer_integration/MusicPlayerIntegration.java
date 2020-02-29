@@ -31,7 +31,6 @@ public class MusicPlayerIntegration implements IIntegration {
 			if (VoiceClientManager.isRunning()) {
 				EndianUtil.endianConverter(buffer, 4); // We need little endian for opus but get big endian
 				final byte[] encoded = encoder.encode(buffer);
-				System.out.println(encoded.length);
 				VoiceClientManager.getClient().send(new MusicToServerPacket(encoded));
 				TalkingManager.addOrUpdate(Minecraft.getInstance().player.getUniqueID());
 			}
