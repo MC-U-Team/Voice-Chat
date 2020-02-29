@@ -19,11 +19,14 @@ public class SpeakerData implements NoExceptionCloseable {
 	
 	private final Map<Integer, SpeakerLineInfo> sourceLines;
 	
+	private int volume;
+	
 	private final ScheduledFuture<?> cleanupTask;
 	
 	public SpeakerData(String speakerName) {
 		sourceLines = new ConcurrentHashMap<>();
 		setMixer(speakerName);
+		volume = 100;
 		cleanupTask = executor.scheduleWithFixedDelay(() -> {
 			final long currentTime = System.currentTimeMillis();
 			sourceLines.forEach((id, lineInfo) -> {
@@ -40,7 +43,9 @@ public class SpeakerData implements NoExceptionCloseable {
 				final SourceDataLine line = (SourceDataLine) mixer.getLine(SPEAKER_INFO);
 				line.open(FORMAT, 960 * 2 * 2 * 4);
 				line.start();
-				sourceLines.put(id, new SpeakerLineInfo(line));
+				final SpeakerLineInfo lineInfo = new SpeakerLineInfo(line);
+				lineInfo.setGain(volume);
+				sourceLines.put(id, lineInfo);
 				return true;
 			} catch (LineUnavailableException ex) {
 			}
@@ -64,6 +69,11 @@ public class SpeakerData implements NoExceptionCloseable {
 			}
 		}
 		mixer = AudioUtil.findMixer(name, SPEAKER_INFO);
+	}
+	
+	public void setVolume(int volume) {
+		this.volume = volume;
+		sourceLines.values().stream().forEach(lineInfo -> lineInfo.setGain(volume));
 	}
 	
 	public boolean isAvailable(int id) {
