@@ -44,7 +44,7 @@ public class SpeakerData implements NoExceptionCloseable {
 				line.open(FORMAT, 960 * 2 * 2 * 4);
 				line.start();
 				final SpeakerLineInfo lineInfo = new SpeakerLineInfo(line);
-				lineInfo.setGain(volume);
+				lineInfo.setMasterVolume(volume);
 				sourceLines.put(id, lineInfo);
 				return true;
 			} catch (LineUnavailableException ex) {
@@ -73,7 +73,7 @@ public class SpeakerData implements NoExceptionCloseable {
 	
 	public void setVolume(int volume) {
 		this.volume = volume;
-		sourceLines.values().stream().forEach(lineInfo -> lineInfo.setGain(volume));
+		sourceLines.values().stream().forEach(lineInfo -> lineInfo.setMasterVolume(volume));
 	}
 	
 	public boolean isAvailable(int id) {
@@ -96,8 +96,11 @@ public class SpeakerData implements NoExceptionCloseable {
 	
 	public byte[] write(int id, byte[] array) {
 		if (isAvailable(id)) {
-			setVolume(100);
-			sourceLines.get(id).getSourceDataLine().write(array, 0, array.length);
+			final SpeakerLineInfo lineInfo = sourceLines.get(id);
+			if (!lineInfo.isMasterVolumeControlFound()) {
+				AudioUtil.changeVolume(array, volume, lineInfo.getMultiplier());
+			}
+			lineInfo.getSourceDataLine().write(array, 0, array.length);
 		}
 		return array;
 	}
