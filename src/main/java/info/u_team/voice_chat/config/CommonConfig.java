@@ -24,7 +24,7 @@ public class CommonConfig {
 	
 	private CommonConfig(Builder builder) {
 		builder.comment("Voice Server configuration settings").push("server");
-		portValue = builder.comment("The udp port the voice chat server is listening on. This port with the ip the client connects to must be exposed in the firewall!").defineInRange("yolo", 25566, 0, 65535);
+		portValue = builder.comment("The udp port the voice chat server is listening on. This port with the ip the client connects to must be exposed in the firewall!").defineInRange("port", 25566, 0, 65535);
 		builder.pop();
 	}
 	
