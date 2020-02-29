@@ -1,5 +1,7 @@
 package info.u_team.voice_chat.audio_client.micro;
 
+import java.nio.*;
+
 import javax.sound.sampled.*;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
@@ -13,8 +15,11 @@ public class MicroData implements NoExceptionCloseable {
 	private Mixer mixer;
 	private TargetDataLine targetLine;
 	
+	private double volume;
+	
 	public MicroData(String microName) {
 		setMixer(microName);
+		volume = 1;
 	}
 	
 	private boolean createLine() {
@@ -49,6 +54,10 @@ public class MicroData implements NoExceptionCloseable {
 		mixer = AudioUtil.findMixer(name, MIC_INFO);
 	}
 	
+	public void setVolume(double volume) {
+		this.volume = volume;
+	}
+	
 	public boolean isAvailable() {
 		if (mixer != null) {
 			if (targetLine != null) {
@@ -69,8 +78,20 @@ public class MicroData implements NoExceptionCloseable {
 	public byte[] read(byte[] array) {
 		if (isAvailable()) {
 			targetLine.read(array, 0, array.length);
+			adjustVolume(array, volume);
 		}
 		return array;
+	}
+	
+	private void adjustVolume(byte[] pcm, double volume) {
+		if (Math.abs(volume - 1) < 0.001) {
+			return;
+		}
+		final ShortBuffer shortBuffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
+		for (int index = 0; index < shortBuffer.capacity(); index++) {
+			shortBuffer.put(index, (short) (shortBuffer.get(index) * volume));
+		}
+		return;
 	}
 	
 	@Override

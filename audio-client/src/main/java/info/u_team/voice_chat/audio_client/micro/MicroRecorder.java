@@ -1,6 +1,5 @@
 package info.u_team.voice_chat.audio_client.micro;
 
-import java.nio.*;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
@@ -18,7 +17,6 @@ public class MicroRecorder implements NoExceptionCloseable {
 	private final MicroData microData;
 	private final Consumer<byte[]> opusPacketConsumer;
 	private final IOpusEncoder encoder;
-	private double volume;
 	
 	private volatile boolean send;
 	
@@ -26,7 +24,6 @@ public class MicroRecorder implements NoExceptionCloseable {
 		this.microData = microData;
 		this.opusPacketConsumer = opusPacketConsumer;
 		this.encoder = new PcmOpusEncoder(48000, 2, 20, 64000, Opus.OPUS_SIGNAL_VOICE, 1000);
-		volume = 1;
 	}
 	
 	public void start() {
@@ -37,21 +34,10 @@ public class MicroRecorder implements NoExceptionCloseable {
 		executor.execute(() -> {
 			final byte[] buffer = new byte[960 * 2 * 2];
 			while (send && microData.isAvailable()) {
-				opusPacketConsumer.accept(encoder.encode(adjustVolume(microData.read(buffer), volume)));
+				opusPacketConsumer.accept(encoder.encode(microData.read(buffer)));
 			}
 			ThreadUtil.execute(5, 20, () -> opusPacketConsumer.accept(encoder.silence()));
 		});
-	}
-	
-	private byte[] adjustVolume(byte[] pcm, double volume) {
-		if (Math.abs(volume - 1) < 0.001) {
-			return pcm;
-		}
-		final ShortBuffer shortBuffer = ByteBuffer.wrap(pcm).order(ByteOrder.LITTLE_ENDIAN).asShortBuffer();
-		for (int index = 0; index < shortBuffer.capacity(); index++) {
-			shortBuffer.put(index, (short) (shortBuffer.get(index) * volume));
-		}
-		return pcm;
 	}
 	
 	public void stop() {
@@ -60,7 +46,7 @@ public class MicroRecorder implements NoExceptionCloseable {
 	}
 	
 	public void setVolume(double volume) {
-		this.volume = volume;
+		microData.setVolume(volume);
 	}
 	
 	public boolean isSending() {
