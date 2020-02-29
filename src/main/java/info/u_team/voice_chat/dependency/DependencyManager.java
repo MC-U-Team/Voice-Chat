@@ -20,11 +20,11 @@ public class DependencyManager {
 	
 	public static void construct() {
 		LOGGER.info(MARKER, "Load dependencies");
-		LOGGER.info(MARKER, "Finished loading dependencies");
 		final String devPath = System.getProperty("voicechat.dev");
 		if (devPath == null) {
 			findJarFilesInJar("dependencies/internal", path -> addToInternalDependencies(createInternalURL(path)));
 		}
+		LOGGER.info(MARKER, "Finished loading dependencies");
 	}
 	
 	private static void findJarFilesInJar(String folder, Consumer<Path> consumer) {
