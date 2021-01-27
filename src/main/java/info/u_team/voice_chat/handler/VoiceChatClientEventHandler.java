@@ -7,6 +7,7 @@ import info.u_team.voice_chat.musicplayer_integration.util.MusicPlayerIntegratio
 import info.u_team.voice_chat.render.RenderOverlayVoiceChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.*;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -30,7 +31,7 @@ public class VoiceChatClientEventHandler {
 	public static void on(GuiScreenEvent.InitGuiEvent.Post event) {
 		final Screen gui = event.getGui();
 		if (gui instanceof IngameMenuScreen) {
-			event.addWidget(new BetterButton(gui.width - 103, 1 + (MusicPlayerIntegrationUtil.isShowIngameMenueOverlay() ? 15 : 0), 102, 15, 0.7F, "Voicechat", button -> {
+			event.addWidget(new BetterButton(gui.width - 103, 1 + (MusicPlayerIntegrationUtil.isShowIngameMenueOverlay() ? 15 : 0), 102, 15, 0.7F, new StringTextComponent("Voicechat"), button -> {
 				gui.getMinecraft().displayGuiScreen(new VoiceChatSettingsGui());
 			}));
 		}

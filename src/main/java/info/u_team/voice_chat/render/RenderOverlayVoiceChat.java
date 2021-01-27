@@ -3,15 +3,20 @@ package info.u_team.voice_chat.render;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.client.TalkingManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.network.play.*;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.network.play.ClientPlayNetHandler;
+import net.minecraft.client.network.play.NetworkPlayerInfo;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.vector.Matrix4f;
 
 public class RenderOverlayVoiceChat {
 	
@@ -20,17 +25,16 @@ public class RenderOverlayVoiceChat {
 	public static void draw() {
 		final Minecraft minecraft = Minecraft.getInstance();
 		final FontRenderer fontRenderer = minecraft.fontRenderer;
-		
 		final AtomicInteger counter = new AtomicInteger();
 		TalkingManager.getTalkers().stream().map(RenderOverlayVoiceChat::getName).forEach(name -> {
-			drawEntry(5, 5 + counter.getAndIncrement() * 8, minecraft, fontRenderer, name);
+			drawEntry(new MatrixStack(),5, 5 + counter.getAndIncrement() * 8, minecraft, fontRenderer, name);
 		});
 	}
 	
-	public static void drawEntry(int x, int y, Minecraft minecraft, FontRenderer fontRenderer, String name) {
+	public static void drawEntry(MatrixStack stack, int x, int y, Minecraft minecraft, FontRenderer fontRenderer, String name) {
 		minecraft.getTextureManager().bindTexture(SPEAKING);
 		RenderSystem.color3f(0, 0, 0);
-		AbstractGui.blit(x, y, 8, 8, 0, 0, 128, 128, 128, 128);
+		AbstractGui.blit(stack, x, y, 8, 8, 0, 0, 128, 128, 128, 128);
 		renderString(fontRenderer, name, 15 + x * (1 / 0.75F), 1.5F + y * (1 / 0.75F), 0xFFFF00, Matrix4f.makeScale(0.75F, 0.75F, 0), false);
 	}
 	

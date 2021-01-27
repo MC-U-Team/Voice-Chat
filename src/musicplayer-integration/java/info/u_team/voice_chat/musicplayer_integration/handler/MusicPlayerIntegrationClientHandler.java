@@ -6,6 +6,7 @@ import info.u_team.voice_chat.gui.VoiceChatSettingsGui;
 import info.u_team.voice_chat.musicplayer_integration.MusicPlayerIntegration;
 import info.u_team.voice_chat.musicplayer_integration.util.MusicPlayerIntegrationUtil;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -22,7 +23,7 @@ public class MusicPlayerIntegrationClientHandler {
 		}
 		final Screen gui = event.getGui();
 		if (gui instanceof VoiceChatSettingsGui) {
-			final ActiveButton streamButton = new ActiveButton(13, 190, gui.width - 24, 15, "Stream music to other players", 0x80FF00FF);
+			final ActiveButton streamButton = new ActiveButton(13, 190, gui.width - 24, 15, new StringTextComponent("Stream music to other players"), 0x80FF00FF);
 			streamButton.setActive(MusicPlayerIntegration.getInstance().isShouldStream());
 			streamButton.setPressable(() -> {
 				MusicPlayerIntegration.getInstance().setShouldStream(!streamButton.isActive());
@@ -39,7 +40,7 @@ public class MusicPlayerIntegrationClientHandler {
 		}
 		final Screen gui = event.getGui();
 		if (gui instanceof VoiceChatSettingsGui) {
-			gui.getMinecraft().fontRenderer.drawString("Select speaker", 13, 172, 0xFFFFFF);
+			gui.getMinecraft().fontRenderer.drawString(event.getMatrixStack(), "Select speaker", 13, 172, 0xFFFFFF);
 		}
 	}
 	
