@@ -4,6 +4,8 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = targetCompatibility = "1.8"
+
 dependencies {
 	compile ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows")
 	compile ("org.lwjgl:lwjgl-opus:3.2.2")

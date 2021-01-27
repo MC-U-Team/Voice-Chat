@@ -5,6 +5,7 @@ displayURL="https://u-team.info/mods/voicechat"
 logoFile="logo.png"
 credits="Team U-Team"
 authors="HyCraftHD"
+license="Apache 2.0"
 
 [[mods]]
 	modId="voicechat"
@@ -23,7 +24,7 @@ authors="HyCraftHD"
 	[[dependencies.voicechat]]
 	    modId="minecraft"
 	    mandatory=true
-	    versionRange="[1.15.2]"
+	    versionRange="[1.16.4]"
 	    ordering="NONE"
 	    side="BOTH"
 	    
