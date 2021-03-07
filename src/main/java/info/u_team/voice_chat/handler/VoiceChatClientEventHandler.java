@@ -24,7 +24,7 @@ public class VoiceChatClientEventHandler {
 		if (event.getType() != ElementType.ALL || minecraft.gameSettings.showDebugInfo) {
 			return;
 		}
-		RenderOverlayVoiceChat.draw();
+		RenderOverlayVoiceChat.draw(event.getMatrixStack());
 	}
 	
 	@SubscribeEvent

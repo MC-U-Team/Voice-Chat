@@ -19,12 +19,12 @@ public class RenderOverlayVoiceChat {
 	
 	private static ResourceLocation SPEAKING = new ResourceLocation(VoiceChatMod.MODID, "textures/gui/speaking.png");
 	
-	public static void draw() {
+	public static void draw(MatrixStack matrixStack) {
 		final Minecraft minecraft = Minecraft.getInstance();
 		final FontRenderer fontRenderer = minecraft.fontRenderer;
 		final AtomicInteger counter = new AtomicInteger();
 		TalkingManager.getTalkers().stream().map(RenderOverlayVoiceChat::getName).forEach(name -> {
-			drawEntry(new MatrixStack(), 5, 5 + counter.getAndIncrement() * 8, minecraft, fontRenderer, name);
+			drawEntry(matrixStack, 5, 5 + counter.getAndIncrement() * 8, minecraft, fontRenderer, name);
 		});
 	}
 	
