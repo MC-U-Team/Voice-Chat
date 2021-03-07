@@ -14,6 +14,11 @@ public class VoiceChatSettingsGuiMixerDeviceList extends ScrollableList<VoiceCha
 	public VoiceChatSettingsGuiMixerDeviceList(int width, int height, int top, int bottom, int left, int right, Supplier<Line.Info> lineInfoGetter, Supplier<String> mixerGetter, Consumer<String> mixerSetter) {
 		super(width, height, top, bottom, left, right, 20, 20);
 		this.mixerSetter = mixerSetter;
+		
+		func_244606_c(false);
+		setShouldUseScissor(true);
+		setShouldRenderTransparentBorder(true);
+		
 		AudioUtil.findAudioDevices(lineInfoGetter.get()).stream().map(VoiceChatSettingsGuiMixerDeviceListEntry::new).peek(entry -> {
 			if (entry.getMixerName().equals(mixerGetter.get())) {
 				super.setSelected(entry);
