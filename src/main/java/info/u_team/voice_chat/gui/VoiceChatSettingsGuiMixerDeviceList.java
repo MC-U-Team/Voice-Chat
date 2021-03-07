@@ -12,7 +12,7 @@ public class VoiceChatSettingsGuiMixerDeviceList extends ScrollableList<VoiceCha
 	private final Consumer<String> mixerSetter;
 	
 	public VoiceChatSettingsGuiMixerDeviceList(int width, int height, int top, int bottom, int left, int right, Supplier<Line.Info> lineInfoGetter, Supplier<String> mixerGetter, Consumer<String> mixerSetter) {
-		super(width, height, top, bottom, left, right, 20, 20, 5);
+		super(width, height, top, bottom, left, right, 20, 20);
 		this.mixerSetter = mixerSetter;
 		AudioUtil.findAudioDevices(lineInfoGetter.get()).stream().map(VoiceChatSettingsGuiMixerDeviceListEntry::new).peek(entry -> {
 			if (entry.getMixerName().equals(mixerGetter.get())) {
