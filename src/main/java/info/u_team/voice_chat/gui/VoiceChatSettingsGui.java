@@ -2,7 +2,7 @@ package info.u_team.voice_chat.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import info.u_team.u_team_core.gui.elements.BetterFontSlider;
+import info.u_team.u_team_core.gui.elements.*;
 import info.u_team.voice_chat.audio.MicroHandler;
 import info.u_team.voice_chat.audio.MicroManager;
 import info.u_team.voice_chat.audio.SpeakerHandler;
@@ -15,10 +15,7 @@ import net.minecraft.util.text.StringTextComponent;
 public class VoiceChatSettingsGui extends Screen {
 	
 	private VoiceChatSettingsGuiMixerDeviceList microMixerDeviceList;
-	private BetterFontSlider microMixerVolumeSlider;
-	
 	private VoiceChatSettingsGuiMixerDeviceList speakerMixerDeviceList;
-	private BetterFontSlider speakerMixerVolumeSlider;
 	
 	public VoiceChatSettingsGui() {
 		super(new StringTextComponent("voicechatsettings"));
@@ -32,7 +29,7 @@ public class VoiceChatSettingsGui extends Screen {
 		
 		StringTextComponent volume = new StringTextComponent("Volume: ");
 		StringTextComponent empty = new StringTextComponent("");
-		microMixerVolumeSlider = addButton(new BetterFontSlider(180, 9, width - 192, 15, volume, empty, 0, 150, microHandler.getVolume(), false, true, 0.7F, slider -> {
+		addButton(new ScalableSlider(180, 9, width - 192, 15, volume, empty, 0, 150, microHandler.getVolume(), false, true, false, 0.7F, slider -> {
 			microHandler.setVolume(slider.getValueInt());
 		}));
 		
@@ -40,19 +37,13 @@ public class VoiceChatSettingsGui extends Screen {
 		speakerMixerDeviceList = new VoiceChatSettingsGuiMixerDeviceList(width - 24, height, 110, 160, 12, width - 12, () -> SpeakerData.SPEAKER_INFO, speakerHandler::getSpeaker, speakerHandler::setSpeaker);
 		children.add(speakerMixerDeviceList);
 		
-		speakerMixerVolumeSlider = addButton(new BetterFontSlider(180, 89, width - 192, 15, volume, empty, 0, 150, speakerHandler.getVolume(), false, true, 0.7F, slider -> {
+		addButton(new ScalableSlider(180, 89, width - 192, 15, volume, empty, 0, 150, speakerHandler.getVolume(), false, true, false, 0.7F, slider -> {
 			speakerHandler.setVolume(slider.getValueInt());
 		}));
 	}
 	
 	@Override
 	public boolean mouseReleased(double mouseX, double mouseY, int button) {
-		if (microMixerVolumeSlider != null) {
-			microMixerVolumeSlider.mouseReleased(mouseX, mouseY, button);
-		}
-		if (speakerMixerVolumeSlider != null) {
-			speakerMixerVolumeSlider.mouseReleased(mouseX, mouseY, button);
-		}
 		return super.mouseReleased(mouseX, mouseY, button);
 	}
 	
