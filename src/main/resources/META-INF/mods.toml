@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[36,)"
 issueTrackerURL="https://github.com/MC-U-Team/Voice-Chat/issues"
 displayURL="https://u-team.info/mods/voicechat"
 logoFile="logo.png"
+license="Apache 2.0"
 credits="Team U-Team"
 authors="HyCraftHD"
-license="Apache 2.0"
 
 [[mods]]
 	modId="voicechat"
@@ -17,20 +17,20 @@ license="Apache 2.0"
 	[[dependencies.voicechat]]
 	    modId="forge"
 	    mandatory=true
-	    versionRange="[31.2.30,)"
+	    versionRange="[36.0.22,)"
 	    ordering="NONE"
 	    side="BOTH"
 	
 	[[dependencies.voicechat]]
 	    modId="minecraft"
 	    mandatory=true
-	    versionRange="[1.16.4]"
+	    versionRange="[1.16.5]"
 	    ordering="NONE"
 	    side="BOTH"
 	    
 	[[dependencies.voicechat]]
 	    modId="uteamcore"
 	    mandatory=true
-	    versionRange="[3.0.0.160,)"
+	    versionRange="[3.2.0.193-SNAPSHOT,)"
 	    ordering="NONE"
 	    side="BOTH"
