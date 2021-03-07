@@ -1,6 +1,6 @@
 package info.u_team.voice_chat.handler;
 
-import info.u_team.u_team_core.gui.elements.BetterButton;
+import info.u_team.u_team_core.gui.elements.ScalableButton;
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.gui.VoiceChatSettingsGui;
 import info.u_team.voice_chat.musicplayer_integration.util.MusicPlayerIntegrationUtil;
@@ -31,7 +31,7 @@ public class VoiceChatClientEventHandler {
 	public static void on(GuiScreenEvent.InitGuiEvent.Post event) {
 		final Screen gui = event.getGui();
 		if (gui instanceof IngameMenuScreen) {
-			event.addWidget(new BetterButton(gui.width - 103, 1 + (MusicPlayerIntegrationUtil.isShowIngameMenueOverlay() ? 15 : 0), 102, 15, 0.7F, new StringTextComponent("Voicechat"), button -> {
+			event.addWidget(new ScalableButton(gui.width - 103, 1 + (MusicPlayerIntegrationUtil.isShowIngameMenueOverlay() ? 15 : 0), 102, 15, new StringTextComponent("Voicechat"), 0.7F, button -> {
 				gui.getMinecraft().displayGuiScreen(new VoiceChatSettingsGui());
 			}));
 		}
