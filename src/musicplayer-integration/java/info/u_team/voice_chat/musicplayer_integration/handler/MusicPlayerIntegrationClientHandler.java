@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.musicplayer_integration.handler;
 
-import info.u_team.u_team_core.gui.elements.*;
+import info.u_team.u_team_core.gui.elements.ScalableActivatableButton;
+import info.u_team.u_team_core.util.RGBA;
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.gui.VoiceChatSettingsGui;
 import info.u_team.voice_chat.musicplayer_integration.MusicPlayerIntegration;
@@ -23,11 +24,10 @@ public class MusicPlayerIntegrationClientHandler {
 		}
 		final Screen gui = event.getGui();
 		if (gui instanceof VoiceChatSettingsGui) {
-			final ActiveButton streamButton = new ActiveButton(13, 190, gui.width - 24, 15, new StringTextComponent("Stream music to other players"), 0x80FF00FF);
-			streamButton.setActive(MusicPlayerIntegration.getInstance().isShouldStream());
+			final ScalableActivatableButton streamButton = new ScalableActivatableButton(13, 190, gui.width - 24, 15, new StringTextComponent("Stream music to other players"), 1, MusicPlayerIntegration.getInstance().isShouldStream(), new RGBA(0x80FF00FF));
 			streamButton.setPressable(() -> {
-				MusicPlayerIntegration.getInstance().setShouldStream(!streamButton.isActive());
-				streamButton.setActive(!streamButton.isActive());
+				MusicPlayerIntegration.getInstance().setShouldStream(!streamButton.isActivated());
+				streamButton.setActivated(!streamButton.isActivated());
 			});
 			event.addWidget(streamButton);
 		}
