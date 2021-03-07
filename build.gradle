@@ -43,7 +43,7 @@ minecraft {
     	client = {
             workingDirectory project.file("run/client/default").canonicalPath
             property "mixin.env.disableRefMap", "true"
-			property "musicplayer.dev", "${project.rootDir}"         
+			property "voicechat.dev", "${project.rootDir}"         
 			mods {
             	"${config.mod.modid}" {
                     source sourceSets.main
@@ -63,7 +63,7 @@ minecraft {
         server = {
             workingDirectory project.file("run/server").canonicalPath
 			property "mixin.env.disableRefMap", "true"
-			property "musicplayer.dev", "${project.rootDir}" 
+			property "voicechat.dev", "${project.rootDir}" 
             mods {
                 "${config.mod.modid}" {
                     source sourceSets.main
@@ -73,7 +73,7 @@ minecraft {
         data = {
             workingDirectory project.file("run/data").canonicalPath
 			property "mixin.env.disableRefMap", "true"
-			property "musicplayer.dev", "${project.rootDir}" 
+			property "voicechat.dev", "${project.rootDir}" 
             args "--mod", config.mod.modid, "--all", "--output", "\"" + file("src/generated/resources").toString() + "\"", "--validate", "--existing", "\"" + sourceSets.main.resources.srcDirs[0] + "\""
             mods {
                 "${config.mod.modid}" {
