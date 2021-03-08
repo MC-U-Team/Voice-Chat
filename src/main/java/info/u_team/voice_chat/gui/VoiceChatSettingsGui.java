@@ -2,11 +2,8 @@ package info.u_team.voice_chat.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 
-import info.u_team.u_team_core.gui.elements.*;
-import info.u_team.voice_chat.audio.MicroHandler;
-import info.u_team.voice_chat.audio.MicroManager;
-import info.u_team.voice_chat.audio.SpeakerHandler;
-import info.u_team.voice_chat.audio.SpeakerManager;
+import info.u_team.u_team_core.gui.elements.ScalableSlider;
+import info.u_team.voice_chat.audio.*;
 import info.u_team.voice_chat.audio_client.micro.MicroData;
 import info.u_team.voice_chat.audio_client.speaker.SpeakerData;
 import net.minecraft.client.gui.screen.Screen;

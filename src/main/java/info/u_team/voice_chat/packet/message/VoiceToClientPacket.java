@@ -3,7 +3,7 @@ package info.u_team.voice_chat.packet.message;
 import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
-import info.u_team.voice_chat.audio.*;
+import info.u_team.voice_chat.audio.SpeakerManager;
 import info.u_team.voice_chat.client.*;
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
 

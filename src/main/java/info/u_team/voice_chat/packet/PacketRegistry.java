@@ -10,7 +10,7 @@ import org.apache.logging.log4j.*;
 import com.google.common.collect.*;
 
 import info.u_team.voice_chat.packet.PacketRegistry.Context.Sender;
-import net.minecraft.entity.player.*;
+import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class PacketRegistry {
 	
