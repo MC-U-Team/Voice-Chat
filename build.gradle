@@ -9,7 +9,7 @@ buildscript {
 		maven {
 			url = "https://plugins.gradle.org/m2/"
 		}
-		jcenter()
+		mavenCentral()
 	}
 	dependencies {
 		classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "4.0.11", changing: true
@@ -39,109 +39,109 @@ java {
 minecraft {
 	mappings channel: config.forge.mapping_channel, version: config.forge.mapping
 	
-    runs {
-    	client = {
-            workingDirectory project.file("run/client/default").canonicalPath
-            property "mixin.env.disableRefMap", "true"
-			property "voicechat.dev", "${project.rootDir}"         
+	runs {
+		client = {
+			workingDirectory project.file("run/client/default").canonicalPath
+			property "mixin.env.disableRefMap", "true"
+			property "voicechat.dev", "${project.rootDir}"
 			mods {
-            	"${config.mod.modid}" {
-                    source sourceSets.main
+				"${config.mod.modid}" {
+					source sourceSets.main
 				}
-            }
-        }
-        client_first = {
-       		parents runs.getByName("client")
-            workingDirectory project.file("run/client/one").canonicalPath
-            args "--username", "HyCraftHD", "--uuid", "d9202ce0-f6c1-4dc1-9341-2d9091764808"
-        }
-        client_second = {
-       	 	parents runs.getByName("client")
-            workingDirectory project.file("run/client/second").canonicalPath
+			}
+		}
+		client_first = {
+			parents runs.getByName("client")
+			workingDirectory project.file("run/client/one").canonicalPath
+			args "--username", "HyCraftHD", "--uuid", "d9202ce0-f6c1-4dc1-9341-2d9091764808"
+		}
+		client_second = {
+			parents runs.getByName("client")
+			workingDirectory project.file("run/client/second").canonicalPath
 			args "--username", "UTeam", "--uuid", "08e0d9d9-e948-40de-b68d-d5101571acf1"
-        }
-        server = {
-            workingDirectory project.file("run/server").canonicalPath
+		}
+		server = {
+			workingDirectory project.file("run/server").canonicalPath
 			property "mixin.env.disableRefMap", "true"
-			property "voicechat.dev", "${project.rootDir}" 
-            mods {
-                "${config.mod.modid}" {
-                    source sourceSets.main
+			property "voicechat.dev", "${project.rootDir}"
+			mods {
+				"${config.mod.modid}" {
+					source sourceSets.main
 				}
 			}
-        }
-        data = {
-            workingDirectory project.file("run/data").canonicalPath
+		}
+		data = {
+			workingDirectory project.file("run/data").canonicalPath
 			property "mixin.env.disableRefMap", "true"
-			property "voicechat.dev", "${project.rootDir}" 
-            args "--mod", config.mod.modid, "--all", "--output", "\"" + file("src/generated/resources").toString() + "\"", "--validate", "--existing", "\"" + sourceSets.main.resources.srcDirs[0] + "\""
-            mods {
-                "${config.mod.modid}" {
-                    source sourceSets.main
+			property "voicechat.dev", "${project.rootDir}"
+			args "--mod", config.mod.modid, "--all", "--output", "\"" + file("src/generated/resources").toString() + "\"", "--validate", "--existing", "\"" + sourceSets.main.resources.srcDirs[0] + "\""
+			mods {
+				"${config.mod.modid}" {
+					source sourceSets.main
 				}
 			}
-        }
-    }
+		}
+	}
 }
 
 configurations {
-    internal
-    compile.extendsFrom(internal)
+	internal
+	compile.extendsFrom(internal)
 }
 
 jar {
 	classifier = ""
-
-    from "LICENSE"
-    from "audio-client/src/main/resources/LICENSE-DEPENDENCIES"
-    
-    jar.dependsOn ":audio-client:build"
-
-    from "audio-client/build/classes/java/main"
-    
-    into ("dependencies/internal") {
-		from configurations.internal		
+	
+	from "LICENSE"
+	from "audio-client/src/main/resources/LICENSE-DEPENDENCIES"
+	
+	jar.dependsOn ":audio-client:build"
+	
+	from "audio-client/build/classes/java/main"
+	
+	into ("dependencies/internal") {
+		from configurations.internal
 	}
-                  
-    exclude(".cache")      
-           
-   	manifest normalManifest
+	
+	exclude(".cache")
+	
+	manifest normalManifest
 }
 
 task deobfJar(type: Jar) {
 	classifier = "dev"
-
-    from sourceSets.main.output
-    from "LICENSE"
-    from "audio-client/src/main/resources/LICENSE-DEPENDENCIES"
-    
-    jar.dependsOn ":audio-client:build"
-
-    from "audio-client/build/classes/java/main"
-    
-    into ("dependencies/internal") {
-		from configurations.internal		
+	
+	from sourceSets.main.output
+	from "LICENSE"
+	from "audio-client/src/main/resources/LICENSE-DEPENDENCIES"
+	
+	jar.dependsOn ":audio-client:build"
+	
+	from "audio-client/build/classes/java/main"
+	
+	into ("dependencies/internal") {
+		from configurations.internal
 	}
 	
-    exclude(".cache")    
-            
-    manifest normalManifest
+	exclude(".cache")
+	
+	manifest normalManifest
 }
 
 task sourcesJar(type: Jar) {
-    classifier = "sources"
-    
-    from sourceSets.main.allJava
-    from "LICENSE"
+	classifier = "sources"
+	
+	from sourceSets.main.allJava
+	from "LICENSE"
 }
 
 task docJar(type: Jar) {
-    classifier = "javadoc"
-    
-    from javadoc
-    from "LICENSE"
-    
-    tasks.withType(Javadoc) {
+	classifier = "javadoc"
+	
+	from javadoc
+	from "LICENSE"
+	
+	tasks.withType(Javadoc) {
 		options.addStringOption('Xdoclint:none', '-quiet')
 		options.addStringOption('encoding', 'UTF-8')
 		options.addStringOption('charSet', 'UTF-8')
@@ -150,9 +150,9 @@ task docJar(type: Jar) {
 
 artifacts {
 	archives jar
-    archives deobfJar
-    archives sourcesJar
-    archives docJar
+	archives deobfJar
+	archives sourcesJar
+	archives docJar
 }
 
 signAllJars()
@@ -170,11 +170,11 @@ sourceSets {
 }
 
 dependencies {
-    minecraft getForgeDependency()
+	minecraft getForgeDependency()
 	compile getUTeamCoreDependency()
 	compile project(":audio-client")
-  	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
-  	//compile fileTree(dir: 'libs', include: ['*.jar'])
+	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
+	//compile fileTree(dir: 'libs', include: ['*.jar'])
 	internal ("org.lwjgl:lwjgl-opus:3.2.2") {
 		transitive=false
 	}
@@ -200,10 +200,10 @@ curseforge {
 	
 	apiKey = getValueDefault("token")
 	
-  	project {
-    	id = config.curse.id
-    	releaseType = config.curse.type
-
+	project {
+		id = config.curse.id
+		releaseType = config.curse.type
+		
 		addGameVersion config.forge.mcversion
 		addGameVersion "Forge"
 		addGameVersion "Java 8"
@@ -211,22 +211,22 @@ curseforge {
 		addGameVersion "Java 10"
 		
 		relations {
-      		requiredDependency "u-team-core"
+			requiredDependency "u-team-core"
 			optionalDependency "music-player"
-    	}
-
-    	mainArtifact(jar) {
-      		displayName = "${config.curse.display}-${config.forge.mcversion}-${project.version}"
-      		changelogType = "html"
-      		changelog = "<a href=\"" + generateChangelogUrl() + "\">Changelog of ${project.version}</a>"
-    	}
-    	
-    	addArtifact(deobfJar) {
+		}
+		
+		mainArtifact(jar) {
+			displayName = "${config.curse.display}-${config.forge.mcversion}-${project.version}"
+			changelogType = "html"
+			changelog = "<a href=\"" + generateChangelogUrl() + "\">Changelog of ${project.version}</a>"
+		}
+		
+		addArtifact(deobfJar) {
 			displayName = "${config.curse.display}-${config.forge.mcversion}-${project.version}-dev"
 			changelogType = "text"
 			changelog = "ONLY for development environment!\nMappings: ${config.forge.mapping_channel}_${config.forge.mapping}"
 		}
-  	}
+	}
 }
 
 tasks.withType(PublishToMavenRepository) {
