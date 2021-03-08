@@ -37,7 +37,7 @@ public class ServerEventHandler {
 		final UUID[] uuids = new UUID[map.size()];
 		final short[] ids = new short[map.size()];
 		int counter = 0;
-		for (Entry<UUID, PlayerData> entry : map.entrySet()) {
+		for (final Entry<UUID, PlayerData> entry : map.entrySet()) {
 			uuids[counter] = entry.getKey();
 			ids[counter] = entry.getValue().getId();
 			counter++;

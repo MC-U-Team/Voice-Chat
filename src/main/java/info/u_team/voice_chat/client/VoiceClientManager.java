@@ -14,7 +14,7 @@ public class VoiceClientManager {
 	public static synchronized void start(int port, byte[] secret) {
 		try {
 			CLIENT = new VoiceClient(EXECUTOR, port, secret);
-		} catch (SocketException ex) {
+		} catch (final SocketException ex) {
 			ex.printStackTrace();
 		}
 	}

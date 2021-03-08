@@ -14,7 +14,7 @@ public class VoiceServerManager {
 	public synchronized static void start() {
 		try {
 			SERVER = new VoiceServer(EXECUTOR);
-		} catch (SocketException ex) {
+		} catch (final SocketException ex) {
 			ex.printStackTrace();
 		}
 	}

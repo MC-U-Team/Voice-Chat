@@ -36,7 +36,7 @@ public class VoiceClient {
 					System.out.println("SEND HANDSHAKE PACKET");
 					sendIntern(new HandshakePacket());
 					Thread.sleep(500);
-				} catch (InterruptedException ex) {
+				} catch (final InterruptedException ex) {
 					return; // Can happen so we just exist this task
 				}
 			}
@@ -55,7 +55,7 @@ public class VoiceClient {
 					if (message != null) {
 						PacketRegistry.handle(message, Sender.SERVER, (InetSocketAddress) packet.getSocketAddress());
 					}
-				} catch (IOException ex) {
+				} catch (final IOException ex) {
 					if (!socket.isClosed()) {
 						ex.printStackTrace();
 					}
@@ -79,7 +79,7 @@ public class VoiceClient {
 		
 		try {
 			socket.send(new DatagramPacket(buffer.array(), buffer.capacity(), serverAddress));
-		} catch (IOException ex) {
+		} catch (final IOException ex) {
 			if (!socket.isClosed()) {
 				ex.printStackTrace();
 			}

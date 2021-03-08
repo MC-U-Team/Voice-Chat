@@ -79,7 +79,7 @@ public class PacketRegistry {
 		}
 		try {
 			packet.getMessageConsumer().accept(message, () -> new Context(sender, address, player));
-		} catch (Exception ex) {
+		} catch (final Exception ex) {
 			LOGGER.warn("An exception occured while handling the message %s", message.toString(), ex);
 		}
 	}

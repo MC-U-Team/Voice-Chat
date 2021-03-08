@@ -24,8 +24,8 @@ public class VoiceChatSettingsGui extends Screen {
 		microMixerDeviceList = new VoiceChatSettingsGuiMixerDeviceList(width - 24, 110, 30, 80, 12, width - 12, () -> MicroData.MIC_INFO, microHandler::getMicro, microHandler::setMicro);
 		children.add(microMixerDeviceList);
 		
-		StringTextComponent volume = new StringTextComponent("Volume: ");
-		StringTextComponent empty = new StringTextComponent("");
+		final StringTextComponent volume = new StringTextComponent("Volume: ");
+		final StringTextComponent empty = new StringTextComponent("");
 		addButton(new ScalableSlider(180, 9, width - 192, 15, volume, empty, 0, 150, microHandler.getVolume(), false, true, false, 0.7F, slider -> {
 			microHandler.setVolume(slider.getValueInt());
 		}));

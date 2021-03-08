@@ -50,7 +50,7 @@ public class VoiceServer {
 					if (message != null) {
 						PacketRegistry.handle(message, Sender.PLAYER, (InetSocketAddress) packet.getSocketAddress(), player);
 					}
-				} catch (IOException ex) {
+				} catch (final IOException ex) {
 					if (!socket.isClosed()) {
 						ex.printStackTrace();
 					}
@@ -79,7 +79,7 @@ public class VoiceServer {
 		players.stream().forEach(playerData -> {
 			try {
 				socket.send(new DatagramPacket(data, data.length, playerData.getAddress()));
-			} catch (IOException ex) {
+			} catch (final IOException ex) {
 				if (!socket.isClosed()) {
 					ex.printStackTrace();
 				}

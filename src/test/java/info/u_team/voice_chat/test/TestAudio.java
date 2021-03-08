@@ -74,7 +74,7 @@ public class TestAudio {
 		
 		try {
 			Thread.sleep(100000);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 		
