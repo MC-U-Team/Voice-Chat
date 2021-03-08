@@ -29,7 +29,7 @@ public class MicroData implements NoExceptionCloseable {
 				line.start();
 				targetLine = line;
 				return true;
-			} catch (LineUnavailableException ex) {
+			} catch (final LineUnavailableException ex) {
 			}
 		}
 		return false;

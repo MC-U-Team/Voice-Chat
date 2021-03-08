@@ -9,7 +9,7 @@ public class AudioUtil {
 	
 	public static Mixer findMixer(String name, Line.Info lineInfo) {
 		Mixer defaultMixer = null;
-		for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
+		for (final Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
 			final Mixer mixer = AudioSystem.getMixer(mixerInfo);
 			if (mixer.isLineSupported(lineInfo)) {
 				if (mixerInfo.getName().equals(name)) {
@@ -25,7 +25,7 @@ public class AudioUtil {
 	
 	public static List<String> findAudioDevices(Line.Info lineInfo) {
 		final List<String> list = new ArrayList<>();
-		for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
+		for (final Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
 			final Mixer mixer = AudioSystem.getMixer(mixerInfo);
 			if (mixer.isLineSupported(lineInfo)) {
 				list.add(mixerInfo.getName());

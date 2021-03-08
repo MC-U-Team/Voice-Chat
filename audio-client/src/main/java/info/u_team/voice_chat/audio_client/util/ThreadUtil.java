@@ -16,7 +16,7 @@ public class ThreadUtil {
 	public static void sleep(int time) {
 		try {
 			TimeUnit.MILLISECONDS.sleep(time);
-		} catch (InterruptedException ex) {
+		} catch (final InterruptedException ex) {
 			throw new AssertionError();
 		}
 	}

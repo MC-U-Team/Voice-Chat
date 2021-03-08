@@ -13,7 +13,7 @@ public class SpeakerBuffer {
 	public byte[] getNextPacket() {
 		try {
 			return queue.take();
-		} catch (InterruptedException ex) {
+		} catch (final InterruptedException ex) {
 			throw new AssertionError();
 		}
 	}

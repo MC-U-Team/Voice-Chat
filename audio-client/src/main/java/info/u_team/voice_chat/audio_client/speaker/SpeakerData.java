@@ -47,7 +47,7 @@ public class SpeakerData implements NoExceptionCloseable {
 				lineInfo.setMasterVolume(volume);
 				sourceLines.put(id, lineInfo);
 				return true;
-			} catch (LineUnavailableException ex) {
+			} catch (final LineUnavailableException ex) {
 			}
 		}
 		return false;
