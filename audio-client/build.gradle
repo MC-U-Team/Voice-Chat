@@ -1,10 +1,14 @@
 apply plugin: "java"
 
 repositories {
-    mavenCentral()
+	mavenCentral()
 }
 
-sourceCompatibility = targetCompatibility = "1.8"
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(8)
+	}
+}
 
 dependencies {
 	compile ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows")
