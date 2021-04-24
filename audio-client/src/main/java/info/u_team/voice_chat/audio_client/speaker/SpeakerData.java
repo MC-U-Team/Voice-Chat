@@ -1,12 +1,21 @@
 package info.u_team.voice_chat.audio_client.speaker;
 
 import java.util.Map;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
+import javax.sound.sampled.SourceDataLine;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
-import info.u_team.voice_chat.audio_client.util.*;
+import info.u_team.voice_chat.audio_client.util.AudioUtil;
+import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 
 public class SpeakerData implements NoExceptionCloseable {
 	

@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.audio_client.speaker;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.SourceDataLine;
 
 import info.u_team.voice_chat.audio_client.util.AudioUtil;
 

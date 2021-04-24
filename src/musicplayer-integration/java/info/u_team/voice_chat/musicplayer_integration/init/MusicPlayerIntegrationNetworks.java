@@ -1,7 +1,8 @@
 package info.u_team.voice_chat.musicplayer_integration.init;
 
 import info.u_team.voice_chat.VoiceChatMod;
-import info.u_team.voice_chat.musicplayer_integration.message.*;
+import info.u_team.voice_chat.musicplayer_integration.message.MusicToClientPacket;
+import info.u_team.voice_chat.musicplayer_integration.message.MusicToServerPacket;
 import info.u_team.voice_chat.packet.PacketRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;

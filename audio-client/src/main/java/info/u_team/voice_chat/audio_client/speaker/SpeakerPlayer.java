@@ -1,7 +1,9 @@
 package info.u_team.voice_chat.audio_client.speaker;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.util.ThreadUtil;

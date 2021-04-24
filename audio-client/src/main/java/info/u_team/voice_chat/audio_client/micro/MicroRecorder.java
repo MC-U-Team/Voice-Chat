@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.audio_client.micro;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import org.lwjgl.util.opus.Opus;

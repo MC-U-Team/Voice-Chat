@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.audio_client.speaker;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.opus.PcmOpusDecoder;

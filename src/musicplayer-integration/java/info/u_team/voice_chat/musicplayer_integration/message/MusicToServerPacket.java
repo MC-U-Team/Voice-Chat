@@ -4,8 +4,9 @@ import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
-import info.u_team.voice_chat.server.*;
+import info.u_team.voice_chat.server.VerifiedPlayerManager;
 import info.u_team.voice_chat.server.VerifiedPlayerManager.PlayerData;
+import info.u_team.voice_chat.server.VoiceServerManager;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 public class MusicToServerPacket {

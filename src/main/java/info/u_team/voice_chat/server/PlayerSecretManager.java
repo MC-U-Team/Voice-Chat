@@ -1,12 +1,16 @@
 package info.u_team.voice_chat.server;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Random;
+import java.util.UUID;
 
-import com.google.common.collect.*;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.*;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 
 public class PlayerSecretManager {
 	

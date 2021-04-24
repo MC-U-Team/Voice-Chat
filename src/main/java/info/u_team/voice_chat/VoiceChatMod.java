@@ -1,9 +1,11 @@
 package info.u_team.voice_chat;
 
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import info.u_team.u_team_core.util.verify.JarSignVerifier;
-import info.u_team.voice_chat.config.*;
+import info.u_team.voice_chat.config.ClientConfig;
+import info.u_team.voice_chat.config.CommonConfig;
 import info.u_team.voice_chat.dependency.DependencyManager;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;

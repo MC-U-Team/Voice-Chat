@@ -1,7 +1,8 @@
 package info.u_team.voice_chat.audio;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
-import info.u_team.voice_chat.audio_client.speaker.*;
+import info.u_team.voice_chat.audio_client.speaker.SpeakerData;
+import info.u_team.voice_chat.audio_client.speaker.SpeakerPlayer;
 import info.u_team.voice_chat.config.ClientConfig;
 
 public class SpeakerHandler implements NoExceptionCloseable {

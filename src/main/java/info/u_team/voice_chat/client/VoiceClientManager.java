@@ -1,7 +1,8 @@
 package info.u_team.voice_chat.client;
 
 import java.net.SocketException;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import info.u_team.voice_chat.audio_client.util.ThreadUtil;
 

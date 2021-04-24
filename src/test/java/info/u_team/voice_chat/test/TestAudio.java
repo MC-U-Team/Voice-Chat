@@ -1,12 +1,16 @@
 package info.u_team.voice_chat.test;
 
-import java.awt.*;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.TargetDataLine;
 import javax.swing.JFrame;
 
-import info.u_team.voice_chat.audio.*;
+import info.u_team.voice_chat.audio.MicroHandler;
+import info.u_team.voice_chat.audio.SpeakerHandler;
 import info.u_team.voice_chat.audio_client.util.AudioUtil;
 
 public class TestAudio {

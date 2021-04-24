@@ -6,7 +6,8 @@ import info.u_team.voice_chat.config.CommonConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ServerAddress;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.fml.*;
+import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.fml.LogicalSidedProvider;
 
 public class NetworkUtil {
 	

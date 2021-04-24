@@ -1,10 +1,14 @@
 package info.u_team.voice_chat.client;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import info.u_team.voice_chat.packet.PacketRegistry;
 import info.u_team.voice_chat.packet.PacketRegistry.Context.Sender;

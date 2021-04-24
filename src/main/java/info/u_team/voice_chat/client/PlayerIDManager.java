@@ -2,7 +2,8 @@ package info.u_team.voice_chat.client;
 
 import java.util.UUID;
 
-import com.google.common.collect.*;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 public class PlayerIDManager {
 	

@@ -4,7 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
 import info.u_team.voice_chat.init.VoiceChatNetworks;
-import info.u_team.voice_chat.message.*;
+import info.u_team.voice_chat.message.HandshakeDoneMessage;
+import info.u_team.voice_chat.message.PlayerIDMessage;
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
 import info.u_team.voice_chat.server.VerifiedPlayerManager;
 import info.u_team.voice_chat.server.VerifiedPlayerManager.PlayerData;

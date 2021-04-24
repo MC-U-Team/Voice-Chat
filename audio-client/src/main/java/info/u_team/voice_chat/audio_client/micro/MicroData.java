@@ -1,6 +1,10 @@
 package info.u_team.voice_chat.audio_client.micro;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
+import javax.sound.sampled.TargetDataLine;
 
 import info.u_team.voice_chat.audio_client.api.NoExceptionCloseable;
 import info.u_team.voice_chat.audio_client.util.AudioUtil;

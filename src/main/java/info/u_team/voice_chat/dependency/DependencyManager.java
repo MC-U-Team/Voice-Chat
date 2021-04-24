@@ -2,12 +2,18 @@ package info.u_team.voice_chat.dependency;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.*;
-import java.nio.file.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.Marker;
+import org.apache.logging.log4j.MarkerManager;
 
 import info.u_team.voice_chat.VoiceChatMod;
 import net.minecraftforge.fml.ModList;

@@ -1,9 +1,14 @@
 package info.u_team.voice_chat.init;
 
 import info.u_team.voice_chat.VoiceChatMod;
-import info.u_team.voice_chat.message.*;
+import info.u_team.voice_chat.message.HandshakeDoneMessage;
+import info.u_team.voice_chat.message.PlayerIDJoinMessage;
+import info.u_team.voice_chat.message.PlayerIDMessage;
+import info.u_team.voice_chat.message.ServerPortHandshakeMessage;
 import info.u_team.voice_chat.packet.PacketRegistry;
-import info.u_team.voice_chat.packet.message.*;
+import info.u_team.voice_chat.packet.message.HandshakePacket;
+import info.u_team.voice_chat.packet.message.VoiceToClientPacket;
+import info.u_team.voice_chat.packet.message.VoiceToServerPacket;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;

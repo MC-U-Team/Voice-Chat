@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.musicplayer_integration;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.lwjgl.util.opus.Opus;
 
@@ -8,8 +9,10 @@ import info.u_team.music_player.musicplayer.MusicPlayerManager;
 import info.u_team.voice_chat.api.IIntegration;
 import info.u_team.voice_chat.audio_client.api.opus.IOpusEncoder;
 import info.u_team.voice_chat.audio_client.opus.PcmOpusEncoder;
-import info.u_team.voice_chat.audio_client.util.*;
-import info.u_team.voice_chat.client.*;
+import info.u_team.voice_chat.audio_client.util.EndianUtil;
+import info.u_team.voice_chat.audio_client.util.ThreadUtil;
+import info.u_team.voice_chat.client.TalkingManager;
+import info.u_team.voice_chat.client.VoiceClientManager;
 import info.u_team.voice_chat.config.ClientConfig;
 import info.u_team.voice_chat.musicplayer_integration.message.MusicToServerPacket;
 import net.minecraft.client.Minecraft;

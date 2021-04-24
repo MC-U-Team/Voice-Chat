@@ -4,7 +4,8 @@ import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
 import info.u_team.voice_chat.audio.SpeakerManager;
-import info.u_team.voice_chat.client.*;
+import info.u_team.voice_chat.client.PlayerIDManager;
+import info.u_team.voice_chat.client.TalkingManager;
 import info.u_team.voice_chat.packet.PacketRegistry.Context;
 
 public class VoiceToClientPacket {

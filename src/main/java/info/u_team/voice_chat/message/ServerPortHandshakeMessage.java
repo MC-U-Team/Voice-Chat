@@ -3,8 +3,10 @@ package info.u_team.voice_chat.message;
 import java.util.function.Supplier;
 
 import info.u_team.voice_chat.api.IIntegration;
-import info.u_team.voice_chat.audio.*;
-import info.u_team.voice_chat.client.*;
+import info.u_team.voice_chat.audio.MicroManager;
+import info.u_team.voice_chat.audio.SpeakerManager;
+import info.u_team.voice_chat.client.TalkingManager;
+import info.u_team.voice_chat.client.VoiceClientManager;
 import info.u_team.voice_chat.init.VoiceChatIntegrations;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent.Context;

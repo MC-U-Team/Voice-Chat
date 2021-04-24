@@ -1,6 +1,8 @@
 package info.u_team.voice_chat.audio_client.opus;
 
-import java.nio.*;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.ShortBuffer;
 
 import org.lwjgl.system.MemoryUtil;
 import org.lwjgl.util.opus.Opus;

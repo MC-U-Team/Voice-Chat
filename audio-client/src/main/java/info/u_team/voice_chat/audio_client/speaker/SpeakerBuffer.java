@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.audio_client.speaker;
 
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class SpeakerBuffer {
 	

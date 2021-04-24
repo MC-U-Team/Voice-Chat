@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.gui;
 
-import java.util.function.*;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.sound.sampled.Line;
 

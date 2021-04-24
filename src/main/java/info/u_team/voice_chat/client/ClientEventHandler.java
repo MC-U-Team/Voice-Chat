@@ -2,11 +2,14 @@ package info.u_team.voice_chat.client;
 
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.api.IIntegration;
-import info.u_team.voice_chat.audio.*;
-import info.u_team.voice_chat.init.*;
+import info.u_team.voice_chat.audio.MicroManager;
+import info.u_team.voice_chat.audio.SpeakerManager;
+import info.u_team.voice_chat.init.VoiceChatIntegrations;
+import info.u_team.voice_chat.init.VoiceChatKeys;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent.LoggedOutEvent;
-import net.minecraftforge.event.TickEvent.*;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
+import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;

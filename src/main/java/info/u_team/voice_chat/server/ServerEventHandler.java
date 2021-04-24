@@ -1,19 +1,24 @@
 package info.u_team.voice_chat.server;
 
-import java.util.*;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import info.u_team.voice_chat.VoiceChatMod;
 import info.u_team.voice_chat.config.CommonConfig;
 import info.u_team.voice_chat.init.VoiceChatNetworks;
-import info.u_team.voice_chat.message.*;
+import info.u_team.voice_chat.message.PlayerIDJoinMessage;
+import info.u_team.voice_chat.message.PlayerIDMessage;
+import info.u_team.voice_chat.message.ServerPortHandshakeMessage;
 import info.u_team.voice_chat.server.VerifiedPlayerManager.PlayerData;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraftforge.event.entity.player.PlayerEvent.*;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
-import net.minecraftforge.fml.event.server.*;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.event.server.FMLServerStoppingEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 @EventBusSubscriber(modid = VoiceChatMod.MODID, bus = Bus.FORGE)

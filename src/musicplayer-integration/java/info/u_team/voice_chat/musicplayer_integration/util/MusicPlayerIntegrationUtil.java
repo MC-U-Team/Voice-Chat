@@ -1,6 +1,7 @@
 package info.u_team.voice_chat.musicplayer_integration.util;
 
-import java.util.function.*;
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import info.u_team.music_player.musicplayer.MusicPlayerManager;
 import net.minecraftforge.fml.ModList;
