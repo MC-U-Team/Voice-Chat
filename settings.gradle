@@ -1,1 +1,3 @@
+rootProject.name = "Voice-Chat"
+
 include "audio-client"
