@@ -175,7 +175,7 @@ dependencies {
 	compile project(":audio-client")
 	compile ("info.u-team:music_player-${config.forge.mcversion}:${config.musicplayer.version}:dev")
 	//compile fileTree(dir: 'libs', include: ['*.jar'])
-	internal ("org.lwjgl:lwjgl-opus:3.2.2") {
+	internal ("org.lwjgl:lwjgl-opus:3.3.0") {
 		transitive=false
 	}
 	internal ("org.lwjgl:lwjgl-opus:3.2.2:natives-linux") {

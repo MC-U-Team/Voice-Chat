@@ -11,7 +11,7 @@ java {
 }
 
 dependencies {
-	compile ("org.lwjgl:lwjgl-opus:3.2.2:natives-windows")
+	compile ("org.lwjgl:lwjgl-opus:3.3.0:natives-windows")
 	compile ("org.lwjgl:lwjgl-opus:3.2.2")
 	compile "org.lwjgl:lwjgl:3.2.2:natives-windows"
 }
